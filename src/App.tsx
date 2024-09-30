@@ -1,10 +1,13 @@
-import HomePage from "@/pages/home/home-page";
+import SignInPage from "@/pages/auth/signin-page";
+import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
-    <div>
-      <HomePage />
-    </div>
+    <Routes>
+      <Route path="/">
+        <Route path="signin" element={<SignInPage />} />
+      </Route>
+    </Routes>
   );
 };
 

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "clean": "echo \"Cleaning build and dependencies\" && rm -rf ./dist && rm -rf ./node_modules && echo \"Done\"",
     "prebuild": "echo \"Cleaning build\" && rm -rf ./dist && echo \"Done\"",
     "build": "tsc -b && vite build",
@@ -19,7 +19,8 @@
     "@mui/material": "^6.1.1",
     "lucide-react": "^0.446.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

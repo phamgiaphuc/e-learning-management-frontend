@@ -8,7 +8,17 @@ const TempDrawer = () => {
 
   return (
     <div>
-      <Button onClick={() => onToogleDrawer(true)}>Open drawer</Button>
+      <Button
+        onClick={() => onToogleDrawer(true)}
+        variant="outlined"
+        sx={{
+          color: (theme) => (theme.palette.mode === "dark" ? "white" : "red"),
+          borderColor: (theme) =>
+            theme.palette.mode === "dark" ? "white" : "red",
+        }}
+      >
+        Open drawer
+      </Button>
       <Drawer
         anchor="right"
         open={open}
