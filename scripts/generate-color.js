@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
@@ -41,6 +42,10 @@ function generateOrUpdateColorTs(colorName, colorArray, additionalColors) {
   );
 }
 
+function formatFile() {
+  execSync("npx eslint . --fix");
+}
+
 const name = "purple";
 const palette = [
   "F3E5F5",
@@ -62,3 +67,4 @@ const additionalColors = `
 `;
 
 generateOrUpdateColorTs(name, palette, additionalColors);
+formatFile();
