@@ -1,31 +1,41 @@
 import FacebookLogo from "@/assets/icons/facebook-logo.svg";
 import GoogleLogo from "@/assets/icons/google-logo.svg";
-import AuthHeroImage from "@/assets/images/auth-hero-image.svg";
+import useBreakpointContext from "@/hooks/use-breakpoint-context";
+import {
+  initialSignInValues,
+  SignInProps,
+  signInSchema,
+} from "@/types/auth/signin";
 import {
   Box,
   Button,
   Divider,
-  Grid2,
   IconButton,
   InputAdornment,
   Link,
   Stack,
   TextField,
+  Tooltip,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { useFormik } from "formik";
+import { CircleHelp, Eye, EyeOff, Lock, User } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
   // Variables and states
-  const theme = useTheme();
-  const isTabletView = useMediaQuery(theme.breakpoints.down("xl"));
-  const isMobileView = useMediaQuery(theme.breakpoints.down("sm"));
+  const { isTabletView, isMobileView } = useBreakpointContext();
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+
+  const formik = useFormik<SignInProps>({
+    validationSchema: signInSchema,
+    initialValues: initialSignInValues,
+    onSubmit: async (values) => {
+      console.log(values);
+    },
+  });
 
   // Actions
   const onPasswordVisibleChange = useCallback(
@@ -33,201 +43,158 @@ const SignInPage = () => {
     [passwordVisible],
   );
 
-  console.log(isTabletView);
-
   return (
-    <Grid2
-      container
-      sx={{
-        height: "100vh",
-        width: "100vw",
+    <form
+      style={{
+        width: "100%",
       }}
-      padding={4}
-      columnSpacing={4}
+      onSubmit={formik.handleSubmit}
     >
-      {!isMobileView && (
-        <Grid2
-          size={{
-            xs: 6,
-          }}
-          sx={{
-            backgroundColor: "#1B1E31",
-            borderRadius: 8,
-          }}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
-        >
-          <img
-            src={AuthHeroImage}
-            loading="eager"
-            width={isTabletView ? "256px" : ""}
-          />
-          <Stack
-            sx={{
-              textAlign: "center",
-            }}
-          >
-            <Typography
-              color="white"
-              variant={isTabletView ? "h4" : "h2"}
-              fontWeight={800}
-            >
-              Study Toghether
-            </Typography>
-            <Typography color="white" variant={isTabletView ? "body1" : "h6"}>
-              Make your study easier with our study app
-            </Typography>
-          </Stack>
-          <Box
-            sx={{
-              position: "absolute",
-              top: 32,
-              left: 32,
-            }}
-          >
-            <Typography color="white" variant="h6" fontWeight={800}>
-              Logo
-            </Typography>
-          </Box>
-        </Grid2>
-      )}
-      <Grid2
-        size={{
-          xs: 12,
-          md: 6,
-        }}
-        paddingY={4}
-        display="flex"
-        flexDirection="column"
-        alignItems="start"
-        justifyContent="center"
-      >
-        <Stack width="100%" gap={2}>
-          <Typography variant="h4" fontWeight={800} marginBottom={4}>
-            Join our community now!
+      <Stack gap={2}>
+        <Box display="flex" flexDirection="column" gap={1}>
+          <Typography fontSize={18} fontWeight={500}>
+            Username or account
           </Typography>
-          <Box display="flex" flexDirection="column" gap={1}>
-            <Typography fontSize={18} fontWeight={500}>
-              Username or account
-            </Typography>
-            <TextField
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <User />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              placeholder="Enter your username or account"
-              fullWidth
-            />
-          </Box>
-          <Box display="flex" flexDirection="column" gap={1}>
+          <TextField
+            autoFocus
+            name="account"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <User size={20} />
+                  </InputAdornment>
+                ),
+              },
+            }}
+            placeholder="Enter your username or account"
+            fullWidth
+            value={formik.values.account}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!(formik.touched.account && formik.errors.account)}
+            helperText={formik.touched.account && formik.errors.account}
+          />
+        </Box>
+        <Box display="flex" flexDirection="column" gap={1}>
+          <Box display="flex" flexDirection="row" gap={1} alignItems="center">
             <Typography fontSize={18} fontWeight={500}>
               Password
             </Typography>
-            <TextField
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={onPasswordVisibleChange}>
-                        {passwordVisible ? <Eye /> : <EyeOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              placeholder="Enter your password"
-              type={passwordVisible ? "text" : "password"}
-              fullWidth
-            />
+            <Tooltip
+              arrow={true}
+              title="Minimum 6 characters, at least 1 letter and 1 number"
+            >
+              <CircleHelp size={14} cursor="pointer" />
+            </Tooltip>
           </Box>
-          <Button
-            size="large"
-            variant="contained"
+          <TextField
+            name="password"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock size={20} />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={onPasswordVisibleChange}>
+                      {passwordVisible ? (
+                        <Eye size={20} />
+                      ) : (
+                        <EyeOff size={20} />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+            placeholder="Enter your password"
+            type={passwordVisible ? "text" : "password"}
+            fullWidth
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!(formik.touched.password && formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+        </Box>
+        <Button
+          type="submit"
+          size="large"
+          variant="contained"
+          sx={{
+            backgroundColor: "#1B1E31",
+          }}
+        >
+          <Typography fontWeight={600}>Sign in</Typography>
+        </Button>
+        <Box
+          display="flex"
+          flexDirection={isTabletView || isMobileView ? "column" : "row"}
+          width="100%"
+          justifyContent="space-between"
+          gap={isTabletView || isMobileView ? 0.5 : 0}
+        >
+          <Link
+            color="#8B2CF5"
             sx={{
-              backgroundColor: "#1B1E31",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forget your password?
+          </Link>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 0.5,
             }}
           >
-            <Typography fontWeight={600}>Sign in</Typography>
-          </Button>
-          <Box
-            display="flex"
-            flexDirection={isTabletView ? "column" : "row"}
-            width="100%"
-            justifyContent="space-between"
-            gap={isTabletView ? 0.5 : 0}
-          >
+            <Typography>Don't have an account?</Typography>
             <Link
               color="#8B2CF5"
               sx={{
                 cursor: "pointer",
               }}
-              onClick={() => navigate("/forgot-password")}
+              onClick={() => navigate("/signup")}
             >
-              Forget your password?
+              Sign up
             </Link>
-            <Box
-              sx={{
-                display: "flex",
-                gap: 0.5,
-              }}
-            >
-              <Typography>Don't have an account?</Typography>
-              <Link
-                color="#8B2CF5"
-                sx={{
-                  cursor: "pointer",
-                }}
-                onClick={() => navigate("/signup")}
-              >
-                Sign up
-              </Link>
-            </Box>
           </Box>
-          <Divider>
-            <Typography fontWeight={600}>
-              Or sign in with other methods
-            </Typography>
-          </Divider>
-          <Button
-            variant="outlined"
-            size="large"
-            sx={{
-              borderColor: "#1B1E31",
-            }}
-          >
-            <img src={GoogleLogo} width={24} height={24} />
-            <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
-              Sign in with Google
-            </Typography>
-          </Button>
-          <Button
-            variant="outlined"
-            size="large"
-            sx={{
-              borderColor: "#1B1E31",
-            }}
-          >
-            <img src={FacebookLogo} width={24} height={24} />
-            <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
-              Sign in with Facebook
-            </Typography>
-          </Button>
-        </Stack>
-      </Grid2>
-    </Grid2>
+        </Box>
+        <Divider>
+          <Typography fontWeight={600}>
+            Or sign in with other methods
+          </Typography>
+        </Divider>
+        <Button
+          variant="outlined"
+          size="large"
+          sx={{
+            borderColor: "#1B1E31",
+          }}
+        >
+          <img src={GoogleLogo} width={24} height={24} />
+          <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
+            Sign in with Google
+          </Typography>
+        </Button>
+        <Button
+          variant="outlined"
+          size="large"
+          sx={{
+            borderColor: "#1B1E31",
+          }}
+        >
+          <img src={FacebookLogo} width={24} height={24} />
+          <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
+            Sign in with Facebook
+          </Typography>
+        </Button>
+      </Stack>
+    </form>
   );
 };
 
