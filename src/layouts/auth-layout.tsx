@@ -2,12 +2,37 @@ import AuthHeroImage from "@/assets/images/auth-hero-image.svg";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
 import { ArrowLeft, Home } from "lucide-react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const AuthLayout = () => {
   // Variables and states
+  const location = useLocation();
   const navigate = useNavigate();
   const { isTabletView, isMobileView } = useBreakpointContext();
+
+  const authPathname = useMemo(() => {
+    if (location.pathname.includes("signin")) {
+      return "signin";
+    }
+    if (location.pathname.includes("signup")) {
+      return "signup";
+    }
+    if (location.pathname.includes("forgot-password")) {
+      return "forgot-password";
+    }
+    return "default";
+  }, [location.pathname]);
+
+  const formTitle = useMemo(() => {
+    if (authPathname === "signin") {
+      return "Join our community now!";
+    }
+    if (authPathname === "forgot-password") {
+      return "Forgot password";
+    }
+    return "Default title";
+  }, [authPathname]);
 
   return (
     <Grid2
@@ -81,43 +106,29 @@ const AuthLayout = () => {
       >
         <Box
           display="flex"
-          flexDirection={
-            isTabletView || isMobileView ? "column-reverse" : "row"
-          }
+          flexDirection="column"
           marginBottom={4}
           justifyContent="space-between"
           width="100%"
         >
-          <Box
-            display="flex"
-            flexDirection={isMobileView ? "column" : "row"}
-            alignItems="start"
-          >
-            {isMobileView && (
-              <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
-                Logo
-              </Typography>
-            )}
-            <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
-              Join our community now!
-            </Typography>
-          </Box>
           <div
             style={{
-              marginBottom: isMobileView ? "1rem" : 0,
+              marginBottom: "1rem",
             }}
           >
-            <Button
-              size="large"
-              variant="text"
-              startIcon={<ArrowLeft size={20} />}
-              sx={{
-                color: "black",
-              }}
-              onClick={() => navigate(-1)}
-            >
-              Back
-            </Button>
+            {authPathname === "forgot-password" && (
+              <Button
+                size="large"
+                variant="text"
+                startIcon={<ArrowLeft size={20} />}
+                sx={{
+                  color: "black",
+                }}
+                onClick={() => navigate("/signin")}
+              >
+                Back
+              </Button>
+            )}
             <Button
               size="large"
               variant="text"
@@ -130,6 +141,20 @@ const AuthLayout = () => {
               Home
             </Button>
           </div>
+          <Box
+            display="flex"
+            flexDirection={isMobileView ? "column" : "row"}
+            alignItems="start"
+          >
+            {isMobileView && (
+              <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
+                Logo
+              </Typography>
+            )}
+            <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
+              {formTitle}
+            </Typography>
+          </Box>
         </Box>
         <Outlet />
       </Grid2>

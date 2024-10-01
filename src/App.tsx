@@ -1,5 +1,6 @@
 import AuthLayout from "@/layouts/auth-layout";
 import GeneralLayout from "@/layouts/general-layout";
+import ForgotPasswordPage from "@/pages/auth/forgot-password-page";
 import SignInPage from "@/pages/auth/signin-page";
 import { Route, Routes } from "react-router-dom";
 
@@ -10,6 +11,7 @@ const App = () => {
         <Route path="" />
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
         </Route>
       </Routes>
     </GeneralLayout>
