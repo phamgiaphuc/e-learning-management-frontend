@@ -6,7 +6,7 @@ interface MetaTitleProps {
 
 const useMetaTitle = ({ title }: MetaTitleProps) => {
   useEffect(() => {
-    document.title = `${title} | ELearning`;
+    document.title = `${title} | Scholaro`;
   }, [title]);
 };
 
