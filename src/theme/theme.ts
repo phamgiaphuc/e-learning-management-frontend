@@ -4,8 +4,8 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   colorSchemes: {
-    dark: darkColorScheme,
     light: lightColorScheme,
+    dark: darkColorScheme,
   },
   typography: {
     fontFamily: ["Lato", "sans-serif"].join(","),
