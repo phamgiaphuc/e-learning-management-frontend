@@ -3,7 +3,7 @@ import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
 import { ArrowLeft, Home } from "lucide-react";
 import { useMemo } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const AuthLayout = () => {
   // Variables and states
@@ -21,15 +21,24 @@ const AuthLayout = () => {
     if (location.pathname.includes("forgot-password")) {
       return "forgot-password";
     }
+    if (location.pathname.includes("verify")) {
+      return "verify";
+    }
     return "default";
   }, [location.pathname]);
 
   const formTitle = useMemo(() => {
     if (authPathname === "signin") {
+      return "Sign in to your ELearning account!";
+    }
+    if (authPathname === "signup") {
       return "Join our community now!";
     }
     if (authPathname === "forgot-password") {
       return "Forgot password";
+    }
+    if (authPathname === "verify") {
+      return "OTP Verification";
     }
     return "Default title";
   }, [authPathname]);
@@ -87,9 +96,16 @@ const AuthLayout = () => {
               left: 32,
             }}
           >
-            <Typography color="white" variant="h6" fontWeight={800}>
-              Logo
-            </Typography>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+              }}
+            >
+              <Typography color="white" variant="h6" fontWeight={800}>
+                Logo
+              </Typography>
+            </Link>
           </Box>
         </Grid2>
       )}
@@ -129,22 +145,25 @@ const AuthLayout = () => {
                 Back
               </Button>
             )}
-            <Button
-              size="large"
-              variant="text"
-              startIcon={<Home size={20} />}
-              sx={{
-                color: "black",
-              }}
-              onClick={() => navigate("/")}
-            >
-              Home
-            </Button>
+            {isMobileView && (
+              <Button
+                size="large"
+                variant="text"
+                startIcon={<Home size={20} />}
+                sx={{
+                  color: "black",
+                }}
+                onClick={() => navigate("/")}
+              >
+                Home
+              </Button>
+            )}
           </div>
           <Box
             display="flex"
             flexDirection={isMobileView ? "column" : "row"}
-            alignItems="start"
+            alignItems={["verify"].includes(authPathname) ? "center" : "start"}
+            justifyContent={["verify"].includes(authPathname) ? "center" : ""}
           >
             {isMobileView && (
               <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>

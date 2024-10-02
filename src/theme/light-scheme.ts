@@ -1,4 +1,8 @@
 import { ColorSystemOptions } from "@mui/material";
 export const lightColorScheme: ColorSystemOptions = {
-  palette: {},
+  palette: {
+    primary: {
+      main: "#1B1E31",
+    },
+  },
 };

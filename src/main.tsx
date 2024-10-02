@@ -1,5 +1,6 @@
 import App from "@/App";
 import "@/index.css";
+import AppMeta from "@/meta";
 import theme from "@/theme/theme";
 import {
   CssBaseline,
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")!).render(
       <StyledEngineProvider injectFirst={true}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <AppMeta />
           <App />
         </ThemeProvider>
       </StyledEngineProvider>
