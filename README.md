@@ -25,18 +25,22 @@
 
 ## 2. Language and Tools
 
-<img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=flat" alt="React Badge">
-<img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff&style=flat" alt="Vite Badge">
-<img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=flat" alt="TypeScript Badge">
-<img src="https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=fff&style=flat" alt="React Router Badge">
-<img src="https://img.shields.io/badge/MUI-007FFF?logo=mui&logoColor=fff&style=flat" alt="MUI Badge">
-<img src="https://img.shields.io/badge/Redux-764ABC?logo=redux&logoColor=fff&style=flat" alt="Redux Badge">
-<img src="https://img.shields.io/badge/Node.js-5FA04E?logo=nodedotjs&logoColor=fff&style=flat" alt="Node.js Badge">
-<img src="https://img.shields.io/badge/Axios-5A29E4?logo=axios&logoColor=fff&style=flat" alt="Axios Badge">
-<img src="https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=fff&style=flat" alt="Prettier Badge">
-<img src="https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=fff&style=flat" alt="Yarn Badge">
-<img src="https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=fff&style=flat" alt="npm Badge">
-<img src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=flat" alt="ESLint Badge">
+<div style={
+  display: "flex"
+}>
+  <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=flat" alt="React Badge">
+  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff&style=flat" alt="Vite Badge">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=flat" alt="TypeScript Badge">
+  <img src="https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=fff&style=flat" alt="React Router Badge">
+  <img src="https://img.shields.io/badge/MUI-007FFF?logo=mui&logoColor=fff&style=flat" alt="MUI Badge">
+  <img src="https://img.shields.io/badge/Redux-764ABC?logo=redux&logoColor=fff&style=flat" alt="Redux Badge">
+  <img src="https://img.shields.io/badge/Node.js-5FA04E?logo=nodedotjs&logoColor=fff&style=flat" alt="Node.js Badge">
+  <img src="https://img.shields.io/badge/Axios-5A29E4?logo=axios&logoColor=fff&style=flat" alt="Axios Badge">
+  <img src="https://img.shields.io/badge/Prettier-F7B93E?logo=prettier&logoColor=fff&style=flat" alt="Prettier Badge">
+  <img src="https://img.shields.io/badge/Yarn-2C8EBB?logo=yarn&logoColor=fff&style=flat" alt="Yarn Badge">
+  <img src="https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=fff&style=flat" alt="npm Badge">
+  <img src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=fff&style=flat" alt="ESLint Badge">
+</div>
 
 ## For devs only
 
