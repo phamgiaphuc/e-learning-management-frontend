@@ -53,6 +53,7 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
                 display: "flex",
                 flexDirection: "column",
                 marginBottom: 1,
+                flexGrow: 1,
               }}
             >
               <Typography color="white" variant="h6" fontWeight={800}>
