@@ -72,6 +72,7 @@ const AuthLayout = () => {
             src={AuthHeroImage}
             loading="eager"
             width={isTabletView ? "256px" : ""}
+            alt="auth-hero-image"
           />
           <Stack
             sx={{
@@ -103,7 +104,7 @@ const AuthLayout = () => {
               }}
             >
               <Typography color="white" variant="h6" fontWeight={800}>
-                Logo
+                Scholaro
               </Typography>
             </Link>
           </Box>
