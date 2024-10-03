@@ -78,7 +78,7 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
                 key={index}
                 sx={{
                   color: "white",
-                  gap: 1,
+                  gap: 2,
                   borderRadius: "6px",
                   ":hover": {
                     backgroundColor: "#39426f",

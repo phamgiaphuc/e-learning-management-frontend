@@ -83,7 +83,7 @@ const DashboardSideNavDrawer = ({
             key={index}
             sx={{
               marginBottom: 0.5,
-              gap: 1,
+              gap: 2,
               borderRadius: "6px",
               backgroundColor: pathname.includes(route.href)
                 ? "primary.main"
