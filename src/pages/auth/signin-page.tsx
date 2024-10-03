@@ -187,12 +187,12 @@ const SignInPage = () => {
         variant="outlined"
         size="large"
         sx={{
-          borderColor: "#1B1E31",
+          borderColor: "primary.main",
           height: 48,
         }}
       >
         <img src={GoogleLogo} width={24} height={24} alt="google-logo" />
-        <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
+        <Typography fontWeight={600} color="primary.main" marginLeft={0.5}>
           Sign in with Google
         </Typography>
       </Button>
@@ -200,12 +200,12 @@ const SignInPage = () => {
         variant="outlined"
         size="large"
         sx={{
-          borderColor: "#1B1E31",
+          borderColor: "primary.main",
           height: 48,
         }}
       >
         <img src={FacebookLogo} width={24} height={24} alt="facebook-logo" />
-        <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
+        <Typography fontWeight={600} color="primary.main" marginLeft={0.5}>
           Sign in with Facebook
         </Typography>
       </Button>

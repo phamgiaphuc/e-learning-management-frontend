@@ -1,3 +1,4 @@
+import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import AuthHeroImage from "@/assets/images/auth-hero-image.svg";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
@@ -59,7 +60,7 @@ const AuthLayout = () => {
             xs: 6,
           }}
           sx={{
-            backgroundColor: "#1B1E31",
+            backgroundColor: "primary.main",
             borderRadius: 8,
           }}
           display="flex"
@@ -97,16 +98,32 @@ const AuthLayout = () => {
               left: 32,
             }}
           >
-            <Link
+            <Box
+              component={Link}
               to="/"
-              style={{
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
                 textDecoration: "none",
               }}
             >
-              <Typography color="white" variant="h6" fontWeight={800}>
-                Scholaro
-              </Typography>
-            </Link>
+              <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: 1,
+                }}
+              >
+                <Typography color="white" variant="h6" fontWeight={800}>
+                  Scholaro
+                </Typography>
+                <Typography fontSize={12} color="grey.400">
+                  A Elearning Management Platform
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </Grid2>
       )}
@@ -146,7 +163,7 @@ const AuthLayout = () => {
                 Back
               </Button>
             )}
-            {isMobileView && (
+            {isMobileView && ["signin", "signup"].includes(authPathname) && (
               <Button
                 size="large"
                 variant="text"
@@ -167,9 +184,33 @@ const AuthLayout = () => {
             justifyContent={["verify"].includes(authPathname) ? "center" : ""}
           >
             {isMobileView && (
-              <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
-                Logo
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  alignItems: "center",
+                  textDecoration: "none",
+                }}
+              >
+                <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginBottom: 1,
+                  }}
+                >
+                  <Typography
+                    variant={isMobileView ? "h5" : "h4"}
+                    fontWeight={800}
+                  >
+                    Scholaro
+                  </Typography>
+                  <Typography fontSize={12} color="grey.600">
+                    A Elearning Management Platform
+                  </Typography>
+                </Box>
+              </Box>
             )}
             <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
               {formTitle}

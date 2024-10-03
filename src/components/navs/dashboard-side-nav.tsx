@@ -47,7 +47,7 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
               textDecoration: "none",
             }}
           >
-            <img src={HCMIUIcon} alt="hcmiu-logo" height={36} width={36} />
+            <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
             <Box
               sx={{
                 display: "flex",

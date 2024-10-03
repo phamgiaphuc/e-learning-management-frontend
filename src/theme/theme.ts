@@ -1,11 +1,9 @@
-import { darkColorScheme } from "@/theme/dark-scheme";
 import { lightColorScheme } from "@/theme/light-scheme";
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   colorSchemes: {
     light: lightColorScheme,
-    dark: darkColorScheme,
   },
   typography: {
     fontFamily: ["Lato", "sans-serif"].join(","),
