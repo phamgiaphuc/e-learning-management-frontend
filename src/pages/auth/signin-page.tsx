@@ -146,11 +146,13 @@ const SignInPage = () => {
         gap={isTabletView || isMobileView ? 0.5 : 0}
       >
         <Link
+          href="/forgot-password"
           color="#8B2CF5"
           sx={{
             cursor: "pointer",
           }}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             navigate("/forgot-password");
           }}
         >
@@ -164,11 +166,15 @@ const SignInPage = () => {
         >
           <Typography>Don't have an account?</Typography>
           <Link
+            href="/forgot-password"
             color="#8B2CF5"
             sx={{
               cursor: "pointer",
             }}
-            onClick={() => navigate("/signup")}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/signup");
+            }}
           >
             Sign up
           </Link>
@@ -185,7 +191,7 @@ const SignInPage = () => {
           height: 48,
         }}
       >
-        <img src={GoogleLogo} width={24} height={24} />
+        <img src={GoogleLogo} width={24} height={24} alt="google-logo" />
         <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
           Sign in with Google
         </Typography>
@@ -198,7 +204,7 @@ const SignInPage = () => {
           height: 48,
         }}
       >
-        <img src={FacebookLogo} width={24} height={24} />
+        <img src={FacebookLogo} width={24} height={24} alt="facebook-logo" />
         <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
           Sign in with Facebook
         </Typography>

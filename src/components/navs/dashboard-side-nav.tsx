@@ -1,8 +1,9 @@
+import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import LucideIcon from "@/components/icons/lucide-icon";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import { RouteProps } from "@/types/dashboard/side-nav-routes";
-import { Box, List, ListItemButton, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, List, ListItemButton, Typography, useTheme } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 
 interface DashboardSideNavProps {
   routes: Array<RouteProps>;
@@ -12,13 +13,14 @@ interface DashboardSideNavProps {
 const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
   const { isMobileView, isTabletView } = useBreakpointContext();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
     !(isMobileView || isTabletView) && (
       <Box
         sx={{
           display: "flex",
-          width: "280px",
+          width: "300px",
           height: "100vh",
           padding: 2,
         }}
@@ -35,15 +37,32 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
             boxShadow: 2,
           }}
         >
-          <Typography
-            color="white"
-            variant="h5"
-            fontWeight={800}
-            marginBottom={1}
-            textAlign="center"
+          <Box
+            component={Link}
+            to="/dashboard"
+            sx={{
+              display: "flex",
+              gap: 1,
+              alignItems: "center",
+              textDecoration: "none",
+            }}
           >
-            Scholaro
-          </Typography>
+            <img src={HCMIUIcon} alt="hcmiu-logo" height={36} width={36} />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: 1,
+              }}
+            >
+              <Typography color="white" variant="h6" fontWeight={800}>
+                Scholaro
+              </Typography>
+              <Typography fontSize={12} color={theme.palette.grey[400]}>
+                A Elearning Management Platform
+              </Typography>
+            </Box>
+          </Box>
           <Box
             sx={{
               flexGrow: 1,
@@ -74,8 +93,17 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
                   }}
                   onClick={() => navigate(route.href)}
                 >
-                  <LucideIcon name={route.icon} size={20} />
-                  <Typography fontWeight={500}>{route.name}</Typography>
+                  <LucideIcon
+                    name={route.icon}
+                    size={18}
+                    color={pathname.includes(route.href) ? "#FF9600" : "white"}
+                  />
+                  <Typography
+                    fontWeight={500}
+                    color={pathname.includes(route.href) ? "#FF9600" : "white"}
+                  >
+                    {route.name}
+                  </Typography>
                 </ListItemButton>
               ))}
             </List>

@@ -53,6 +53,7 @@ const DashboardLayout = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            marginBottom: 1,
           }}
         >
           <Box
@@ -105,7 +106,7 @@ const DashboardLayout = () => {
           onClose={() => setOpenDbDrawer(false)}
           PaperProps={{
             sx: {
-              width: "280px",
+              width: "300px",
             },
           }}
         ></Drawer>
