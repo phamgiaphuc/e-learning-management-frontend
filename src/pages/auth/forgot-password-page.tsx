@@ -67,7 +67,7 @@ const ForgotPasswordPage = () => {
           size="large"
           variant="contained"
           sx={{
-            backgroundColor: "#1B1E31",
+            backgroundColor: "primary.main",
             height: 48,
           }}
         >

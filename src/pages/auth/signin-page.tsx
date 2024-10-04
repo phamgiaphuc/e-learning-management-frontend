@@ -2,6 +2,7 @@ import FacebookLogo from "@/assets/icons/facebook-logo.svg";
 import GoogleLogo from "@/assets/icons/google-logo.svg";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
+import { blue } from "@/theme/color";
 import {
   initialSignInValues,
   SignInProps,
@@ -18,6 +19,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { CircleHelp, Eye, EyeOff, Lock, User } from "lucide-react";
@@ -26,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
   // Variables and states
+  const theme = useTheme();
   const { isTabletView, isMobileView } = useBreakpointContext();
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -130,7 +133,7 @@ const SignInPage = () => {
             size="large"
             variant="contained"
             sx={{
-              backgroundColor: "#1B1E31",
+              backgroundColor: "primary.main",
               height: 48,
             }}
           >
@@ -147,7 +150,7 @@ const SignInPage = () => {
       >
         <Link
           href="/forgot-password"
-          color="#8B2CF5"
+          color={theme.palette.mode === "light" ? "#8B2CF5" : blue[500]}
           sx={{
             cursor: "pointer",
           }}
@@ -167,7 +170,7 @@ const SignInPage = () => {
           <Typography>Don't have an account?</Typography>
           <Link
             href="/forgot-password"
-            color="#8B2CF5"
+            color={theme.palette.mode === "light" ? "#8B2CF5" : blue[500]}
             sx={{
               cursor: "pointer",
             }}
@@ -187,27 +190,25 @@ const SignInPage = () => {
         variant="outlined"
         size="large"
         sx={{
-          borderColor: "primary.main",
           height: 48,
         }}
       >
-        <img src={GoogleLogo} width={24} height={24} alt="google-logo" />
-        <Typography fontWeight={600} color="primary.main" marginLeft={0.5}>
+        <Typography fontWeight={500} color="primary.main" marginRight={0.5}>
           Sign in with Google
         </Typography>
+        <img src={GoogleLogo} width={24} height={24} alt="google-logo" />
       </Button>
       <Button
         variant="outlined"
         size="large"
         sx={{
-          borderColor: "primary.main",
           height: 48,
         }}
       >
-        <img src={FacebookLogo} width={24} height={24} alt="facebook-logo" />
-        <Typography fontWeight={600} color="primary.main" marginLeft={0.5}>
+        <Typography fontWeight={500} color="primary.main" marginRight={0.5}>
           Sign in with Facebook
         </Typography>
+        <img src={FacebookLogo} width={24} height={24} alt="facebook-logo" />
       </Button>
     </Stack>
   );

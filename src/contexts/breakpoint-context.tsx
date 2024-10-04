@@ -1,6 +1,5 @@
-import theme from "@/theme/theme";
 import { ChildrenNodeProps } from "@/types/children";
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import { createContext } from "react";
 
 interface BreakpointContextProps {
@@ -20,6 +19,7 @@ export const BreakpointContext = createContext<BreakpointContextProps>({
 });
 
 export const BreakpointProvider = ({ children }: BreakpointProviderProps) => {
+  const theme = useTheme();
   const isMobileView = useMediaQuery(theme.breakpoints.down("md"));
   const isTabletView = useMediaQuery(theme.breakpoints.between("md", "xl"));
   const isSmallLaptopView = useMediaQuery(

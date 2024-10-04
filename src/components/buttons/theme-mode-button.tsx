@@ -1,41 +1,37 @@
-import { Tooltip, useColorScheme } from "@mui/material";
+import useThemeModeContext from "@/hooks/use-theme-mode-context";
+import { Tooltip } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { Moon, Sun } from "lucide-react";
 import { useCallback } from "react";
 
 const ThemeModeButton = () => {
-  const { mode, setMode } = useColorScheme();
+  const { themeMode, toggleTheme } = useThemeModeContext();
 
   const onModeClick = useCallback(() => {
-    if (mode === "light") {
-      setMode("dark");
+    if (themeMode === "light") {
+      toggleTheme("dark");
     } else {
-      setMode("light");
+      toggleTheme("light");
     }
-  }, [mode, setMode]);
+  }, [themeMode, toggleTheme]);
 
-  if (!mode) {
+  if (!themeMode) {
     return null;
   }
 
   return (
     <Tooltip
-      title={mode === "light" ? "Turn off the light" : "Turn on the light"}
+      title={themeMode === "light" ? "Turn off the light" : "Turn on the light"}
       arrow
     >
       <IconButton
         aria-label="mode"
-        sx={{
-          border: "solid",
-          borderColor: "gray",
-          "&:hover": {
-            color: mode === "light" ? "black" : "white",
-            borderColor: mode === "light" ? "black" : "white",
-          },
-        }}
         onClick={onModeClick}
+        sx={{
+          color: "primary.main",
+        }}
       >
-        {mode === "light" ? <Sun size={20} /> : <Moon size={20} />}
+        {themeMode === "light" ? <Sun /> : <Moon />}
       </IconButton>
     </Tooltip>
   );

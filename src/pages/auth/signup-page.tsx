@@ -4,6 +4,7 @@ import StudentImg from "@/assets/images/student.png";
 import TeacherImg from "@/assets/images/teacher.png";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
+import { blue, grey } from "@/theme/color";
 import {
   Box,
   Button,
@@ -16,15 +17,16 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { CircleHelp, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 type RoleProps = "student" | "teacher";
 
 const SignUpPage = () => {
   // Variables and states
+  const theme = useTheme();
   const { isTabletView, isMobileView } = useBreakpointContext();
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -305,6 +307,8 @@ const SignUpPage = () => {
                       height: "5rem",
                       ":hover": {
                         borderColor: "primary.main",
+                        backgroundColor:
+                          theme.palette.mode === "dark" ? grey[800] : grey[100],
                       },
                     }}
                     onClick={() => onRoleChange("student")}
@@ -328,6 +332,8 @@ const SignUpPage = () => {
                       height: "5rem",
                       ":hover": {
                         borderColor: "primary.main",
+                        backgroundColor:
+                          theme.palette.mode === "dark" ? grey[800] : grey[100],
                       },
                     }}
                     onClick={() => onRoleChange("teacher")}
@@ -344,7 +350,7 @@ const SignUpPage = () => {
             size="large"
             variant="contained"
             sx={{
-              backgroundColor: "#1B1E31",
+              backgroundColor: "primary.main",
               height: 48,
             }}
           >
@@ -360,7 +366,7 @@ const SignUpPage = () => {
         gap={isTabletView || isMobileView ? 0.5 : 0}
       >
         <Link
-          color="#8B2CF5"
+          color={theme.palette.mode === "light" ? "#8B2CF5" : blue[500]}
           sx={{
             cursor: "pointer",
           }}
@@ -378,7 +384,7 @@ const SignUpPage = () => {
         >
           <Typography>Already have an account?</Typography>
           <Link
-            color="#8B2CF5"
+            color={theme.palette.mode === "light" ? "#8B2CF5" : blue[500]}
             sx={{
               cursor: "pointer",
             }}
@@ -395,12 +401,12 @@ const SignUpPage = () => {
         variant="outlined"
         size="large"
         sx={{
-          borderColor: "#1B1E31",
+          borderColor: "primary.main",
           height: 48,
         }}
       >
         <img src={GoogleLogo} width={24} height={24} />
-        <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
+        <Typography fontWeight={600} color="primary.main" marginLeft={0.5}>
           Sign in with Google
         </Typography>
       </Button>
@@ -408,12 +414,12 @@ const SignUpPage = () => {
         variant="outlined"
         size="large"
         sx={{
-          borderColor: "#1B1E31",
+          borderColor: "primary.main",
           height: 48,
         }}
       >
         <img src={FacebookLogo} width={24} height={24} />
-        <Typography fontWeight={600} color="#1B1E31" marginLeft={0.5}>
+        <Typography fontWeight={600} color="primary.main" marginLeft={0.5}>
           Sign in with Facebook
         </Typography>
       </Button>

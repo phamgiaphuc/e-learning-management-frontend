@@ -1,6 +1,7 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import AuthHeroImage from "@/assets/images/auth-hero-image.svg";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
+import { zinc } from "@/theme/tailwind-color";
 import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
 import { ArrowLeft, Home } from "lucide-react";
 import { useMemo } from "react";
@@ -60,7 +61,8 @@ const AuthLayout = () => {
             xs: 6,
           }}
           sx={{
-            backgroundColor: "primary.main",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light" ? "primary.main" : zinc[800],
             borderRadius: 8,
           }}
           display="flex"
@@ -81,9 +83,11 @@ const AuthLayout = () => {
             }}
           >
             <Typography
-              color="white"
               variant={isTabletView ? "h4" : "h2"}
               fontWeight={800}
+              sx={{
+                color: "white",
+              }}
             >
               Study Toghether
             </Typography>
@@ -156,7 +160,8 @@ const AuthLayout = () => {
                 variant="text"
                 startIcon={<ArrowLeft size={20} />}
                 sx={{
-                  color: "black",
+                  color: (theme) =>
+                    theme.palette.mode === "light" ? "black" : "white",
                 }}
                 onClick={() => navigate("/signin")}
               >

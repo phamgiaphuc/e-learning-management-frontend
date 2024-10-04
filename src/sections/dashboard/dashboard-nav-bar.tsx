@@ -1,6 +1,9 @@
+import ThemeModeButton from "@/components/buttons/theme-mode-button";
 import LucideIcon from "@/components/icons/lucide-icon";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useScroll from "@/hooks/use-scroll";
+import { grey } from "@/theme/color";
+import { zinc } from "@/theme/tailwind-color";
 import { routes } from "@/types/dashboard/side-nav-routes";
 import {
   Avatar,
@@ -11,7 +14,9 @@ import {
   Menu,
   MenuItem,
   TextField,
+  Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { Bell, Menu as LucideMenu, MessageCircle, Search } from "lucide-react";
@@ -26,6 +31,7 @@ const DashboardNavBar = ({
   pathname,
   onOpenDbSideNavDrawer,
 }: DashboardNavBar) => {
+  const theme = useTheme();
   const { scrolled } = useScroll();
   const { isMobileView, isTabletView } = useBreakpointContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,8 +57,14 @@ const DashboardNavBar = ({
         position: "sticky",
         top: isMobileView ? 8 : 16,
         zIndex: 1,
-        backgroundColor: scrolled ? "rgba(247, 248, 249, 0.85)" : "",
-        padding: 1,
+        backgroundColor: (theme) =>
+          scrolled
+            ? theme.palette.mode === "light"
+              ? "rgba(247, 248, 249, 0.85)"
+              : zinc[800]
+            : "",
+        paddingX: 1,
+        paddingY: 0.5,
         borderRadius: "12px",
       }}
     >
@@ -64,16 +76,29 @@ const DashboardNavBar = ({
         }}
       >
         {(isMobileView || isTabletView) && (
-          <IconButton onClick={onOpenDbSideNavDrawer}>
-            <LucideMenu color="#1B1E31" />
+          <IconButton
+            onClick={onOpenDbSideNavDrawer}
+            sx={{
+              color: "primary.main",
+            }}
+          >
+            <LucideMenu />
           </IconButton>
         )}
-        <Typography
-          variant={isMobileView || isTabletView ? "h5" : "h4"}
-          fontWeight={800}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+          }}
         >
-          {page?.name}
-        </Typography>
+          <Typography
+            variant={isMobileView || isTabletView ? "h6" : "h5"}
+            fontWeight={800}
+          >
+            {page?.name}
+          </Typography>
+        </Box>
       </Box>
       <Box
         sx={{
@@ -98,22 +123,41 @@ const DashboardNavBar = ({
                 },
               }}
             />
-            <IconButton>
-              <MessageCircle color="#1B1E31" />
-            </IconButton>
-            <IconButton>
-              <Bell color="#1B1E31" />
-            </IconButton>
+            <Tooltip title="Messages" arrow>
+              <IconButton
+                sx={{
+                  color: "primary.main",
+                }}
+              >
+                <MessageCircle />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Notifications" arrow>
+              <IconButton
+                sx={{
+                  color: "primary.main",
+                }}
+              >
+                <Bell />
+              </IconButton>
+            </Tooltip>
           </>
         )}
+        <ThemeModeButton />
         <IconButton
-          size="small"
           onClick={onHandleMenuOpen}
           aria-controls={menuOpen ? "account-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={menuOpen ? "true" : undefined}
         >
-          <Avatar alt="avatar" src="https://avatar.iran.liara.run/public" />
+          <Avatar
+            alt="avatar"
+            src="https://avatar.iran.liara.run/public"
+            sx={{
+              height: 30,
+              width: 30,
+            }}
+          />
         </IconButton>
         <Menu
           id="account-menu"
@@ -143,7 +187,10 @@ const DashboardNavBar = ({
                   right: 14,
                   width: 10,
                   height: 10,
-                  bgcolor: "background.paper",
+                  bgcolor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "background.paper"
+                      : grey[950],
                   transform: "translateY(-50%) rotate(45deg)",
                   zIndex: 0,
                 },
@@ -155,13 +202,21 @@ const DashboardNavBar = ({
         >
           <MenuItem>
             <ListItemIcon>
-              <LucideIcon name="User" color="black" size={18} />
+              <LucideIcon
+                name="User"
+                size={18}
+                color={theme.palette.mode === "light" ? "black" : "white"}
+              />
             </ListItemIcon>
             <Typography fontWeight={500}>Profile</Typography>
           </MenuItem>
           <MenuItem>
             <ListItemIcon>
-              <LucideIcon name="BookOpen" color="black" size={18} />
+              <LucideIcon
+                name="BookOpen"
+                size={18}
+                color={theme.palette.mode === "light" ? "black" : "white"}
+              />
             </ListItemIcon>
             <Typography fontWeight={500}>My courses</Typography>
           </MenuItem>
@@ -169,13 +224,21 @@ const DashboardNavBar = ({
             <>
               <MenuItem>
                 <ListItemIcon>
-                  <LucideIcon name="MessageCircle" color="black" size={18} />
+                  <LucideIcon
+                    name="MessageCircle"
+                    size={18}
+                    color={theme.palette.mode === "light" ? "black" : "white"}
+                  />
                 </ListItemIcon>
                 <Typography fontWeight={500}>Notifications</Typography>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>
-                  <LucideIcon name="Bell" color="black" size={18} />
+                  <LucideIcon
+                    name="Bell"
+                    size={18}
+                    color={theme.palette.mode === "light" ? "black" : "white"}
+                  />
                 </ListItemIcon>
                 <Typography fontWeight={500}>Messsage</Typography>
               </MenuItem>
@@ -184,13 +247,21 @@ const DashboardNavBar = ({
           <Divider />
           <MenuItem>
             <ListItemIcon>
-              <LucideIcon name="Settings" color="black" size={18} />
+              <LucideIcon
+                name="Settings"
+                size={18}
+                color={theme.palette.mode === "light" ? "black" : "white"}
+              />
             </ListItemIcon>
             <Typography fontWeight={500}>Settings</Typography>
           </MenuItem>
           <MenuItem>
             <ListItemIcon>
-              <LucideIcon name="LogOut" color="black" size={18} />
+              <LucideIcon
+                name="LogOut"
+                size={18}
+                color={theme.palette.mode === "light" ? "black" : "white"}
+              />
             </ListItemIcon>
             <Typography fontWeight={500}>Sign out</Typography>
           </MenuItem>

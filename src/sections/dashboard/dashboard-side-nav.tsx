@@ -1,5 +1,6 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import LucideIcon from "@/components/icons/lucide-icon";
+import { zinc } from "@/theme/tailwind-color";
 import { RouteProps } from "@/types/dashboard/side-nav-routes";
 import { Box, List, ListItemButton, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,7 +25,8 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
     >
       <Box
         sx={{
-          backgroundColor: "primary.main",
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light" ? "primary.main" : zinc[800],
           flexGrow: 1,
           borderRadius: "12px",
           padding: 2,
@@ -106,6 +108,21 @@ const DashboardSideNav = ({ routes, pathname }: DashboardSideNavProps) => {
             ))}
           </List>
         </Box>
+        <List>
+          <ListItemButton
+            sx={{
+              color: "white",
+              gap: 2,
+              borderRadius: "6px",
+              ":hover": {
+                backgroundColor: "#39426f",
+              },
+            }}
+          >
+            <LucideIcon name="CircleHelp" size={18} />
+            <Typography fontWeight={500}>Support</Typography>
+          </ListItemButton>
+        </List>
       </Box>
     </Box>
   );

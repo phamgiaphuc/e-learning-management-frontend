@@ -1,5 +1,6 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import LucideIcon from "@/components/icons/lucide-icon";
+import { zinc } from "@/theme/tailwind-color";
 import { routes } from "@/types/dashboard/side-nav-routes";
 import {
   Box,
@@ -29,10 +30,13 @@ const DashboardSideNavDrawer = ({
     <Drawer
       open={openDbDrawer}
       onClose={onCloseDbSideNavDrawer}
+      elevation={8}
       PaperProps={{
         sx: {
           width: "280px",
           padding: 2,
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light" ? "background.papper" : zinc[950],
         },
       }}
     >
@@ -72,7 +76,13 @@ const DashboardSideNavDrawer = ({
               <ArrowLeft size={20} />
             </IconButton>
           </Box>
-          <Typography fontSize={12} color="grey.600">
+          <Typography
+            fontSize={12}
+            sx={{
+              color: (theme) =>
+                theme.palette.mode === "light" ? "grey.600" : "grey.300",
+            }}
+          >
             A Elearning Management Platform
           </Typography>
         </Box>
@@ -88,7 +98,7 @@ const DashboardSideNavDrawer = ({
               backgroundColor: pathname.includes(route.href)
                 ? "primary.main"
                 : "",
-              color: pathname.includes(route.href) ? "#FF9600" : "black",
+              color: pathname.includes(route.href) ? "#FF9600" : "primary.main",
             }}
             onClick={() => {
               navigate(route.href);
