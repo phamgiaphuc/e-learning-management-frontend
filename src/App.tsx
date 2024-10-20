@@ -11,6 +11,7 @@ import CommunitiesPage from "@/pages/dashboard/communities-page";
 import CoursesPage from "@/pages/dashboard/courses-page";
 import DashboardPage from "@/pages/dashboard/dashboard-page";
 import HomePage from "@/pages/home/home-page";
+import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
 
@@ -20,6 +21,7 @@ const App = () => {
       <Routes>
         <Route>
           <Route path="/" element={<HomePage />} />
+          <Route path="/my-course" element={<MyCoursePage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />

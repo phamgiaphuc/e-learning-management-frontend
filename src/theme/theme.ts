@@ -28,6 +28,13 @@ export const generateTheme = (theme: ThemeMode) =>
           },
         },
       },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
+          },
+        },
+      },
       MuiTextField: {
         styleOverrides: {
           root: {
