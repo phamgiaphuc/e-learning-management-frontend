@@ -31,7 +31,7 @@ const AuthLayout = () => {
 
   const formTitle = useMemo(() => {
     if (authPathname === "signin") {
-      return "Sign in to your ELearning account!";
+      return "Sign in to your E-Learning account!";
     }
     if (authPathname === "signup") {
       return "Join our community now!";
@@ -89,10 +89,10 @@ const AuthLayout = () => {
                 color: "white",
               }}
             >
-              Study Toghether
+              Study Together
             </Typography>
             <Typography color="white" variant={isTabletView ? "body1" : "h6"}>
-              Make your study easier with our study app
+              Embark on a journey of knowledge and skills.
             </Typography>
           </Stack>
           <Box
@@ -124,7 +124,7 @@ const AuthLayout = () => {
                   Scholaro
                 </Typography>
                 <Typography fontSize={12} color="grey.400">
-                  A Elearning Management Platform
+                  A E-learning Management Platform
                 </Typography>
               </Box>
             </Box>
@@ -212,7 +212,7 @@ const AuthLayout = () => {
                     Scholaro
                   </Typography>
                   <Typography fontSize={12} color="grey.600">
-                    A Elearning Management Platform
+                    A E-learning Management Platform
                   </Typography>
                 </Box>
               </Box>

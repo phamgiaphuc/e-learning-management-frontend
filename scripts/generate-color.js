@@ -52,9 +52,9 @@ function formatFile() {
 }
 
 const fileName = "tailwind-color";
-const name = "zinc";
+const name = "blue";
 const palette = [
-  "#FAFAFA",
+  "#EFF6FF",
   "#F4F4F5",
   "#E4E4E7",
   "#D4D4D8",
@@ -66,6 +66,7 @@ const palette = [
   "#18181B",
   "#09090B",
 ];
+
 const additionalColors = ``;
 
 generateOrUpdateColorTs(fileName, name, palette, additionalColors);

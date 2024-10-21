@@ -1,6 +1,7 @@
 import AuthLayout from "@/layouts/auth-layout";
 import DashboardLayout from "@/layouts/dasboard-layout";
 import GeneralLayout from "@/layouts/general-layout";
+import HomeLayout from "@/layouts/home-layout";
 import ForgotPasswordPage from "@/pages/auth/forgot-password-page";
 import OtpVerificationPage from "@/pages/auth/otp-verification-page";
 import RecoverPasswordPage from "@/pages/auth/recover-password-page";
@@ -19,7 +20,7 @@ const App = () => {
   return (
     <GeneralLayout>
       <Routes>
-        <Route>
+        <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/my-course" element={<MyCoursePage />} />
         </Route>
