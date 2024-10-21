@@ -70,7 +70,7 @@ const SignUpPage = () => {
                     },
                   }}
                   type="text"
-                  placeholder="Enter your firstName"
+                  placeholder="Enter your first name"
                   fullWidth
                   // value={formik.values.account}
                   // onChange={formik.handleChange}
@@ -102,7 +102,7 @@ const SignUpPage = () => {
                     },
                   }}
                   type="text"
-                  placeholder="Enter your lastname"
+                  placeholder="Enter your last name"
                   fullWidth
                   // value={formik.values.account}
                   // onChange={formik.handleChange}

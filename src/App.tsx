@@ -10,15 +10,16 @@ import BlogsPage from "@/pages/dashboard/blogs-page";
 import CommunitiesPage from "@/pages/dashboard/communities-page";
 import CoursesPage from "@/pages/dashboard/courses-page";
 import DashboardPage from "@/pages/dashboard/dashboard-page";
-import HomePage from "@/pages/home/home-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
+import HomeLayout from "./layouts/home-layout";
+import HomePage from "./pages/home/home-page";
 
 const App = () => {
   return (
     <GeneralLayout>
       <Routes>
-        <Route>
+        <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
         </Route>
         <Route element={<AuthLayout />}>
