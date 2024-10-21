@@ -12,14 +12,15 @@ import CoursesPage from "@/pages/dashboard/courses-page";
 import DashboardPage from "@/pages/dashboard/dashboard-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
-import NavbarLayout from "./layouts/navbar-layout";
+import HomeLayout from "./layouts/home-layout";
+import HomePage from "./pages/home/home-page";
 
 const App = () => {
   return (
     <GeneralLayout>
       <Routes>
-        <Route>
-          <Route path="/" element={<NavbarLayout />} />
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<HomePage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />

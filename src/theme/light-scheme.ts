@@ -6,9 +6,8 @@ export const lightColorScheme: ColorSystemOptions = {
     primary: {
       main: "#1B1E31",
     },
-    text: {
-      primary: "#1575E3",
-      secondary: "#C7CACD",
+    secondary: {
+      main: "#1575E3",
     },
     background: {
       default: grey[50],

@@ -23,7 +23,7 @@ const SearchBar = () => {
           color: grey[900],
         },
         "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: "text.primary",
+          borderColor: "secondary.main",
           borderWidth: "2px",
           borderRadius: "0.1rem",
         },
@@ -31,7 +31,7 @@ const SearchBar = () => {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchIcon color="#1575E3" transform="rotate(180deg)" />
+            <SearchIcon color="#1575E3" />
           </InputAdornment>
         ),
       }}
