@@ -15,6 +15,8 @@ import HomePage from "@/pages/home/home-page";
 import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
+import Home from "./pages/home/defalut-home";
+import LoginHome from "./pages/home/login-home";
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/my-course" element={<MyCoursePage />} />
+          <Route path="home" element={<Home />} />
+          <Route path="login-home" element={<LoginHome />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />
