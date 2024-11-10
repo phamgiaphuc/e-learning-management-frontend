@@ -14,13 +14,17 @@ import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
 import HomeLayout from "./layouts/home-layout";
 import HomePage from "./pages/home/home-page";
+import Home from "./pages/home/defalut-home";
+import LoginHome from "./pages/home/login-home";
 
 const App = () => {
   return (
     <GeneralLayout>
       <Routes>
-        <Route element={<HomeLayout />}>
+        <Route>
           <Route path="/" element={<HomePage />} />
+          <Route path="home" element={<Home />} />
+          <Route path="login-home" element={<LoginHome />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />
