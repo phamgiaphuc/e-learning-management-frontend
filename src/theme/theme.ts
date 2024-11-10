@@ -7,7 +7,7 @@ export const generateTheme = (theme: ThemeMode) =>
   createTheme({
     ...(theme === "light" ? lightColorScheme : darkColorScheme),
     typography: {
-      fontFamily: ["Lato", "sans-serif"].join(","),
+      fontFamily: ["Poppins", "sans-serif"].join(","),
     },
     breakpoints: {
       values: {
@@ -25,6 +25,13 @@ export const generateTheme = (theme: ThemeMode) =>
           root: {
             textTransform: "none",
             borderRadius: "12px",
+          },
+        },
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: "none",
           },
         },
       },

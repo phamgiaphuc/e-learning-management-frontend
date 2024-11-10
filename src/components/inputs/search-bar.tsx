@@ -8,18 +8,13 @@ const SearchBar = () => {
       variant="outlined"
       placeholder="Search for courses..."
       sx={{
-        display: "flex",
-        fontFamily: "Poppins, sans-serif",
-        lineHeight: "24px",
-        width: "25rem",
+        width: "24rem",
         "& .MuiInputBase-root": {
           height: "2.7rem",
         },
         "& .MuiOutlinedInput-root": {
-          fontWeight: "300",
-          fontFamily: "Poppins, sans-serif",
-          lineHeight: "24px",
-          fontSize: "16px",
+          fontWeight: 300,
+          fontSize: 16,
           color: grey[900],
         },
         "& .MuiOutlinedInput-notchedOutline": {
@@ -28,12 +23,14 @@ const SearchBar = () => {
           borderRadius: "0.1rem",
         },
       }}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <SearchIcon color="#1575E3" />
-          </InputAdornment>
-        ),
+      slotProps={{
+        input: {
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon color="#1575E3" />
+            </InputAdornment>
+          ),
+        },
       }}
     />
   );
