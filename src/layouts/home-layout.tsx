@@ -12,6 +12,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
   underline: "hover",
@@ -45,7 +46,14 @@ const AuthButton = styled(Button)<{
   },
 }));
 
-const HomeLayout = () => {
+const HomeLayout = () => (
+  <Box>
+    <Navbar />
+    <Outlet />
+  </Box>
+);
+
+const Navbar = () => {
   return (
     <AppBar
       sx={{
