@@ -7,7 +7,7 @@ export const generateTheme = (theme: ThemeMode) =>
   createTheme({
     ...(theme === "light" ? lightColorScheme : darkColorScheme),
     typography: {
-      fontFamily: ["Lato", "sans-serif"].join(","),
+      fontFamily: ["Poppins", "sans-serif"].join(","),
     },
     breakpoints: {
       values: {

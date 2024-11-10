@@ -1,37 +1,25 @@
-import React from "react";
+import ala from "@/assets/images/ala.png";
+import math from "@/assets/images/math.png";
+import python from "@/assets/images/python.png";
+import useMetaTitle from "@/hooks/use-meta-title";
+import { blue } from "@/theme/color";
 import {
   Box,
-  Typography,
   Card,
   CardContent,
   CardMedia,
-  LinearProgress,
   Chip,
+  LinearProgress,
   Stack,
+  Typography,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import { blue } from "@/theme/color";
-import python from "@/assets/images/python.png";
-import ala from "@/assets/images/ala.png";
-import math from "@/assets/images/math.png";
-import useMetaTitle from "@/hooks/use-meta-title";
+import { Grid, styled } from "@mui/system";
 
-const CourseBox = styled(Box)({
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "space-around",
-  margin: "1rem 3rem 0 3rem",
-  flexGrow: 1,
-});
 const Chips = styled(Chip)({
   borderRadius: "0.5rem",
 });
-const CourseCard = styled(Card)({
-  maxWidth: "19rem",
-  minWidth: "19rem",
-  maxHeight: "18rem",
-  marginBottom: "1rem",
-});
+
+const CourseCard = styled(Card)({});
 
 const courses = [
   {
@@ -88,14 +76,22 @@ const LoginHomePage = () => {
 
   return (
     <>
-      <Box margin="2rem 3rem">
-        <Typography variant="h5" color={blue[900]} gutterBottom>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          paddingX: 4,
+          paddingY: 2,
+          gap: 2,
+        }}
+      >
+        <Typography variant="h5" color={blue[900]} fontWeight={700}>
           Continue Learning
         </Typography>
         <Card
           sx={{
             borderRadius: "1rem",
-            boxShadow: "0 5px 10px black",
+            boxShadow: "0 2.5px 5px black",
           }}
         >
           <Box display="flex">
@@ -150,59 +146,71 @@ const LoginHomePage = () => {
             </CardContent>
           </Box>
         </Card>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography
+            variant="h5"
+            color={blue[900]}
+            gutterBottom
+            fontWeight={700}
+          >
+            What to learn next?
+          </Typography>
+          <Grid container spacing={2}>
+            {courses.map((course, index) => (
+              <Grid size={3}>
+                <CourseCard key={index}>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={course.image}
+                    alt={course.title}
+                    sx={{
+                      objectFit: "cover",
+                      width: "95%",
+                      height: "170px",
+                      margin: "auto",
+                      paddingTop: "8px",
+                      borderRadius: "1rem",
+                    }}
+                  />
+                  <CardContent sx={{ paddingTop: "0" }}>
+                    <Typography
+                      sx={{
+                        paddingTop: 0,
+                        fontSize: "16px",
+                        fontWeight: "650",
+                        fontFamily: "Poppins",
+                        minHeight: "3rem",
+                      }}
+                      color={blue[900]}
+                      variant="h6"
+                      component="div"
+                    >
+                      {course.title}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textDecoration: "underline",
+                        fontFamily: "Poppins",
+                        fontSize: "12px",
+                      }}
+                      variant="body2"
+                      color="text.secondary"
+                    >
+                      {course.subtitle}
+                    </Typography>
+                  </CardContent>
+                </CourseCard>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Box>
-      <Box margin="2rem 3rem">
-        <Typography variant="h5" color={blue[900]} gutterBottom>
-          What to learn next?
-        </Typography>
-      </Box>
-      <CourseBox>
-        {courses.map((course, index) => (
-          <CourseCard key={index}>
-            <CardMedia
-              component="img"
-              height="140"
-              image={course.image}
-              alt={course.title}
-              sx={{
-                objectFit: "cover",
-                width: "95%",
-                height: "170px",
-                margin: "auto",
-                paddingTop: "8px",
-                borderRadius: "1rem",
-              }}
-            />
-            <CardContent sx={{ paddingTop: "0" }}>
-              <Typography
-                sx={{
-                  paddingTop: 0,
-                  fontSize: "16px",
-                  fontWeight: "650",
-                  fontFamily: "Poppins",
-                  minHeight: "3rem",
-                }}
-                color={blue[900]}
-                variant="h6"
-                component="div"
-              >
-                {course.title}
-              </Typography>
-              <Typography
-                sx={{
-                  textDecoration: "underline",
-                  fontFamily: "Poppins",
-                  fontSize: "12px",
-                }}
-                variant="body2"
-                color="text.secondary"
-              >
-                {course.subtitle}
-              </Typography>
-            </CardContent>
-          </CourseCard>
-        ))}
-      </CourseBox>
     </>
   );
 };
