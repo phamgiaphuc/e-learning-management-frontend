@@ -58,7 +58,10 @@ const CustomTab = styled(Tab)(() => ({
   },
 }));
 
-const CourseCard = styled(Card)({});
+const CourseCard = styled(Card)({
+  boxShadow: "0px 5px 6px rgba(0, 0, 0, 0.25)",
+  borderRadius: "10px",
+});
 
 const courses = [
   {
@@ -191,7 +194,7 @@ const DefalutHomePage: React.FC = () => {
           </NavigationTabs>
           <Grid
             container
-            spacing={2}
+            spacing={3}
             sx={{
               marginTop: 2,
             }}

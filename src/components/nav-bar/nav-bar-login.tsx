@@ -1,15 +1,8 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
 import { grey } from "@/theme/color";
-import {
-  AppBar,
-  Box,
-  Button,
-  Link,
-  styled,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Link, styled, Toolbar, Typography } from "@mui/material";
+import { BellIcon, CircleUserIcon, MailIcon } from "lucide-react";
 
 const NavBarLink = styled(Link)(() => ({
   underline: "hover",
@@ -24,23 +17,7 @@ const NavBarLink = styled(Link)(() => ({
   },
 }));
 
-const AuthButton = styled(Button)<{
-  borderColor: string;
-  backgroundColor: string;
-  textColor: string;
-}>(({ borderColor, backgroundColor, textColor }) => ({
-  padding: "8px 16px 8px 16px",
-  boxSizing: "border-box",
-  border: `1px solid ${borderColor}`,
-  backgroundColor: backgroundColor,
-  "& .MuiTypography-root": {
-    fontWeight: 600,
-    fontSize: 16,
-    color: textColor,
-  },
-}));
-
-const NavBar = () => {
+const NavBarLogin = () => {
   return (
     <AppBar
       sx={{
@@ -108,24 +85,21 @@ const NavBar = () => {
           }}
         >
           <SearchBar />
-          <AuthButton
-            borderColor="#1575E3"
-            backgroundColor="white"
-            textColor="#1575E3"
+          <Box
+            color="#1575E3"
+            alignItems={"center"}
+            display="flex"
+            gap={3}
+            marginLeft={4}
           >
-            <Typography>Sign up</Typography>
-          </AuthButton>
-          <AuthButton
-            borderColor="#1575E3"
-            backgroundColor="#1575E3"
-            textColor="white"
-          >
-            <Typography>Log in</Typography>
-          </AuthButton>
+            <BellIcon />
+            <MailIcon />
+            <CircleUserIcon />
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>
   );
 };
 
-export default NavBar;
+export default NavBarLogin;
