@@ -1,8 +1,21 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
 import { grey } from "@/theme/color";
-import { AppBar, Box, Link, styled, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Link,
+  Menu,
+  MenuItem,
+  styled,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { BellIcon, CircleUserIcon, MailIcon } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
   underline: "hover",
@@ -18,6 +31,19 @@ const NavBarLink = styled(Link)(() => ({
 }));
 
 const NavBarLogin = () => {
+  const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>): void => {
+    setAncholEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAncholEl(null);
+  };
+
+  const navigate = useNavigate();
+
   return (
     <AppBar
       sx={{
@@ -85,16 +111,54 @@ const NavBarLogin = () => {
           }}
         >
           <SearchBar />
+          {/* Three right-side buttons */}
           <Box
-            color="#1575E3"
-            alignItems={"center"}
-            display="flex"
-            gap={3}
-            marginLeft={4}
+            sx={{
+              color: "#1575E3",
+              alignItems: "center",
+              display: "flex",
+              gap: 3,
+              marginLeft: 4,
+              marginRight: 3,
+            }}
           >
-            <BellIcon />
-            <MailIcon />
-            <CircleUserIcon />
+            <Tooltip title="Notification">
+              <IconButton color="inherit">
+                <BellIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Messages">
+              <IconButton color="inherit">
+                <MailIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Account">
+              <IconButton onClick={handleClick} color="inherit">
+                <CircleUserIcon
+                  aria-controls="profile-menu"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                />
+              </IconButton>
+            </Tooltip>
+            {/* Profile Dropdown Menu */}
+            <Menu
+              id="profile-menu"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>My profile</MenuItem>
+              <MenuItem onClick={handleClose}>Settings</MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/signout");
+                }}
+              >
+                Log out
+              </MenuItem>
+            </Menu>
           </Box>
         </Box>
       </Toolbar>

@@ -15,7 +15,7 @@ import HomePage from "@/pages/home/home-page";
 import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/home/defalut-home";
+import Home from "./pages/home/default-home";
 import LoginHome from "./pages/home/login-home";
 
 const App = () => {
