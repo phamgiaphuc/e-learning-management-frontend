@@ -9,11 +9,12 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Grid2,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
-import { Grid, styled } from "@mui/system";
+import { styled } from "@mui/system";
 import React from "react";
 
 const Container = styled(Box)({
@@ -189,7 +190,7 @@ const DefalutHomePage: React.FC = () => {
             <CustomTab label="Database" />
             <CustomTab label="AI" />
           </NavigationTabs>
-          <Grid
+          <Grid2
             container
             spacing={2}
             sx={{
@@ -197,7 +198,7 @@ const DefalutHomePage: React.FC = () => {
             }}
           >
             {courses.map((course, index) => (
-              <Grid size={3}>
+              <Grid2 size={3}>
                 <CourseCard key={index}>
                   <CardMedia
                     component="img"
@@ -241,9 +242,9 @@ const DefalutHomePage: React.FC = () => {
                     </Typography>
                   </CardContent>
                 </CourseCard>
-              </Grid>
+              </Grid2>
             ))}
-          </Grid>
+          </Grid2>
         </Box>
       </Box>
     </>

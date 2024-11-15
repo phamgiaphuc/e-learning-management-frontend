@@ -1,5 +1,6 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
+import { useAppSelector } from "@/hooks/use-app-selector";
 import { grey } from "@/theme/color";
 import {
   AppBar,
@@ -41,6 +42,7 @@ const AuthButton = styled(Button)<{
 }));
 
 const NavBar = () => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   return (
     <AppBar
       sx={{
@@ -106,20 +108,28 @@ const NavBar = () => {
           }}
         >
           <SearchBar />
-          <AuthButton
-            borderColor="#1575E3"
-            backgroundColor="white"
-            textColor="#1575E3"
-          >
-            <Typography>Sign up</Typography>
-          </AuthButton>
-          <AuthButton
-            borderColor="#1575E3"
-            backgroundColor="#1575E3"
-            textColor="white"
-          >
-            <Typography>Log in</Typography>
-          </AuthButton>
+          <>
+            {isAuthenticated ? (
+              <div>User signed in</div>
+            ) : (
+              <>
+                <AuthButton
+                  borderColor="#1575E3"
+                  backgroundColor="white"
+                  textColor="#1575E3"
+                >
+                  <Typography>Sign up</Typography>
+                </AuthButton>
+                <AuthButton
+                  borderColor="#1575E3"
+                  backgroundColor="#1575E3"
+                  textColor="white"
+                >
+                  <Typography>Log in</Typography>
+                </AuthButton>
+              </>
+            )}
+          </>
         </Box>
       </Toolbar>
     </AppBar>
