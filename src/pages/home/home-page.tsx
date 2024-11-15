@@ -1,5 +1,12 @@
+import { testAxios } from "@/apis/test/test.api";
+import { useEffect } from "react";
+
 const HomePage = () => {
-  return <div>Home Page</div>;
+  useEffect(() => {
+    testAxios();
+  }, []);
+
+  return <div>Home page</div>;
 };
 
-export default HomePage; /* HomePage */
+export default HomePage;
