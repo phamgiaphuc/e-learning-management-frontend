@@ -1,15 +1,24 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
+import { useAppSelector } from "@/hooks/use-app-selector";
+import { signout } from "@/stores/auth/auth.slice";
 import { grey } from "@/theme/color";
 import {
   AppBar,
   Box,
   Button,
+  IconButton,
   Link,
+  Menu,
+  MenuItem,
   styled,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import { BellIcon, CircleUserIcon, MailIcon } from "lucide-react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
@@ -42,7 +51,22 @@ const AuthButton = styled(Button)<{
 }));
 
 const NavBar = () => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+
+  const handleClickProfile = (e: React.MouseEvent<HTMLElement>): void => {
+    setAncholEl(e.currentTarget);
+  };
+
+  const handleCloseProfile = () => {
+    setAncholEl(null);
+  };
+
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
   return (
     <AppBar
       sx={{
@@ -96,7 +120,8 @@ const NavBar = () => {
                 gap: 6,
               }}
             >
-              <NavBarLink>Homepage</NavBarLink>
+              <NavBarLink href="/home">Homepage</NavBarLink>
+              <NavBarLink href="/my-course">Course</NavBarLink>
               <NavBarLink>About</NavBarLink>
             </Box>
           </Box>
@@ -109,28 +134,86 @@ const NavBar = () => {
           }}
         >
           <SearchBar />
-          <AuthButton
-            borderColor="#1575E3"
-            backgroundColor="white"
-            textColor="#1575E3"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/signup");
-            }}
-          >
-            <Typography>Sign up</Typography>
-          </AuthButton>
-          <AuthButton
-            borderColor="#1575E3"
-            backgroundColor="#1575E3"
-            textColor="white"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/signin");
-            }}
-          >
-            <Typography>Log in</Typography>
-          </AuthButton>
+          <>
+            {/* If the user has already logged in */}
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  color: "#1575E3",
+                  alignItems: "center",
+                  display: "flex",
+                  gap: 2,
+                  marginLeft: 4,
+                  marginRight: 3,
+                }}
+              >
+                <Tooltip title="Notification">
+                  <IconButton color="inherit">
+                    <BellIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Messages">
+                  <IconButton color="inherit">
+                    <MailIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Account">
+                  <IconButton onClick={handleClickProfile} color="inherit">
+                    <CircleUserIcon
+                      aria-controls="profile-menu"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    />
+                  </IconButton>
+                </Tooltip>
+                {/* Profile Dropdown Menu */}
+                <Menu
+                  id="profile-menu"
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleCloseProfile}
+                >
+                  <MenuItem onClick={handleCloseProfile}>My profile</MenuItem>
+                  <MenuItem onClick={handleCloseProfile}>Settings</MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.preventDefault();
+                      dispatch(signout());
+                      navigate("/signout");
+                    }}
+                  >
+                    Log out
+                  </MenuItem>
+                </Menu>
+              </Box>
+            ) : (
+              // If the user has NOT logged in
+              <>
+                <AuthButton
+                  borderColor="#1575E3"
+                  backgroundColor="white"
+                  textColor="#1575E3"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/signup");
+                  }}
+                >
+                  <Typography>Sign up</Typography>
+                </AuthButton>
+                <AuthButton
+                  borderColor="#1575E3"
+                  backgroundColor="#1575E3"
+                  textColor="white"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/signin");
+                  }}
+                >
+                  <Typography>Log in</Typography>
+                </AuthButton>
+              </>
+            )}
+          </>
         </Box>
       </Toolbar>
     </AppBar>

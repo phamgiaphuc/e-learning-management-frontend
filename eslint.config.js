@@ -36,6 +36,12 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "prettier/prettier": "error",
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
+        {
+          allowShortCircuit: true,
+        },
+      ],
     },
   },
 );

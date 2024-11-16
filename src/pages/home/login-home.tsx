@@ -9,11 +9,12 @@ import {
   CardContent,
   CardMedia,
   Chip,
+  Grid2,
   LinearProgress,
   Stack,
   Typography,
 } from "@mui/material";
-import { Grid, styled } from "@mui/system";
+import { styled } from "@mui/system";
 
 const Chips = styled(Chip)({
   borderRadius: "0.5rem",
@@ -160,9 +161,9 @@ const LoginHomePage = () => {
           >
             What to learn next?
           </Typography>
-          <Grid container spacing={2}>
+          <Grid2 container spacing={2}>
             {courses.map((course, index) => (
-              <Grid size={3}>
+              <Grid2 size={3}>
                 <CourseCard key={index}>
                   <CardMedia
                     component="img"
@@ -206,9 +207,9 @@ const LoginHomePage = () => {
                     </Typography>
                   </CardContent>
                 </CourseCard>
-              </Grid>
+              </Grid2>
             ))}
-          </Grid>
+          </Grid2>
         </Box>
       </Box>
     </>

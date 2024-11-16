@@ -1,10 +1,10 @@
-import NavBarLogin from "@/components/nav-bar/nav-bar-login";
+import NavBar from "@/components/nav-bar/nav-bar";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 const HomeLayout = () => (
   <Box>
-    <NavBarLogin />
+    <NavBar />
     <Box
       sx={{
         marginTop: "5rem",

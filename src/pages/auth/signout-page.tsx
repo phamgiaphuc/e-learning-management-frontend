@@ -61,7 +61,7 @@ const SignOutPage = () => {
                 navigate("/signin");
               }}
             >
-              Sign in
+              Log in
             </Button>
             <Button
               variant="outlined"
