@@ -10,6 +10,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
   underline: "hover",
@@ -41,6 +42,7 @@ const AuthButton = styled(Button)<{
 }));
 
 const NavBar = () => {
+  const navigate = useNavigate();
   return (
     <AppBar
       sx={{
@@ -95,7 +97,6 @@ const NavBar = () => {
               }}
             >
               <NavBarLink>Homepage</NavBarLink>
-              <NavBarLink>Course</NavBarLink>
               <NavBarLink>About</NavBarLink>
             </Box>
           </Box>
@@ -112,6 +113,10 @@ const NavBar = () => {
             borderColor="#1575E3"
             backgroundColor="white"
             textColor="#1575E3"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/signup");
+            }}
           >
             <Typography>Sign up</Typography>
           </AuthButton>
@@ -119,6 +124,10 @@ const NavBar = () => {
             borderColor="#1575E3"
             backgroundColor="#1575E3"
             textColor="white"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/signin");
+            }}
           >
             <Typography>Log in</Typography>
           </AuthButton>

@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { BellIcon, CircleUserIcon, MailIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
@@ -34,11 +34,11 @@ const NavBarLogin = () => {
   const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>): void => {
+  const handleClickProfile = (e: React.MouseEvent<HTMLElement>): void => {
     setAncholEl(e.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseProfile = () => {
     setAncholEl(null);
   };
 
@@ -97,8 +97,8 @@ const NavBarLogin = () => {
                 gap: 6,
               }}
             >
-              <NavBarLink>Homepage</NavBarLink>
-              <NavBarLink>Course</NavBarLink>
+              <NavBarLink href="/home">Homepage</NavBarLink>
+              <NavBarLink href="/my-course">Course</NavBarLink>
               <NavBarLink>About</NavBarLink>
             </Box>
           </Box>
@@ -117,7 +117,7 @@ const NavBarLogin = () => {
               color: "#1575E3",
               alignItems: "center",
               display: "flex",
-              gap: 3,
+              gap: 2,
               marginLeft: 4,
               marginRight: 3,
             }}
@@ -133,7 +133,7 @@ const NavBarLogin = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="Account">
-              <IconButton onClick={handleClick} color="inherit">
+              <IconButton onClick={handleClickProfile} color="inherit">
                 <CircleUserIcon
                   aria-controls="profile-menu"
                   aria-haspopup="true"
@@ -146,10 +146,10 @@ const NavBarLogin = () => {
               id="profile-menu"
               anchorEl={anchorEl}
               open={openMenu}
-              onClose={handleClose}
+              onClose={handleCloseProfile}
             >
-              <MenuItem onClick={handleClose}>My profile</MenuItem>
-              <MenuItem onClick={handleClose}>Settings</MenuItem>
+              <MenuItem onClick={handleCloseProfile}>My profile</MenuItem>
+              <MenuItem onClick={handleCloseProfile}>Settings</MenuItem>
               <MenuItem
                 onClick={(e) => {
                   e.preventDefault();

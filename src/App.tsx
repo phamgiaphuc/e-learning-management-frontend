@@ -17,6 +17,7 @@ import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/home/default-home";
 import LoginHome from "./pages/home/login-home";
+import SignOutPage from "./pages/auth/signout-page";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/my-course" element={<MyCoursePage />} />
           <Route path="home" element={<Home />} />
           <Route path="login-home" element={<LoginHome />} />
+          <Route path="signout" element={<SignOutPage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />
