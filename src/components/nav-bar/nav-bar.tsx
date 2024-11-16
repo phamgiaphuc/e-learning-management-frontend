@@ -4,6 +4,7 @@ import { useAppSelector } from "@/hooks/use-app-selector";
 import { signout } from "@/stores/auth/auth.slice";
 import { grey } from "@/theme/color";
 import {
+  Avatar,
   AppBar,
   Box,
   Button,
@@ -121,7 +122,9 @@ const NavBar = () => {
               }}
             >
               <NavBarLink href="/home">Homepage</NavBarLink>
-              <NavBarLink href="/my-course">Course</NavBarLink>
+              {isAuthenticated && (
+                <NavBarLink href="/my-course">Course</NavBarLink>
+              )}
               <NavBarLink>About</NavBarLink>
             </Box>
           </Box>
@@ -158,13 +161,20 @@ const NavBar = () => {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Account">
-                  <IconButton onClick={handleClickProfile} color="inherit">
+                  <Avatar
+                    onClick={handleClickProfile}
+                    sx={{
+                      cursor: "pointer",
+                      color: "secondary.main",
+                      bgcolor: "#fff",
+                    }}
+                  >
                     <CircleUserIcon
                       aria-controls="profile-menu"
                       aria-haspopup="true"
                       aria-expanded="false"
                     />
-                  </IconButton>
+                  </Avatar>
                 </Tooltip>
                 {/* Profile Dropdown Menu */}
                 <Menu

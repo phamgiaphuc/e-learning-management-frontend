@@ -67,7 +67,7 @@ const palette = [
   "#09090B",
 ];
 
-const additionalColors = `#000`; //filler to avoid unused expression - will change when additional color needed
+const additionalColors = ``;
 
 generateOrUpdateColorTs(fileName, name, palette, additionalColors);
 formatFile();
