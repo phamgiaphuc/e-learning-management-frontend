@@ -166,7 +166,7 @@ const NavBar = () => {
                     sx={{
                       cursor: "pointer",
                       color: "secondary.main",
-                      bgcolor: "#fff",
+                      bgcolor: "#000",
                     }}
                   >
                     <CircleUserIcon
