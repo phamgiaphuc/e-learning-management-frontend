@@ -1,4 +1,5 @@
 import useCourseContext from "@/hooks/contexts/use-course-context";
+import { useAppSelector } from "@/hooks/use-app-selector";
 import useMetaTitle from "@/hooks/use-meta-title";
 import { CourseProps, intitialCourseValues } from "@/types/course";
 import { Box, Button, Typography } from "@mui/material";
@@ -7,10 +8,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const CourseOverviewPage: React.FC = () => {
   const [course, setCourse] = useState<CourseProps>(intitialCourseValues);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { getCourseById } = useCourseContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [authenticated, setAuthenticated] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
   const [buttonText, setButtonText] = useState("Enroll for Free");
@@ -19,7 +22,7 @@ const CourseOverviewPage: React.FC = () => {
   );
 
   const handleButtonClick = () => {
-    if (!authenticated) {
+    if (!isAuthenticated) {
       navigate(`/signin`);
     } else {
       if (!enrolled) {
