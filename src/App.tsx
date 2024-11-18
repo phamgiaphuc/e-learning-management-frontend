@@ -15,8 +15,10 @@ import HomePage from "@/pages/home/home-page";
 import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
+import CourseOverviewPage from "./pages/course/course-overview";
 import Home from "./pages/home/defalut-home";
 import LoginHome from "./pages/home/login-home";
+import CoursePage from "./pages/course/course";
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
           <Route path="/my-course" element={<MyCoursePage />} />
           <Route path="home" element={<Home />} />
           <Route path="login-home" element={<LoginHome />} />
+          <Route path="/course/:title" element={<CourseOverviewPage />} />
+          <Route path="/course/:title/details" element={<CoursePage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />

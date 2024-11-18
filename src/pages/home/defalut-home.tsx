@@ -6,9 +6,6 @@ import useMetaTitle from "@/hooks/use-meta-title";
 import { blue } from "@/theme/color";
 import {
   Box,
-  Card,
-  CardContent,
-  CardMedia,
   Grid2,
   Tab,
   Tabs,
@@ -16,6 +13,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import React from "react";
+import CourseCard from "@/components/card/card";
 
 const Container = styled(Box)({
   position: "relative",
@@ -59,7 +57,6 @@ const CustomTab = styled(Tab)(() => ({
   },
 }));
 
-const CourseCard = styled(Card)({});
 
 const courses = [
   {
@@ -126,6 +123,7 @@ const DefalutHomePage: React.FC = () => {
         }}
       >
         <Container>
+          
           <Box
             sx={{
               display: "flex",
@@ -199,49 +197,7 @@ const DefalutHomePage: React.FC = () => {
           >
             {courses.map((course, index) => (
               <Grid2 size={3}>
-                <CourseCard key={index}>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={course.image}
-                    alt={course.title}
-                    sx={{
-                      objectFit: "cover",
-                      width: "95%",
-                      height: "170px",
-                      margin: "auto",
-                      paddingTop: "8px",
-                      borderRadius: "1rem",
-                    }}
-                  />
-                  <CardContent sx={{ paddingTop: "0" }}>
-                    <Typography
-                      sx={{
-                        paddingTop: 0,
-                        fontSize: "16px",
-                        fontWeight: "650",
-                        fontFamily: "Poppins",
-                        minHeight: "3rem",
-                      }}
-                      color={blue[900]}
-                      variant="h6"
-                      component="div"
-                    >
-                      {course.title}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        textDecoration: "underline",
-                        fontFamily: "Poppins",
-                        fontSize: "12px",
-                      }}
-                      variant="body2"
-                      color="text.secondary"
-                    >
-                      {course.subtitle}
-                    </Typography>
-                  </CardContent>
-                </CourseCard>
+               <CourseCard course={course} />
               </Grid2>
             ))}
           </Grid2>
