@@ -59,7 +59,14 @@ const CustomTab = styled(Tab)(() => ({
   },
 }));
 
-const CourseCard = styled(Card)({});
+const CourseCard = styled(Card)({
+  boxShadow: "0px 5px 6px rgba(0, 0, 0, 0.25)",
+  borderRadius: "10px",
+  "&:hover": {
+    cursor: "pointer",
+    transform: "scale(1.05)",
+  },
+});
 
 const courses = [
   {
@@ -111,7 +118,7 @@ const courses = [
   },
 ];
 
-const DefalutHomePage: React.FC = () => {
+const DefaultHomePage: React.FC = () => {
   const [value, setValue] = React.useState(0);
   useMetaTitle({ title: "Home before login" });
 
@@ -192,9 +199,10 @@ const DefalutHomePage: React.FC = () => {
           </NavigationTabs>
           <Grid2
             container
-            spacing={2}
+            spacing={3}
             sx={{
               marginTop: 2,
+              gap: 3,
             }}
           >
             {courses.map((course, index) => (
@@ -202,7 +210,7 @@ const DefalutHomePage: React.FC = () => {
                 <CourseCard key={index}>
                   <CardMedia
                     component="img"
-                    height="140"
+                    // height="140"
                     image={course.image}
                     alt={course.title}
                     sx={{
@@ -210,8 +218,9 @@ const DefalutHomePage: React.FC = () => {
                       width: "95%",
                       height: "170px",
                       margin: "auto",
-                      paddingTop: "8px",
+                      paddingTop: "10px",
                       borderRadius: "1rem",
+                      overflow: "hidden",
                     }}
                   />
                   <CardContent sx={{ paddingTop: "0" }}>
@@ -251,4 +260,4 @@ const DefalutHomePage: React.FC = () => {
   );
 };
 
-export default DefalutHomePage;
+export default DefaultHomePage;

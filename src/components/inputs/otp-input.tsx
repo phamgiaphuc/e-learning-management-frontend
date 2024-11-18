@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import { Box, OutlinedInput } from "@mui/material";
 import React, { useEffect, useRef } from "react";
