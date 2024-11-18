@@ -1,10 +1,12 @@
 import ala from "@/assets/images/ala.png";
 import math from "@/assets/images/math.png";
 import python from "@/assets/images/python.png";
+import CustomCourseCard from "@/components/card/card";
 import useMetaTitle from "@/hooks/use-meta-title";
 import { blue } from "@/theme/color";
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -15,12 +17,11 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Chips = styled(Chip)({
   borderRadius: "0.5rem",
 });
-
-const CourseCard = styled(Card)({});
 
 const courses = [
   {
@@ -74,7 +75,11 @@ const courses = [
 
 const LoginHomePage = () => {
   useMetaTitle({ title: "Home login" });
-
+  const { title } = useParams<{ title: string }>();
+  const navigate = useNavigate();
+  const onButtonClick = () => {
+    navigate(`/course/${title}/details`);
+  };
   return (
     <>
       <Box
@@ -141,9 +146,23 @@ const LoginHomePage = () => {
                   10%
                 </Typography>
               </Box>
-              <Typography variant="body2" color="text.secondary">
-                Overall
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "1rem",
+                }}
+              >
+                <Typography>Overall Progress</Typography>
+                <Button
+                  onClick={onButtonClick}
+                  sx={{ cursor: "pointer" }}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  Go to class
+                </Button>
+              </Box>
             </CardContent>
           </Box>
         </Card>
@@ -164,49 +183,7 @@ const LoginHomePage = () => {
           <Grid2 container spacing={2}>
             {courses.map((course, index) => (
               <Grid2 size={3}>
-                <CourseCard key={index}>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={course.image}
-                    alt={course.title}
-                    sx={{
-                      objectFit: "cover",
-                      width: "95%",
-                      height: "170px",
-                      margin: "auto",
-                      paddingTop: "8px",
-                      borderRadius: "1rem",
-                    }}
-                  />
-                  <CardContent sx={{ paddingTop: "0" }}>
-                    <Typography
-                      sx={{
-                        paddingTop: 0,
-                        fontSize: "16px",
-                        fontWeight: "650",
-                        fontFamily: "Poppins",
-                        minHeight: "3rem",
-                      }}
-                      color={blue[900]}
-                      variant="h6"
-                      component="div"
-                    >
-                      {course.title}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        textDecoration: "underline",
-                        fontFamily: "Poppins",
-                        fontSize: "12px",
-                      }}
-                      variant="body2"
-                      color="text.secondary"
-                    >
-                      {course.subtitle}
-                    </Typography>
-                  </CardContent>
-                </CourseCard>
+                <CustomCourseCard course={course} key={index} />
               </Grid2>
             ))}
           </Grid2>

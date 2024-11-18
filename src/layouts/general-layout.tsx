@@ -1,5 +1,6 @@
 import AuthProvider from "@/contexts/auth-context";
 import { BreakpointProvider } from "@/contexts/breakpoint-context";
+import CourseProvider from "@/contexts/course-context";
 import { ChildrenNodeProps } from "@/types/children";
 
 type GeneralLayoutProps = ChildrenNodeProps;
@@ -7,7 +8,9 @@ type GeneralLayoutProps = ChildrenNodeProps;
 const GeneralLayout = ({ children }: GeneralLayoutProps) => {
   return (
     <BreakpointProvider>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        <CourseProvider>{children}</CourseProvider>
+      </AuthProvider>
     </BreakpointProvider>
   );
 };

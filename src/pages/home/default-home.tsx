@@ -1,21 +1,12 @@
-import ala from "@/assets/images/ala.png";
-import math from "@/assets/images/math.png";
-import python from "@/assets/images/python.png";
 import SliderPic from "@/assets/images/slider_pic.png";
+import CustomCourseCard from "@/components/card/card";
+import useCourseContext from "@/hooks/contexts/use-course-context";
 import useMetaTitle from "@/hooks/use-meta-title";
 import { blue } from "@/theme/color";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid2,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import { CourseProps } from "@/types/course";
+import { Box, Grid2, Tab, Tabs, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Container = styled(Box)({
   position: "relative",
@@ -59,68 +50,20 @@ const CustomTab = styled(Tab)(() => ({
   },
 }));
 
-const CourseCard = styled(Card)({
-  boxShadow: "0px 5px 6px rgba(0, 0, 0, 0.25)",
-  borderRadius: "10px",
-  "&:hover": {
-    cursor: "pointer",
-    transform: "scale(1.05)",
-  },
-});
-
-const courses = [
-  {
-    title: "Advanced Learning Algorithms",
-    subtitle: "Course by IBM",
-    image: ala,
-  },
-
-  {
-    title: "Mathematics for Machine Learning Specialization",
-    subtitle: "Course by Instructor David",
-    image: math,
-  },
-
-  {
-    title: "Python for Data Science, AI & Development",
-    subtitle: "Course by Professor Joseph Santarcangelo",
-    image: python,
-  },
-
-  {
-    title: "Python for Data Science, AI & Development",
-    subtitle: "Course by Professor Joseph Santarcangelo",
-    image: python,
-  },
-
-  {
-    title: "Advanced Learning Algorithms",
-    subtitle: "Course by IBM",
-    image: ala,
-  },
-
-  {
-    title: "Mathematics for Machine Learning Specialization",
-    subtitle: "Course by Instructor David",
-    image: math,
-  },
-
-  {
-    title: "Python for Data Science, AI & Development",
-    subtitle: "Course by Professor Joseph Santarcangelo",
-    image: python,
-  },
-
-  {
-    title: "Python for Data Science, AI & Development",
-    subtitle: "Course by Professor Joseph Santarcangelo",
-    image: python,
-  },
-];
-
 const DefaultHomePage: React.FC = () => {
-  const [value, setValue] = React.useState(0);
+  const [courses, setCourses] = useState<Array<CourseProps>>([]);
+  const { getCourses } = useCourseContext();
+  const [value, setValue] = useState(0);
   useMetaTitle({ title: "Home before login" });
+
+  useEffect(() => {
+    async function fetchCourses() {
+      const courses = await getCourses();
+      setCourses(courses);
+    }
+    fetchCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -207,50 +150,7 @@ const DefaultHomePage: React.FC = () => {
           >
             {courses.map((course, index) => (
               <Grid2 size={3}>
-                <CourseCard key={index}>
-                  <CardMedia
-                    component="img"
-                    // height="140"
-                    image={course.image}
-                    alt={course.title}
-                    sx={{
-                      objectFit: "cover",
-                      width: "95%",
-                      height: "170px",
-                      margin: "auto",
-                      paddingTop: "10px",
-                      borderRadius: "1rem",
-                      overflow: "hidden",
-                    }}
-                  />
-                  <CardContent sx={{ paddingTop: "0" }}>
-                    <Typography
-                      sx={{
-                        paddingTop: 0,
-                        fontSize: "16px",
-                        fontWeight: "650",
-                        fontFamily: "Poppins",
-                        minHeight: "3rem",
-                      }}
-                      color={blue[900]}
-                      variant="h6"
-                      component="div"
-                    >
-                      {course.title}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        textDecoration: "underline",
-                        fontFamily: "Poppins",
-                        fontSize: "12px",
-                      }}
-                      variant="body2"
-                      color="text.secondary"
-                    >
-                      {course.subtitle}
-                    </Typography>
-                  </CardContent>
-                </CourseCard>
+                <CustomCourseCard course={course} key={index} />
               </Grid2>
             ))}
           </Grid2>
