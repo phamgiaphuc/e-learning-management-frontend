@@ -1,30 +1,51 @@
+import { TokenProps, UserDetailProps } from "@/types/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface AuthState {
+interface AuthStateProps {
+  type:
+    | "signin"
+    | "signout"
+    | "signup"
+    | "verify-account"
+    | "recover-account"
+    | "forgot-password"
+    | null;
+  loading: boolean;
   isAuthenticated: boolean;
-  user: { data: string; tokens: string } | null;
+  data: { tokens: TokenProps; user: UserDetailProps } | null;
 }
 
-const initialState: AuthState = {
+const initialState: AuthStateProps = {
+  type: null,
+  loading: false,
   isAuthenticated: false,
-  user: null,
+  data: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    signin(state, action: PayloadAction<{ data: string; tokens: string }>) {
-      state.isAuthenticated = true;
-      state.user = action.payload;
+    startAuth(state, action: PayloadAction<AuthStateProps["type"]>) {
+      state.loading = true;
+      state.type = action.payload;
     },
-    signout(state) {
+    finishAuth(state) {
+      state.loading = false;
+      state.type = null;
+    },
+    authSignIn(state, action: PayloadAction<AuthStateProps["data"]>) {
+      state.isAuthenticated = true;
+      state.data = action.payload;
+    },
+    authSignOut(state) {
       state.isAuthenticated = false;
-      state.user = null;
+      state.data = null;
     },
   },
 });
 
-export const { signin, signout } = authSlice.actions;
+export const { startAuth, finishAuth, authSignIn, authSignOut } =
+  authSlice.actions;
 
 export default authSlice.reducer;

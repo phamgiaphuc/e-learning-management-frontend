@@ -2,9 +2,16 @@ import FacebookLogo from "@/assets/icons/facebook-logo.svg";
 import GoogleLogo from "@/assets/icons/google-logo.svg";
 import StudentImg from "@/assets/images/student.png";
 import TeacherImg from "@/assets/images/teacher.png";
+import useAuthContext from "@/hooks/contexts/use-auth-context";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
 import { blue, grey } from "@/theme/color";
+import { RoleProps } from "@/types/auth/role";
+import {
+  initialSignUpValues,
+  SignUpProps,
+  signUpSchema,
+} from "@/types/auth/signup";
 import {
   Box,
   Button,
@@ -19,10 +26,10 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { useFormik } from "formik";
 import { CircleHelp, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-type RoleProps = "student" | "teacher";
 
 const SignUpPage = () => {
   // Variables and states
@@ -31,6 +38,7 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [role, setRole] = useState<Partial<RoleProps>>();
+  const { signUp } = useAuthContext();
 
   // Actions
   const onPasswordVisibleChange = useCallback(
@@ -40,11 +48,21 @@ const SignUpPage = () => {
 
   const onRoleChange = useCallback((value: RoleProps) => setRole(value), []);
 
+  const formik = useFormik<SignUpProps>({
+    validationSchema: signUpSchema,
+    initialValues: initialSignUpValues,
+    onSubmit: async (values) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword, ...rest } = values;
+      await signUp(rest);
+    },
+  });
+
   useMetaTitle({ title: "Sign up" });
 
   return (
     <Stack gap={2} width="100%">
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <Stack gap={2}>
           <Grid2 container spacing={2}>
             <Grid2
@@ -72,11 +90,15 @@ const SignUpPage = () => {
                   type="text"
                   placeholder="Enter your first name"
                   fullWidth
-                  // value={formik.values.account}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // error={!!(formik.touched.account && formik.errors.account)}
-                  // helperText={formik.touched.account && formik.errors.account}
+                  value={formik.values.firstName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    !!(formik.touched.firstName && formik.errors.firstName)
+                  }
+                  helperText={
+                    formik.touched.firstName && formik.errors.firstName
+                  }
                 />
               </Box>
             </Grid2>
@@ -104,11 +126,11 @@ const SignUpPage = () => {
                   type="text"
                   placeholder="Enter your last name"
                   fullWidth
-                  // value={formik.values.account}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // error={!!(formik.touched.account && formik.errors.account)}
-                  // helperText={formik.touched.account && formik.errors.account}
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={!!(formik.touched.lastName && formik.errors.lastName)}
+                  helperText={formik.touched.lastName && formik.errors.lastName}
                 />
               </Box>
             </Grid2>
@@ -136,11 +158,11 @@ const SignUpPage = () => {
                   type="text"
                   placeholder="Enter your email"
                   fullWidth
-                  // value={formik.values.account}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // error={!!(formik.touched.account && formik.errors.account)}
-                  // helperText={formik.touched.account && formik.errors.account}
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={!!(formik.touched.email && formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
                 />
               </Box>
             </Grid2>
@@ -168,11 +190,11 @@ const SignUpPage = () => {
                   type="text"
                   placeholder="Enter your username"
                   fullWidth
-                  // value={formik.values.account}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // error={!!(formik.touched.account && formik.errors.account)}
-                  // helperText={formik.touched.account && formik.errors.account}
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={!!(formik.touched.username && formik.errors.username)}
+                  helperText={formik.touched.username && formik.errors.username}
                 />
               </Box>
             </Grid2>
@@ -224,11 +246,11 @@ const SignUpPage = () => {
                   type="password"
                   placeholder="Enter your password"
                   fullWidth
-                  // value={formik.values.account}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // error={!!(formik.touched.account && formik.errors.account)}
-                  // helperText={formik.touched.account && formik.errors.account}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={!!(formik.touched.password && formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
                 />
               </Box>
             </Grid2>
@@ -256,11 +278,19 @@ const SignUpPage = () => {
                   type="password"
                   placeholder="Enter your password"
                   fullWidth
-                  // value={formik.values.account}
-                  // onChange={formik.handleChange}
-                  // onBlur={formik.handleBlur}
-                  // error={!!(formik.touched.account && formik.errors.account)}
-                  // helperText={formik.touched.account && formik.errors.account}
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    !!(
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                    )
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
                 />
               </Box>
             </Grid2>
