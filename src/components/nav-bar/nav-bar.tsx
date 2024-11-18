@@ -1,7 +1,7 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
 import { useAppSelector } from "@/hooks/use-app-selector";
-import { signout } from "@/stores/auth/auth.slice";
+import { authSignOut } from "@/stores/auth/auth.slice";
 import { grey } from "@/theme/color";
 import {
   AppBar,
@@ -17,7 +17,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { BellIcon, CircleUserIcon, MailIcon } from "lucide-react";
+import { BellIcon, MailIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +57,7 @@ const AuthButton = styled(Button)<{
 }));
 
 const NavBar = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, data } = useAppSelector((state) => state.auth);
   const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
@@ -173,13 +173,8 @@ const NavBar = () => {
                       color: "secondary.main",
                       bgcolor: "#fff",
                     }}
-                  >
-                    <CircleUserIcon
-                      aria-controls="profile-menu"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    />
-                  </Avatar>
+                    src={data?.user.userProfile.avatar}
+                  />
                 </Tooltip>
                 {/* Profile Dropdown Menu */}
                 <Menu
@@ -193,7 +188,7 @@ const NavBar = () => {
                   <MenuItem
                     onClick={(e) => {
                       e.preventDefault();
-                      dispatch(signout());
+                      dispatch(authSignOut());
                       navigate("/signout");
                     }}
                   >

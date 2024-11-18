@@ -7,6 +7,9 @@ interface UserProps {
   role: Role;
   isVerified: boolean;
   userProfileId: string;
+  userProfile: {
+    avatar: string;
+  };
 }
 
 export interface UserDetailProps extends UserProps {
