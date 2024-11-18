@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { passwordRegex } from "../regex";
 
 export interface RecoverPasswordProps {
   password: string;
@@ -15,10 +16,9 @@ export const recoverPasswordSchema = yup.object<RecoverPasswordProps>({
   password: yup
     .string()
     .required("New password is required")
-    .min(6, "Password must be 6 characters at minimum")
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
-      "Password must contain at least one letter and one number",
+      passwordRegex,
+      "Password must have minimum 6 characters, contain at least 1 letter and 1 number",
     ),
   passwordConfirm: yup
     .string()

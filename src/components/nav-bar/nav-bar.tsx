@@ -4,8 +4,8 @@ import { useAppSelector } from "@/hooks/use-app-selector";
 import { signout } from "@/stores/auth/auth.slice";
 import { grey } from "@/theme/color";
 import {
-  Avatar,
   AppBar,
+  Avatar,
   Box,
   Button,
   IconButton,
@@ -32,6 +32,11 @@ const NavBarLink = styled(Link)(() => ({
   "&:hover": {
     color: "#1575E3",
     textDecoration: "underline",
+  },
+  "&.Mui-selected": {
+    color: "#1575E3",
+    fontWeight: "600",
+    borderBottom: "2px solid #1575E3",
   },
 }));
 
@@ -166,7 +171,7 @@ const NavBar = () => {
                     sx={{
                       cursor: "pointer",
                       color: "secondary.main",
-                      bgcolor: "#000",
+                      bgcolor: "#fff",
                     }}
                   >
                     <CircleUserIcon
