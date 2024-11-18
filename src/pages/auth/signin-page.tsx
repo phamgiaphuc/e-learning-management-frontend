@@ -1,5 +1,6 @@
 import FacebookLogo from "@/assets/icons/facebook-logo.svg";
 import GoogleLogo from "@/assets/icons/google-logo.svg";
+import useAuthContext from "@/hooks/contexts/use-auth-context";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
 import { blue } from "@/theme/color";
@@ -29,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 const SignInPage = () => {
   // Variables and states
   const theme = useTheme();
+  const { signIn } = useAuthContext();
   const { isTabletView, isMobileView } = useBreakpointContext();
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -37,7 +39,7 @@ const SignInPage = () => {
     validationSchema: signInSchema,
     initialValues: initialSignInValues,
     onSubmit: async (values) => {
-      console.log(values);
+      await signIn(values);
     },
   });
 

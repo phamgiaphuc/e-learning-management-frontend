@@ -26,6 +26,9 @@ const AuthLayout = () => {
     if (location.pathname.includes("verify")) {
       return "verify";
     }
+    if (location.pathname.includes("recover-password")) {
+      return "recover-password";
+    }
     return "default";
   }, [location.pathname]);
 
@@ -41,6 +44,9 @@ const AuthLayout = () => {
     }
     if (authPathname === "verify") {
       return "OTP Verification";
+    }
+    if (authPathname === "recover-password") {
+      return "Recover password";
     }
     return "Default title";
   }, [authPathname]);

@@ -1,16 +1,26 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
 import { useAppSelector } from "@/hooks/use-app-selector";
+import { authSignOut } from "@/stores/auth/auth.slice";
 import { grey } from "@/theme/color";
 import {
   AppBar,
+  Avatar,
   Box,
   Button,
+  IconButton,
   Link,
+  Menu,
+  MenuItem,
   styled,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
+import { BellIcon, MailIcon } from "lucide-react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
   underline: "hover",
@@ -22,6 +32,11 @@ const NavBarLink = styled(Link)(() => ({
   "&:hover": {
     color: "#1575E3",
     textDecoration: "underline",
+  },
+  "&.Mui-selected": {
+    color: "#1575E3",
+    fontWeight: "600",
+    borderBottom: "2px solid #1575E3",
   },
 }));
 
@@ -42,7 +57,22 @@ const AuthButton = styled(Button)<{
 }));
 
 const NavBar = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, data } = useAppSelector((state) => state.auth);
+  const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+
+  const handleClickProfile = (e: React.MouseEvent<HTMLElement>): void => {
+    setAncholEl(e.currentTarget);
+  };
+
+  const handleCloseProfile = () => {
+    setAncholEl(null);
+  };
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
   return (
     <AppBar
       sx={{
@@ -50,6 +80,8 @@ const NavBar = () => {
         backgroundColor: "white",
         justifyContent: "center",
         height: "5rem",
+        boxShadow:
+          "0px 2px 3px rgba(0, 0, 0, 0.1), 0px 1px 5px rgba(0, 0, 0, 0.08)",
       }}
     >
       <Toolbar
@@ -94,9 +126,11 @@ const NavBar = () => {
                 gap: 6,
               }}
             >
-              <NavBarLink>Homepage</NavBarLink>
-              <NavBarLink>Course</NavBarLink>
-              <NavBarLink>Blog</NavBarLink>
+              <NavBarLink href="/home">Homepage</NavBarLink>
+              {isAuthenticated && (
+                <NavBarLink href="/my-course">Course</NavBarLink>
+              )}
+              <NavBarLink>About</NavBarLink>
             </Box>
           </Box>
         </Box>
@@ -109,14 +143,70 @@ const NavBar = () => {
         >
           <SearchBar />
           <>
+            {/* If the user has already logged in */}
             {isAuthenticated ? (
-              <div>User signed in</div>
+              <Box
+                sx={{
+                  color: "#1575E3",
+                  alignItems: "center",
+                  display: "flex",
+                  gap: 2,
+                  marginLeft: 4,
+                  marginRight: 3,
+                }}
+              >
+                <Tooltip title="Notification">
+                  <IconButton color="inherit">
+                    <BellIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Messages">
+                  <IconButton color="inherit">
+                    <MailIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Account">
+                  <Avatar
+                    onClick={handleClickProfile}
+                    sx={{
+                      cursor: "pointer",
+                      color: "secondary.main",
+                      bgcolor: "#fff",
+                    }}
+                    src={data?.user.userProfile.avatar}
+                  />
+                </Tooltip>
+                {/* Profile Dropdown Menu */}
+                <Menu
+                  id="profile-menu"
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleCloseProfile}
+                >
+                  <MenuItem onClick={handleCloseProfile}>My profile</MenuItem>
+                  <MenuItem onClick={handleCloseProfile}>Settings</MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.preventDefault();
+                      dispatch(authSignOut());
+                      navigate("/signout");
+                    }}
+                  >
+                    Log out
+                  </MenuItem>
+                </Menu>
+              </Box>
             ) : (
+              // If the user has NOT logged in
               <>
                 <AuthButton
                   borderColor="#1575E3"
                   backgroundColor="white"
                   textColor="#1575E3"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/signup");
+                  }}
                 >
                   <Typography>Sign up</Typography>
                 </AuthButton>
@@ -124,6 +214,10 @@ const NavBar = () => {
                   borderColor="#1575E3"
                   backgroundColor="#1575E3"
                   textColor="white"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/signin");
+                  }}
                 >
                   <Typography>Log in</Typography>
                 </AuthButton>

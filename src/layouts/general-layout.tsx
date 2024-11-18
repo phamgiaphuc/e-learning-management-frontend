@@ -1,14 +1,18 @@
+import AuthProvider from "@/contexts/auth-context";
 import { BreakpointProvider } from "@/contexts/breakpoint-context";
+import CourseProvider from "@/contexts/course-context";
 import { ChildrenNodeProps } from "@/types/children";
-import { useEffect } from "react";
 
 type GeneralLayoutProps = ChildrenNodeProps;
 
 const GeneralLayout = ({ children }: GeneralLayoutProps) => {
-  useEffect(() => {
-    console.log("ABC");
-  }, []);
-  return <BreakpointProvider>{children}</BreakpointProvider>;
+  return (
+    <BreakpointProvider>
+      <AuthProvider>
+        <CourseProvider>{children}</CourseProvider>
+      </AuthProvider>
+    </BreakpointProvider>
+  );
 };
 
 export default GeneralLayout;

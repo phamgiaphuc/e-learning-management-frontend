@@ -11,22 +11,26 @@ import BlogsPage from "@/pages/dashboard/blogs-page";
 import CommunitiesPage from "@/pages/dashboard/communities-page";
 import CoursesPage from "@/pages/dashboard/courses-page";
 import DashboardPage from "@/pages/dashboard/dashboard-page";
-import HomePage from "@/pages/home/home-page";
 import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/home/defalut-home";
+import CourseOverviewPage from "./pages/course/course-overview";
 import LoginHome from "./pages/home/login-home";
+import CoursePage from "./pages/course/course";
+import SignOutPage from "@/pages/auth/signout-page";
+import DefaultHomePage from "@/pages/home/default-home";
 
 const App = () => {
   return (
     <GeneralLayout>
       <Routes>
         <Route element={<HomeLayout />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<DefaultHomePage />} />
           <Route path="/my-course" element={<MyCoursePage />} />
-          <Route path="home" element={<Home />} />
           <Route path="login-home" element={<LoginHome />} />
+          <Route path="signout" element={<SignOutPage />} />
+          <Route path="/course/:id" element={<CourseOverviewPage />} />
+          <Route path="/course/:id/details" element={<CoursePage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />

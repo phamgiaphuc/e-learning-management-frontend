@@ -2,7 +2,7 @@ import { passwordRegex } from "@/types/regex";
 import * as yup from "yup";
 
 export interface SignInProps {
-  account: string; // Email or Username
+  account: string;
   password: string;
 }
 
