@@ -15,19 +15,17 @@ import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
 import CourseOverviewPage from "./pages/course/course-overview";
-import LoginHome from "./pages/home/login-home";
 import CoursePage from "./pages/course/course";
 import SignOutPage from "@/pages/auth/signout-page";
-import DefaultHomePage from "@/pages/home/default-home";
+import HomePage from "@/pages/home/home-page";
 
 const App = () => {
   return (
     <GeneralLayout>
       <Routes>
         <Route element={<HomeLayout />}>
-          <Route path="/" element={<DefaultHomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/my-course" element={<MyCoursePage />} />
-          <Route path="login-home" element={<LoginHome />} />
           <Route path="signout" element={<SignOutPage />} />
           <Route path="/course/:id" element={<CourseOverviewPage />} />
           <Route path="/course/:id/details" element={<CoursePage />} />
