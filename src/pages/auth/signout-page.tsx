@@ -53,7 +53,7 @@ const SignOutPage = () => {
             <Button
               sx={{
                 width: "90%",
-                backgroundColor: "secondary.main",
+                backgroundColor: "primary.main",
                 color: "#fff",
               }}
               onClick={(e) => {

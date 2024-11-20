@@ -1,8 +1,7 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
-import AuthHeroImage from "@/assets/images/auth-hero-image.svg";
+import AuthBackground from "@/assets/images/auth-background.png";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
-import { zinc } from "@/theme/tailwind-color";
-import { Box, Button, Grid2, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid2, Typography } from "@mui/material";
 import { ArrowLeft, Home } from "lucide-react";
 import { useMemo } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -11,7 +10,7 @@ const AuthLayout = () => {
   // Variables and states
   const location = useLocation();
   const navigate = useNavigate();
-  const { isTabletView, isMobileView } = useBreakpointContext();
+  const { isMobileView } = useBreakpointContext();
 
   const authPathname = useMemo(() => {
     if (location.pathname.includes("signin")) {
@@ -34,10 +33,10 @@ const AuthLayout = () => {
 
   const formTitle = useMemo(() => {
     if (authPathname === "signin") {
-      return "Sign in to your E-Learning account!";
+      return "Log in";
     }
     if (authPathname === "signup") {
-      return "Join our community now!";
+      return "Sign up";
     }
     if (authPathname === "forgot-password") {
       return "Forgot password";
@@ -55,62 +54,120 @@ const AuthLayout = () => {
     <Grid2
       container
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
         width: "100vw",
+        background: "linear-gradient(to right, #FFFEF9 50%, #1575E3 50%)",
+        backgroundSize: "cover",
+        backgroundPosition: "bottom",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
       }}
-      padding={4}
-      columnSpacing={4}
     >
-      {!isMobileView && (
-        <Grid2
-          size={{
-            xs: 6,
-          }}
+      <img
+        src={AuthBackground}
+        alt="background"
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          height: "110%",
+        }}
+      />
+      <Box
+        sx={{
+          position: "absolute",
+          top: 32,
+          left: 32,
+        }}
+      >
+        <Box
+          component={Link}
+          to="/"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light" ? "primary.main" : zinc[800],
-            borderRadius: 8,
+            display: "flex",
+            gap: 1,
+            alignItems: "center",
+            textDecoration: "none",
           }}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
         >
-          <img
-            src={AuthHeroImage}
-            loading="eager"
-            width={isTabletView ? "256px" : ""}
-            alt="auth-hero-image"
-          />
-          <Stack
-            sx={{
-              textAlign: "center",
-            }}
-          >
-            <Typography
-              variant={isTabletView ? "h4" : "h2"}
-              fontWeight={800}
-              sx={{
-                color: "white",
-              }}
-            >
-              Study Together
-            </Typography>
-            <Typography color="white" variant={isTabletView ? "body1" : "h6"}>
-              Embark on a journey of knowledge and skills.
-            </Typography>
-          </Stack>
+          <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
           <Box
             sx={{
-              position: "absolute",
-              top: 32,
-              left: 32,
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: 1,
             }}
           >
+            <Typography color="primary.main" variant="h6" fontWeight={800}>
+              Scholaro
+            </Typography>
+            <Typography fontSize={12} color="grey.400">
+              A E-learning Management Platform
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems={["verify"].includes(authPathname) ? "center" : "start"}
+        justifyContent={["verify"].includes(authPathname) ? "center" : ""}
+        margin="auto"
+        maxWidth="550px"
+        width="100%"
+        padding="2rem"
+        borderRadius="30px"
+        boxShadow="0px 4px 35px rgba(0, 0, 0, 0.08)"
+        bgcolor="white"
+        zIndex="1"
+        maxHeight="92vh"
+        sx={{
+          overflowY: "auto",
+        }}
+      >
+        <div
+          style={{
+            marginBottom: "1rem",
+          }}
+        >
+          {authPathname === "forgot-password" && (
+            <Button
+              size="large"
+              variant="text"
+              startIcon={<ArrowLeft size={20} />}
+              sx={{
+                color: (theme) =>
+                  theme.palette.mode === "light" ? "black" : "white",
+              }}
+              onClick={() => navigate("/signin")}
+            >
+              Back
+            </Button>
+          )}
+          {isMobileView && ["signin", "signup"].includes(authPathname) && (
+            <Button
+              size="large"
+              variant="text"
+              startIcon={<Home size={20} />}
+              sx={{
+                color: "black",
+              }}
+              onClick={() => navigate("/")}
+            >
+              Home
+            </Button>
+          )}
+        </div>
+        <Box
+          display="flex"
+          flexDirection={isMobileView ? "column" : "row"}
+          alignItems={["verify"].includes(authPathname) ? "center" : "start"}
+          justifyContent={["verify"].includes(authPathname) ? "center" : ""}
+        >
+          {isMobileView && (
             <Box
-              component={Link}
-              to="/"
               sx={{
                 display: "flex",
                 gap: 1,
@@ -126,110 +183,31 @@ const AuthLayout = () => {
                   marginBottom: 1,
                 }}
               >
-                <Typography color="white" variant="h6" fontWeight={800}>
+                <Typography
+                  variant={isMobileView ? "h5" : "h4"}
+                  fontWeight={800}
+                >
                   Scholaro
                 </Typography>
-                <Typography fontSize={12} color="grey.400">
+                <Typography fontSize={12} color="grey.600">
                   A E-learning Management Platform
                 </Typography>
               </Box>
             </Box>
-          </Box>
-        </Grid2>
-      )}
-      <Grid2
-        size={{
-          xs: 12,
-          md: 6,
-        }}
-        paddingY={4}
-        display="flex"
-        flexDirection="column"
-        alignItems="start"
-        justifyContent="center"
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          marginBottom={4}
-          justifyContent="space-between"
-          width="100%"
-        >
-          <div
-            style={{
-              marginBottom: "1rem",
-            }}
+          )}
+
+          <Typography
+            variant={isMobileView ? "h5" : "h4"}
+            fontWeight={600}
+            color="#000000"
+            marginBottom={2}
+            lineHeight="1.2"
           >
-            {authPathname === "forgot-password" && (
-              <Button
-                size="large"
-                variant="text"
-                startIcon={<ArrowLeft size={20} />}
-                sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "light" ? "black" : "white",
-                }}
-                onClick={() => navigate("/signin")}
-              >
-                Back
-              </Button>
-            )}
-            {isMobileView && ["signin", "signup"].includes(authPathname) && (
-              <Button
-                size="large"
-                variant="text"
-                startIcon={<Home size={20} />}
-                sx={{
-                  color: "black",
-                }}
-                onClick={() => navigate("/")}
-              >
-                Home
-              </Button>
-            )}
-          </div>
-          <Box
-            display="flex"
-            flexDirection={isMobileView ? "column" : "row"}
-            alignItems={["verify"].includes(authPathname) ? "center" : "start"}
-            justifyContent={["verify"].includes(authPathname) ? "center" : ""}
-          >
-            {isMobileView && (
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center",
-                  textDecoration: "none",
-                }}
-              >
-                <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    marginBottom: 1,
-                  }}
-                >
-                  <Typography
-                    variant={isMobileView ? "h5" : "h4"}
-                    fontWeight={800}
-                  >
-                    Scholaro
-                  </Typography>
-                  <Typography fontSize={12} color="grey.600">
-                    A E-learning Management Platform
-                  </Typography>
-                </Box>
-              </Box>
-            )}
-            <Typography variant={isMobileView ? "h5" : "h4"} fontWeight={800}>
-              {formTitle}
-            </Typography>
-          </Box>
+            {formTitle}
+          </Typography>
         </Box>
         <Outlet />
-      </Grid2>
+      </Box>
     </Grid2>
   );
 };
