@@ -13,7 +13,7 @@ export interface CourseProps {
   deletedAt: string | null | Date;
 }
 
-export const intitialCourseValues: CourseProps = {
+export const inititialCourse: CourseProps = {
   id: "",
   description: "",
   isDeleted: false,

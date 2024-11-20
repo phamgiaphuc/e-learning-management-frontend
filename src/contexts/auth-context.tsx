@@ -26,7 +26,7 @@ export const AuthContext = createContext<AuthContextProps>({
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { successToast } = useToast();
+  const { successToast, errorToast } = useToast();
 
   const signIn = useCallback(
     async (credentials: SignInProps) => {
@@ -40,20 +40,23 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         navigate("/");
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
-          const {
-            data: { userVerification },
-            status,
-          } = error.response.data;
-          if (status === "failed" && userVerification) {
-            navigate(
-              `/verify?id=${userVerification.id}&userId=${userVerification.userId}`,
-            );
+          const { message, status, ...rest } = error.response.data;
+          errorToast(message);
+          if (rest.data && status === "failed") {
+            const {
+              data: { userVerification },
+            } = rest;
+            if (userVerification) {
+              navigate(
+                `/verify?id=${userVerification.id}&userId=${userVerification.userId}`,
+              );
+            }
           }
         }
         throw error;
       }
     },
-    [dispatch, navigate, successToast],
+    [dispatch, errorToast, navigate, successToast],
   );
 
   const signUp = useCallback(
@@ -62,6 +65,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const {
           data: { userVerification },
         } = await axios.post("/auth/signup", credentials);
+        successToast("Sign up successfully");
         navigate(
           `/verify?id=${userVerification.id}&userId=${userVerification.userId}`,
         );
@@ -70,7 +74,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         throw error;
       }
     },
-    [navigate],
+    [navigate, successToast],
   );
 
   const verifyCode = useCallback(

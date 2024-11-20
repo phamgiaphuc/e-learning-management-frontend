@@ -12,10 +12,7 @@ import { useNavigate } from "react-router-dom";
 const CourseCard = styled(Card)({
   boxShadow: "0px 5px 6px rgba(0, 0, 0, 0.25)",
   borderRadius: "10px",
-  "&:hover": {
-    cursor: "pointer",
-    transform: "scale(1.05)",
-  },
+  cursor: "pointer",
 });
 
 interface CardProps {
@@ -45,7 +42,7 @@ const CustomCourseCard = ({ course }: CardProps) => {
           overflow: "hidden",
         }}
       />
-      <CardContent sx={{ paddingTop: "0" }}>
+      <CardContent sx={{ paddingTop: 1.5 }}>
         <Typography
           sx={{
             paddingTop: 0,

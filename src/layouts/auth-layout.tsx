@@ -1,9 +1,10 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import AuthBackground from "@/assets/images/auth-background.png";
+import { useAppSelector } from "@/hooks/use-app-selector";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import { Box, Button, Grid2, Typography } from "@mui/material";
 import { ArrowLeft, Home } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const AuthLayout = () => {
@@ -11,6 +12,7 @@ const AuthLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isMobileView } = useBreakpointContext();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const authPathname = useMemo(() => {
     if (location.pathname.includes("signin")) {
@@ -49,6 +51,12 @@ const AuthLayout = () => {
     }
     return "Default title";
   }, [authPathname]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <Grid2
@@ -102,7 +110,7 @@ const AuthLayout = () => {
             <Typography color="primary.main" variant="h6" fontWeight={800}>
               Scholaro
             </Typography>
-            <Typography fontSize={12} color="grey.400">
+            <Typography fontSize={12} color="grey.800">
               A E-learning Management Platform
             </Typography>
           </Box>
@@ -115,14 +123,13 @@ const AuthLayout = () => {
         alignItems={["verify"].includes(authPathname) ? "center" : "start"}
         justifyContent={["verify"].includes(authPathname) ? "center" : ""}
         margin="auto"
-        maxWidth="550px"
+        maxWidth="650px"
         width="100%"
         padding="2rem"
         borderRadius="30px"
         boxShadow="0px 4px 35px rgba(0, 0, 0, 0.08)"
         bgcolor="white"
         zIndex="1"
-        maxHeight="92vh"
         sx={{
           overflowY: "auto",
         }}
@@ -195,7 +202,6 @@ const AuthLayout = () => {
               </Box>
             </Box>
           )}
-
           <Typography
             variant={isMobileView ? "h5" : "h4"}
             fontWeight={600}

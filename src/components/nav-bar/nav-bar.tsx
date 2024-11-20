@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 const NavBarLink = styled(Link)(() => ({
   underline: "hover",
-  color: grey[700],
+  color: grey[800],
   fontWeight: "400",
   lineHeight: "24px",
   textDecoration: "none",
@@ -70,7 +70,6 @@ const NavBar = () => {
   };
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   return (
@@ -126,11 +125,14 @@ const NavBar = () => {
                 gap: 6,
               }}
             >
-              <NavBarLink href="/home">Homepage</NavBarLink>
+              <NavBarLink href="/">Homepage</NavBarLink>
               {isAuthenticated && (
-                <NavBarLink href="/my-course">Course</NavBarLink>
+                <NavBarLink href="/course">Course</NavBarLink>
               )}
-              <NavBarLink>About</NavBarLink>
+              <NavBarLink href="/about">About</NavBarLink>
+              {user?.role === "teacher" && (
+                <NavBarLink href="/my-course">My course</NavBarLink>
+              )}
             </Box>
           </Box>
         </Box>
@@ -138,12 +140,11 @@ const NavBar = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 3,
+            gap: 2,
           }}
         >
           <SearchBar />
           <>
-            {/* If the user has already logged in */}
             {isAuthenticated ? (
               <Box
                 sx={{
@@ -151,8 +152,6 @@ const NavBar = () => {
                   alignItems: "center",
                   display: "flex",
                   gap: 2,
-                  marginLeft: 4,
-                  marginRight: 3,
                 }}
               >
                 <Tooltip title="Notification">
@@ -176,7 +175,6 @@ const NavBar = () => {
                     src={user?.userProfile.avatar}
                   />
                 </Tooltip>
-                {/* Profile Dropdown Menu */}
                 <Menu
                   id="profile-menu"
                   anchorEl={anchorEl}
@@ -197,7 +195,6 @@ const NavBar = () => {
                 </Menu>
               </Box>
             ) : (
-              // If the user has NOT logged in
               <>
                 <AuthButton
                   borderColor="#1575E3"

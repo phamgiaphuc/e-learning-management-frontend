@@ -1,6 +1,6 @@
-import { useAppSelector } from "@/hooks/use-app-selector";
+import { axiosJwt } from "@/configs/axios.config";
 import { ChildrenNodeProps } from "@/types/children";
-import { CourseProps, intitialCourseValues } from "@/types/course";
+import { CourseProps, inititialCourse } from "@/types/course";
 import axios from "axios";
 import { createContext, useCallback } from "react";
 
@@ -11,12 +11,10 @@ export interface CourseContextProps {
 
 export const CourseContext = createContext<CourseContextProps>({
   getCourses: async () => [],
-  getCourseById: async () => intitialCourseValues,
+  getCourseById: async () => inititialCourse,
 });
 
 const CourseProvider = ({ children }: ChildrenNodeProps) => {
-  const { data } = useAppSelector((state) => state.auth);
-
   const getCourses = useCallback(async () => {
     try {
       const {
@@ -29,24 +27,17 @@ const CourseProvider = ({ children }: ChildrenNodeProps) => {
     }
   }, []);
 
-  const getCourseById = useCallback(
-    async (id: string) => {
-      try {
-        const {
-          data: { course },
-        } = await axios.get(`/courses/${id}`, {
-          headers: {
-            Authorization: `Bearer ${data?.tokens?.accessToken}`,
-          },
-        });
-        return course;
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    },
-    [data?.tokens?.accessToken],
-  );
+  const getCourseById = useCallback(async (id: string) => {
+    try {
+      const {
+        data: { course },
+      } = await axiosJwt.get(`/courses/${id}`);
+      return course;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }, []);
 
   return (
     <CourseContext.Provider value={{ getCourses, getCourseById }}>
