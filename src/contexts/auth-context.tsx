@@ -1,9 +1,11 @@
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
+import useToast from "@/hooks/use-toast";
 import { authSignIn } from "@/stores/auth/auth.slice";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
+import { VerfiyCodeProps } from "@/types/auth/verify-code";
 import { ChildrenNodeProps } from "@/types/children";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { createContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,16 +14,19 @@ type AuthProviderProps = ChildrenNodeProps;
 export interface AuthContextProps {
   signIn: (credentials: SignInProps) => Promise<void>;
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
+  verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   signIn: async () => {},
   signUp: async () => {},
+  verifyCode: async () => {},
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { successToast, errorToast } = useToast();
 
   const signIn = useCallback(
     async (credentials: SignInProps) => {
@@ -29,14 +34,29 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const {
           data: { user, tokens },
         } = await axios.post("/auth/signin", credentials);
-        dispatch(authSignIn({ user, tokens }));
+        dispatch(authSignIn(user));
+        localStorage.setItem("token", tokens.accessToken);
+        successToast("Sign in successfully");
         navigate("/");
       } catch (error) {
-        console.error("Sign-in failed:", error);
+        if (error instanceof AxiosError && error.response) {
+          const { message, status, ...rest } = error.response.data;
+          errorToast(message);
+          if (rest.data && status === "failed") {
+            const {
+              data: { userVerification },
+            } = rest;
+            if (userVerification) {
+              navigate(
+                `/verify?id=${userVerification.id}&userId=${userVerification.userId}`,
+              );
+            }
+          }
+        }
         throw error;
       }
     },
-    [dispatch, navigate],
+    [dispatch, errorToast, navigate, successToast],
   );
 
   const signUp = useCallback(
@@ -45,6 +65,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const {
           data: { userVerification },
         } = await axios.post("/auth/signup", credentials);
+        successToast("Sign up successfully");
         navigate(
           `/verify?id=${userVerification.id}&userId=${userVerification.userId}`,
         );
@@ -53,11 +74,28 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         throw error;
       }
     },
-    [navigate],
+    [navigate, successToast],
+  );
+
+  const verifyCode = useCallback(
+    async (credentials: VerfiyCodeProps) => {
+      try {
+        const {
+          data: { user, tokens },
+        } = await axios.post("/auth/validation/verify", credentials);
+        dispatch(authSignIn(user));
+        localStorage.setItem("token", tokens.accessToken);
+        navigate("/");
+      } catch (error) {
+        console.log("Verify code failed:", error);
+        throw error;
+      }
+    },
+    [dispatch, navigate],
   );
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp }}>
+    <AuthContext.Provider value={{ signIn, signUp, verifyCode }}>
       {children}
     </AuthContext.Provider>
   );

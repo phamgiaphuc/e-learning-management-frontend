@@ -1,18 +1,29 @@
 import OtpInput from "@/components/inputs/otp-input";
 import OtpInput2 from "@/components/inputs/otp-input-2";
+import useAuthContext from "@/hooks/contexts/use-auth-context";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
 import { Box, Button, Link, Stack, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const OtpVerificationPage = () => {
   // Variables and states
+  const [code, setCode] = useState<string>("");
   const { isMobileView } = useBreakpointContext();
-  const [countdown, setCoundown] = useState<number | null>(10);
+  const [countdown, setCoundown] = useState<number | null>(30);
+  const { verifyCode } = useAuthContext();
+  const [params] = useSearchParams();
 
-  // Actions
+  const onClickSendAgain = useCallback(() => setCoundown(30), []);
 
-  const onClickSendAgain = useCallback(() => setCoundown(10), []);
+  const onClickSubmit = useCallback(async () => {
+    await verifyCode({
+      id: params.get("id") || "",
+      userId: params.get("userId") || "",
+      code: code,
+    });
+  }, [code, params, verifyCode]);
 
   useMetaTitle({ title: "Verification" });
 
@@ -36,13 +47,13 @@ const OtpVerificationPage = () => {
         {isMobileView ? (
           <OtpInput2
             onChange={(res: string) => {
-              console.log(res);
+              setCode(res);
             }}
           />
         ) : (
           <OtpInput
             onChange={(res: string) => {
-              console.log(res);
+              setCode(res);
             }}
           />
         )}
@@ -83,6 +94,7 @@ const OtpVerificationPage = () => {
           height: 48,
         }}
         fullWidth
+        onClick={onClickSubmit}
       >
         <Typography fontWeight={600}> Verify & Proceed</Typography>
       </Button>

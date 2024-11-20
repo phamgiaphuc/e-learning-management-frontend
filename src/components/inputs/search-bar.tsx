@@ -18,7 +18,7 @@ const SearchBar = () => {
           color: grey[900],
         },
         "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: "secondary.main",
+          borderColor: "primary.main",
           borderWidth: "2px",
           borderRadius: "0.1rem",
         },

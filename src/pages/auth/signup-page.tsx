@@ -243,7 +243,7 @@ const SignUpPage = () => {
                       ),
                     },
                   }}
-                  type="password"
+                  type={passwordVisible ? "text" : "password"}
                   placeholder="Enter your password"
                   fullWidth
                   value={formik.values.password}
@@ -327,9 +327,9 @@ const SignUpPage = () => {
                       display: "flex",
                       flexGrow: 1,
                       borderRadius: "12px",
-                      border: role === "student" ? 2 : 1,
+                      border: role === "user" ? 2.5 : 1,
                       borderColor:
-                        role === "student" ? "primary.main" : "grey.400",
+                        role === "user" ? "primary.main" : "grey.400",
                       cursor: "pointer",
                       alignItems: "center",
                       justifyContent: "center",
@@ -341,7 +341,7 @@ const SignUpPage = () => {
                           theme.palette.mode === "dark" ? grey[800] : grey[100],
                       },
                     }}
-                    onClick={() => onRoleChange("student")}
+                    onClick={() => onRoleChange("user")}
                   >
                     <img src={StudentImg} height={48} />
                     <Typography>I am a student</Typography>
@@ -352,7 +352,7 @@ const SignUpPage = () => {
                       display: "flex",
                       flexGrow: 1,
                       borderRadius: "12px",
-                      border: role === "teacher" ? 2 : 1,
+                      border: role === "teacher" ? 2.5 : 1,
                       borderColor:
                         role === "teacher" ? "primary.main" : "grey.400",
                       cursor: "pointer",
@@ -399,6 +399,7 @@ const SignUpPage = () => {
           color={theme.palette.mode === "light" ? "#8B2CF5" : blue[500]}
           sx={{
             cursor: "pointer",
+            marginLeft: 1,
           }}
           onClick={() => {
             navigate("/forgot-password");
@@ -410,6 +411,7 @@ const SignUpPage = () => {
           sx={{
             display: "flex",
             gap: 0.5,
+            marginRight: 1,
           }}
         >
           <Typography>Already have an account?</Typography>
