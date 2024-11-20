@@ -99,7 +99,7 @@ const AuthLayout = () => {
               marginBottom: 1,
             }}
           >
-            <Typography color="secondary.main" variant="h6" fontWeight={800}>
+            <Typography color="primary.main" variant="h6" fontWeight={800}>
               Scholaro
             </Typography>
             <Typography fontSize={12} color="grey.400">
@@ -115,7 +115,6 @@ const AuthLayout = () => {
         alignItems={["verify"].includes(authPathname) ? "center" : "start"}
         justifyContent={["verify"].includes(authPathname) ? "center" : ""}
         margin="auto"
-        marginTop={["signup"].includes(authPathname) ? "2rem" : "auto"}
         maxWidth="550px"
         width="100%"
         padding="2rem"
@@ -123,6 +122,10 @@ const AuthLayout = () => {
         boxShadow="0px 4px 35px rgba(0, 0, 0, 0.08)"
         bgcolor="white"
         zIndex="1"
+        maxHeight="92vh"
+        sx={{
+          overflowY: "auto",
+        }}
       >
         <div
           style={{

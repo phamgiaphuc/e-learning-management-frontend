@@ -115,7 +115,7 @@ const NavBar = () => {
               }}
             >
               <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
-              <Typography color="secondary.main" variant="h5" fontWeight={700}>
+              <Typography color="primary.main" variant="h5" fontWeight={700}>
                 Scholaro
               </Typography>
             </Box>
@@ -170,7 +170,7 @@ const NavBar = () => {
                     onClick={handleClickProfile}
                     sx={{
                       cursor: "pointer",
-                      color: "secondary.main",
+                      color: "primary.main",
                       bgcolor: "#fff",
                     }}
                     src={data?.user.userProfile.avatar}
