@@ -10,6 +10,7 @@ import { Box, Grid2, Tab, Tabs, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import React, { useEffect, useState } from "react";
 
+//DUMMY DATA
 // const courses = [
 //   {
 //     title: "Advanced Learning Algorithms",
@@ -104,7 +105,7 @@ const HomePage: React.FC = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            marginX: 5,
+            marginX: 2,
           }}
         >
           {isAuthenticated ? (

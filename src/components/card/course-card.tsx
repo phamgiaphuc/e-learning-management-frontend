@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const CourseCard = styled(Card)({
   boxShadow: "0px 5px 6px rgba(0, 0, 0, 0.25)",
-  borderRadius: "10px",
+  borderRadius: "20px",
   "&:hover": {
     cursor: "pointer",
     transform: "scale(1.05)",

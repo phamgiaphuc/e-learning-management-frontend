@@ -25,7 +25,12 @@ const ContinueLearningSection = () => {
   };
   return (
     <>
-      <Typography variant="h5" color="primary.main" fontWeight={700}>
+      <Typography
+        variant="h5"
+        color="primary.main"
+        fontWeight={700}
+        marginX={2}
+      >
         Continue Learning
       </Typography>
       <Card
@@ -45,8 +50,8 @@ const ContinueLearningSection = () => {
           </Box>
           <CardContent style={{ flex: 1 }}>
             <Stack direction="row" spacing={1}>
-              <Chips label="Beginers" color="success" />
-              <Chips label="Data visualization" color="primary" />
+              <Chips label="Beginers" />
+              <Chips label="Data visualization" />
             </Stack>
             <Typography variant="body2" color="text.secondary" marginTop={2}>
               Course| Offer by IBM
