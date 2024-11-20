@@ -1,4 +1,5 @@
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
+import useToast from "@/hooks/use-toast";
 import { authSignIn } from "@/stores/auth/auth.slice";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
@@ -25,6 +26,7 @@ export const AuthContext = createContext<AuthContextProps>({
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { successToast } = useToast();
 
   const signIn = useCallback(
     async (credentials: SignInProps) => {
@@ -32,7 +34,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const {
           data: { user, tokens },
         } = await axios.post("/auth/signin", credentials);
-        dispatch(authSignIn({ user, tokens }));
+        dispatch(authSignIn(user));
+        localStorage.setItem("token", tokens.accessToken);
+        successToast("Sign in successfully");
         navigate("/");
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
@@ -49,7 +53,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         throw error;
       }
     },
-    [dispatch, navigate],
+    [dispatch, navigate, successToast],
   );
 
   const signUp = useCallback(
@@ -75,7 +79,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const {
           data: { user, tokens },
         } = await axios.post("/auth/validation/verify", credentials);
-        dispatch(authSignIn({ user, tokens }));
+        dispatch(authSignIn(user));
+        localStorage.setItem("token", tokens.accessToken);
         navigate("/");
       } catch (error) {
         console.log("Verify code failed:", error);

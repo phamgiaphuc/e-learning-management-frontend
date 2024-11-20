@@ -3,7 +3,8 @@ import "@/configs/axios.config";
 import ThemeModeProvider from "@/contexts/theme-mode-context";
 import "@/index.css";
 import AppMeta from "@/meta";
-import store from "@/stores/store";
+import { persistor, store } from "@/stores/store";
+import { PersistGate } from "redux-persist/integration/react";
 import { CssBaseline, StyledEngineProvider } from "@mui/material";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -19,8 +20,10 @@ createRoot(document.getElementById("root")!).render(
           <CssBaseline />
           <AppMeta />
           <Provider store={store}>
-            <App />
-            <Toaster />
+            <PersistGate persistor={persistor}>
+              <App />
+              <Toaster position="bottom-left" reverseOrder={false} />
+            </PersistGate>
           </Provider>
         </ThemeModeProvider>
       </StyledEngineProvider>

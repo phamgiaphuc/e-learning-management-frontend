@@ -341,7 +341,7 @@ const SignUpPage = () => {
                           theme.palette.mode === "dark" ? grey[800] : grey[100],
                       },
                     }}
-                    onClick={() => onRoleChange("student")}
+                    onClick={() => onRoleChange("user")}
                   >
                     <img src={StudentImg} height={48} />
                     <Typography>I am a student</Typography>

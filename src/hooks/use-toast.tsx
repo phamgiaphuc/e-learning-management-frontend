@@ -1,23 +1,23 @@
-import { toast, ToastOptions } from "react-hot-toast";
+import toast, { ToastOptions } from "react-hot-toast";
 
 const useToast = () => {
-  const success = (message: string, options?: ToastOptions) => {
+  const successToast = (message: string, options?: ToastOptions) => {
     toast.success(message, options);
   };
 
-  const error = (message: string, options?: ToastOptions) => {
+  const errorToast = (message: string, options?: ToastOptions) => {
     toast.error(message, options);
   };
 
-  const loading = (message: string, options?: ToastOptions) => {
+  const loadingToast = (message: string, options?: ToastOptions) => {
     return toast.loading(message, options);
   };
 
-  const dismiss = (toastId?: string) => {
+  const dismissToast = (toastId?: string) => {
     toast.dismiss(toastId);
   };
 
-  return { success, error, loading, dismiss };
+  return { successToast, errorToast, loadingToast, dismissToast };
 };
 
 export default useToast;

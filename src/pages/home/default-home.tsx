@@ -54,7 +54,6 @@ const DefaultHomePage: React.FC = () => {
   const [courses, setCourses] = useState<Array<CourseProps>>([]);
   const { getCourses } = useCourseContext();
   const [value, setValue] = useState(0);
-  useMetaTitle({ title: "Home before login" });
 
   useEffect(() => {
     async function fetchCourses() {
@@ -64,6 +63,8 @@ const DefaultHomePage: React.FC = () => {
     fetchCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useMetaTitle({ title: "Home" });
 
   return (
     <>

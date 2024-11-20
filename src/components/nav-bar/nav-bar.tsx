@@ -57,7 +57,7 @@ const AuthButton = styled(Button)<{
 }));
 
 const NavBar = () => {
-  const { isAuthenticated, data } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
@@ -173,7 +173,7 @@ const NavBar = () => {
                       color: "secondary.main",
                       bgcolor: "#fff",
                     }}
-                    src={data?.user.userProfile.avatar}
+                    src={user?.userProfile.avatar}
                   />
                 </Tooltip>
                 {/* Profile Dropdown Menu */}
