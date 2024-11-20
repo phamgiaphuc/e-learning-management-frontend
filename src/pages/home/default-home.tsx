@@ -148,7 +148,7 @@ const DefaultHomePage: React.FC = () => {
               gap: 3,
             }}
           >
-            {courses.map((course, index) => (
+            {courses?.map((course, index) => (
               <Grid2 size={3}>
                 <CustomCourseCard course={course} key={index} />
               </Grid2>
