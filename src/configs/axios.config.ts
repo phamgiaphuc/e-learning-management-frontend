@@ -1,4 +1,5 @@
 import envConfig from "@/configs/env.config";
+import { getToken, setToken } from "@/utils/token";
 import axios from "axios";
 
 axios.defaults.baseURL = envConfig.serverUrl;
@@ -11,7 +12,7 @@ export const axiosJwt = axios.create({
 
 axiosJwt.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getToken("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +31,7 @@ axiosJwt.interceptors.response.use(
         const {
           data: { tokens },
         } = await axios.post("/auth/refresh-token");
-        localStorage.setItem("token", tokens.acceessToken);
+        setToken("token", tokens.acceessToken);
         originalRequest.headers.Authorization = `Bearer ${tokens.acceessToken}`;
         return axios(originalRequest);
       } catch (error) {

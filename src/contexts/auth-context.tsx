@@ -1,10 +1,11 @@
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import useToast from "@/hooks/use-toast";
-import { authSignIn } from "@/stores/auth/auth.slice";
+import { authSignIn, authSignOut } from "@/stores/auth/auth.slice";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
 import { ChildrenNodeProps } from "@/types/children";
+import { removeToken } from "@/utils/token";
 import axios, { AxiosError } from "axios";
 import { createContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,12 +15,14 @@ type AuthProviderProps = ChildrenNodeProps;
 export interface AuthContextProps {
   signIn: (credentials: SignInProps) => Promise<void>;
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
+  signOut: () => Promise<void>;
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   signIn: async () => {},
   signUp: async () => {},
+  signOut: async () => {},
   verifyCode: async () => {},
 });
 
@@ -70,12 +73,24 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           `/verify?id=${userVerification.id}&userId=${userVerification.userId}`,
         );
       } catch (error) {
-        console.error("Sign-up failed:", error);
+        console.error("Sign-up failed: ", error);
         throw error;
       }
     },
     [navigate, successToast],
   );
+
+  const signOut = useCallback(async () => {
+    try {
+      await axios.post("/auth/signout");
+      removeToken("token");
+      dispatch(authSignOut());
+      successToast("Sign out successfully");
+    } catch (error) {
+      console.log("Sign-out failed: ", error);
+      throw error;
+    }
+  }, [dispatch, successToast]);
 
   const verifyCode = useCallback(
     async (credentials: VerfiyCodeProps) => {
@@ -87,7 +102,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         localStorage.setItem("token", tokens.accessToken);
         navigate("/");
       } catch (error) {
-        console.log("Verify code failed:", error);
+        console.log("Verify code failed: ", error);
         throw error;
       }
     },
@@ -95,7 +110,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, verifyCode }}>
+    <AuthContext.Provider value={{ signIn, signUp, signOut, verifyCode }}>
       {children}
     </AuthContext.Provider>
   );

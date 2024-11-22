@@ -1,4 +1,10 @@
-type Role = "admin" | "teacher" | "student";
+type Role = "admin" | "teacher" | "user";
+
+export const roles: Record<Role, string> = {
+  admin: "Admin",
+  teacher: "Teacher",
+  user: "Student",
+};
 
 interface UserProps {
   id: string;

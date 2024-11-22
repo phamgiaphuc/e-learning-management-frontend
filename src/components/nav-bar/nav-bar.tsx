@@ -1,13 +1,15 @@
 import HCMIUIcon from "@/assets/icons/hcmiu.png";
 import SearchBar from "@/components/inputs/search-bar";
+import useAuthContext from "@/hooks/contexts/use-auth-context";
 import { useAppSelector } from "@/hooks/use-app-selector";
-import { authSignOut } from "@/stores/auth/auth.slice";
 import { grey } from "@/theme/color";
+import { roles } from "@/types/user";
 import {
   AppBar,
   Avatar,
   Box,
   Button,
+  Chip,
   IconButton,
   Link,
   Menu,
@@ -19,15 +21,15 @@ import {
 } from "@mui/material";
 import { BellIcon, MailIcon } from "lucide-react";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const NavBarLink = styled(Link)(() => ({
+const NavBarLink = styled(Link)(({ isActive }: { isActive?: boolean }) => ({
   underline: "hover",
-  color: grey[800],
   fontWeight: "400",
   lineHeight: "24px",
-  textDecoration: "none",
+  textDecoration: isActive ? "underline" : "none",
+  textUnderlineOffset: 3,
+  color: isActive ? "#1575E3" : grey[800],
   cursor: "pointer",
   "&:hover": {
     color: "#1575E3",
@@ -58,8 +60,11 @@ const AuthButton = styled(Button)<{
 
 const NavBar = () => {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { signOut } = useAuthContext();
+  const navigate = useNavigate();
   const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
+  const { pathname } = useLocation();
 
   const handleClickProfile = (e: React.MouseEvent<HTMLElement>): void => {
     setAncholEl(e.currentTarget);
@@ -68,9 +73,6 @@ const NavBar = () => {
   const handleCloseProfile = () => {
     setAncholEl(null);
   };
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   return (
     <AppBar
@@ -125,14 +127,20 @@ const NavBar = () => {
                 gap: 6,
               }}
             >
-              <NavBarLink href="/">Homepage</NavBarLink>
+              <NavBarLink href="/" isActive={pathname === "/"}>
+                Homepage
+              </NavBarLink>
               {isAuthenticated && (
-                <NavBarLink href="/course">Course</NavBarLink>
+                <NavBarLink
+                  href="/my-course"
+                  isActive={pathname.includes("/my-course")}
+                >
+                  My course
+                </NavBarLink>
               )}
-              <NavBarLink href="/about">About</NavBarLink>
-              {user?.role === "teacher" && (
-                <NavBarLink href="/my-course">My course</NavBarLink>
-              )}
+              <NavBarLink href="/about" isActive={pathname === "/about"}>
+                About
+              </NavBarLink>
             </Box>
           </Box>
         </Box>
@@ -164,6 +172,7 @@ const NavBar = () => {
                     <MailIcon />
                   </IconButton>
                 </Tooltip>
+                <Chip label={roles[user?.role || "user"]} />
                 <Tooltip title="Account">
                   <Avatar
                     onClick={handleClickProfile}
@@ -186,7 +195,7 @@ const NavBar = () => {
                   <MenuItem
                     onClick={(e) => {
                       e.preventDefault();
-                      dispatch(authSignOut());
+                      signOut();
                       navigate("/signout");
                     }}
                   >
