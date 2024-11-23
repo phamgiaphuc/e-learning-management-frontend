@@ -14,6 +14,7 @@ import SignOutPage from "@/pages/auth/signout-page";
 import HomePage from "@/pages/home/home-page";
 import CourseAddPage from "@/pages/my-course/course-add";
 import MyCourseLayout from "@/layouts/my-course-layout";
+import PreviewLayout from "@/layouts/preview-layout";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="my-course" element={<MyCourseLayout />}>
             <Route index element={<MyCoursePage />} />
             <Route path="add" element={<CourseAddPage />} />
+            <Route path="preview" element={<PreviewLayout />} />
           </Route>
           <Route path="signout" element={<SignOutPage />} />
           <Route path="course">

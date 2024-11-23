@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import {
   closestCenter,
   DndContext,
@@ -17,59 +16,43 @@ import {
 } from "@dnd-kit/sortable";
 import { useState } from "react";
 import { SortableRow } from "@/sections/my-course/module-row";
-
-export interface ModuleProps {
-  id: number;
-  name: string;
-  lessons: Array<{ id: string; name: string }>;
-  sequence: number;
-}
-
-const moduleList: Array<ModuleProps> = [
-  {
-    id: 1,
-    name: "Module 1 - Introduction",
-    lessons: [
-      {
-        id: uuidv4(),
-        name: "Lesson 1.1: Intro 1",
-      },
-      {
-        id: uuidv4(),
-        name: "Lesson 1.2: Intro 2",
-      },
-    ],
-    sequence: 1,
-  },
-  {
-    id: 2,
-    name: "Module 2 - Getting Started",
-    lessons: [
-      {
-        id: uuidv4(),
-        name: "Lesson 2.1",
-      },
-      {
-        id: uuidv4(),
-        name: "Lesson 2.2",
-      },
-    ],
-    sequence: 2,
-  },
-];
+import { Box, Button, Typography } from "@mui/material";
+import { grey } from "@/theme/color";
+import { Plus } from "lucide-react";
+import { ModuleProps } from "@/types/module";
+import { useAppSelector } from "@/hooks/use-app-selector";
+import { useAppDispatch } from "@/hooks/use-app-dispatch";
+import { updateModule } from "@/stores/course/course.slice";
 
 const ModuleList = () => {
-  const [modules, setModules] = useState(moduleList);
+  const { modules } = useAppSelector((state) => state.course);
+  const dispatch = useAppDispatch();
   const [activeModule, setActiveModule] = useState<ModuleProps | undefined>(
     undefined,
   );
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
   const removeItem = (id: number) => {
+    if (!modules) {
+      return;
+    }
     const updated = modules
       .filter((module) => module.id !== id)
       .map((module, i) => ({ ...module, sequence: i + 1 }));
-    setModules(updated);
+    dispatch(updateModule(updated));
+  };
+
+  const addItem = () => {
+    const updated = [
+      ...(modules || []),
+      {
+        id: (modules || []).length + 1,
+        name: `Module ${(modules || []).length + 1}`,
+        lessons: [],
+        sequence: (modules || []).length + 1,
+      },
+    ];
+    dispatch(updateModule(updated));
   };
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -82,6 +65,10 @@ const ModuleList = () => {
 
     if (!over) return;
 
+    if (!modules) {
+      return;
+    }
+
     const activeItem = modules.find((ex) => ex.sequence === active.id);
     const overItem = modules.find((ex) => ex.sequence === over.id);
 
@@ -93,13 +80,13 @@ const ModuleList = () => {
     const overIndex = modules.findIndex((ex) => ex.sequence === over.id);
 
     if (activeIndex !== overIndex) {
-      setModules((prev) => {
-        const updated = arrayMove(prev, activeIndex, overIndex).map(
-          (ex, i) => ({ ...ex, sequence: i + 1 }),
-        );
-
-        return updated;
-      });
+      const updated = arrayMove(modules, activeIndex, overIndex).map(
+        (ex, i) => ({
+          ...ex,
+          sequence: i + 1,
+        }),
+      );
+      dispatch(updateModule(updated));
     }
     setActiveModule(undefined);
   };
@@ -109,35 +96,72 @@ const ModuleList = () => {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        padding: 2,
+        border: 1,
+        borderColor: grey[400],
+        borderRadius: 2,
+        gap: 2,
+      }}
     >
-      <SortableContext
-        items={modules.map((item) => item.sequence)}
-        strategy={verticalListSortingStrategy}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
       >
-        {modules.map((module) => (
-          <SortableRow
-            key={module.id}
-            module={module}
-            removeModule={removeItem}
-          />
-        ))}
-      </SortableContext>
-      <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
-        {activeModule ? (
-          <SortableRow
-            module={activeModule}
-            removeModule={removeItem}
-            forceDragging={true}
-          />
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+        <Typography
+          sx={{
+            fontSize: 18,
+            fontWeight: 600,
+            marginLeft: 0.5,
+          }}
+        >
+          Course content
+        </Typography>
+        <Button
+          size="large"
+          variant="outlined"
+          startIcon={<Plus size={20} />}
+          onClick={addItem}
+        >
+          Add new section
+        </Button>
+      </Box>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+      >
+        <SortableContext
+          items={(modules || []).map((item) => item.sequence)}
+          strategy={verticalListSortingStrategy}
+        >
+          {(modules || []).map((module) => (
+            <SortableRow
+              key={module.id}
+              module={module}
+              removeModule={removeItem}
+            />
+          ))}
+        </SortableContext>
+        <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
+          {activeModule ? (
+            <SortableRow
+              module={activeModule}
+              removeModule={removeItem}
+              forceDragging={true}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+    </Box>
   );
 };
 

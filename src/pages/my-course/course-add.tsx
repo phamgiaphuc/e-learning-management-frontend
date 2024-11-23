@@ -1,38 +1,49 @@
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { grey } from "@/theme/color";
-import {
-  Breadcrumbs,
-  Stack,
-  Typography,
-  Box,
-  TextField,
-  Button,
-  Paper,
-  MenuItem,
-} from "@mui/material";
-import { ChevronRight, Download, Plus, Telescope } from "lucide-react";
+import { Breadcrumbs, Stack, Typography, Box, TextField } from "@mui/material";
+import { ChevronRight, Download } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import ModuleList from "@/sections/my-course/module-list";
 import { useFormik } from "formik";
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
-import { resetCourse } from "@/stores/course/course.slice";
-import { initialNewCourse, newCourseSchema } from "@/types/course";
+import { resetCourse, setThumbnailUrl } from "@/stores/course/course.slice";
+import {
+  initialNewCourse,
+  NewCourseProps,
+  newCourseSchema,
+} from "@/types/course";
+import CourseSideForm from "@/sections/my-course/course-side-form";
+import useImageContext from "@/hooks/contexts/use-image-context";
 
 const CourseAddPage = () => {
   const { course } = useAppSelector((state) => state.course);
-  const { getRootProps, getInputProps } = useDropzone();
+  const { uploadImage } = useImageContext();
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg"],
+    },
+    onDrop: (acceptedFiles) => {
+      handleUploadImage(acceptedFiles[0]);
+    },
+  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const formik = useFormik({
+  const formik = useFormik<NewCourseProps>({
     initialValues: initialNewCourse,
     validationSchema: newCourseSchema,
     onSubmit: async (values) => {
       console.log(values);
     },
   });
+
+  const handleUploadImage = async (image: File) => {
+    const { imageUrl } = await uploadImage(image);
+    dispatch(setThumbnailUrl(imageUrl));
+    formik.setFieldValue("thumbnailUrl", imageUrl);
+  };
 
   const handleClose = useCallback(() => {
     dispatch(resetCourse());
@@ -44,6 +55,7 @@ const CourseAddPage = () => {
       navigate("/my-course");
     } else {
       formik.setValues({
+        id: course.id,
         name: course.name,
         description: course.description,
         thumbnailUrl: course.thumbnailUrl,
@@ -57,31 +69,6 @@ const CourseAddPage = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Stack sx={{ padding: 2, gap: 2 }}>
-        <Breadcrumbs separator={<ChevronRight size={20} />}>
-          {[
-            <Typography
-              color="text.primary"
-              sx={{
-                cursor: "pointer",
-                ":hover": {
-                  textDecoration: "underline",
-                  textUnderlineOffset: 3,
-                },
-              }}
-              onClick={handleClose}
-            >
-              My course
-            </Typography>,
-            <Typography
-              color="primary"
-              sx={{
-                fontWeight: 600,
-              }}
-            >
-              {formik.values.name || "Project's name"}
-            </Typography>,
-          ]}
-        </Breadcrumbs>
         <Box sx={{ display: "flex", gap: 2, position: "relative" }}>
           <Box
             sx={{
@@ -91,6 +78,31 @@ const CourseAddPage = () => {
               gap: 2,
             }}
           >
+            <Breadcrumbs separator={<ChevronRight size={20} />}>
+              {[
+                <Typography
+                  color="text.primary"
+                  sx={{
+                    cursor: "pointer",
+                    ":hover": {
+                      textDecoration: "underline",
+                      textUnderlineOffset: 3,
+                    },
+                  }}
+                  onClick={handleClose}
+                >
+                  My course
+                </Typography>,
+                <Typography
+                  color="primary"
+                  sx={{
+                    fontWeight: 600,
+                  }}
+                >
+                  {formik.values.name || "Project's name"}
+                </Typography>,
+              ]}
+            </Breadcrumbs>
             <Box>
               <Typography variant="h5" color="primary" sx={{ fontWeight: 800 }}>
                 {formik.values.name || "Project's name"}
@@ -147,6 +159,11 @@ const CourseAddPage = () => {
                   type="text"
                   placeholder="Enter course slug"
                   value={formik.values.slug}
+                  name="slug"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.slug && Boolean(formik.errors.slug)}
+                  helperText={formik.touched.slug && formik.errors.slug}
                 />
               </Box>
               <Box
@@ -171,6 +188,16 @@ const CourseAddPage = () => {
                       },
                     },
                   }}
+                  name="description"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.description &&
+                    Boolean(formik.errors.description)
+                  }
+                  helperText={
+                    formik.touched.description && formik.errors.description
+                  }
                 />
               </Box>
               <Box
@@ -194,157 +221,53 @@ const CourseAddPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 1,
+                    overflow: "hidden",
+                    pơsition: "relative",
                   }}
                 >
                   <input {...getInputProps()} />
-                  <Download />
-                  <Typography>
-                    Click here to upload or drag and drop the image
-                  </Typography>
+                  {formik.values.thumbnailUrl ? (
+                    <>
+                      <img
+                        src={formik.values.thumbnailUrl}
+                        alt="thumbnail"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          display: "flex",
+                          gap: 1,
+                          padding: 2,
+                          backgroundColor: "rgba(0, 0, 0, 0.5)",
+                          borderRadius: 2,
+                          color: "white",
+                        }}
+                      >
+                        <Download />
+                        <Typography>
+                          Click here to upload or drag and drop the image
+                        </Typography>
+                      </Box>
+                    </>
+                  ) : (
+                    <>
+                      <Download />
+                      <Typography>
+                        Click here to upload or drag and drop the image
+                      </Typography>
+                    </>
+                  )}
                 </Box>
               </Box>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                padding: 2,
-                border: 1,
-                borderColor: grey[400],
-                borderRadius: 2,
-                gap: 2,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: 18,
-                    fontWeight: 600,
-                    marginLeft: 0.5,
-                  }}
-                >
-                  Course content
-                </Typography>
-                <Button
-                  size="large"
-                  variant="outlined"
-                  startIcon={<Plus size={20} />}
-                >
-                  Add new section
-                </Button>
-              </Box>
-              <ModuleList />
-            </Box>
+            <ModuleList />
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "15%",
-              position: "fixed",
-              right: 16,
-              gap: 2,
-            }}
-          >
-            <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-                sx={{
-                  borderRadius: 2,
-                }}
-              >
-                Save
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                fullWidth
-                sx={{
-                  borderRadius: 2,
-                }}
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-            </Box>
-            <Paper
-              elevation={4}
-              sx={{
-                backgroundColor: "primary.main",
-                color: "white",
-                padding: 2,
-                display: "flex",
-                gap: 2,
-                borderRadius: 2,
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography sx={{ fontWeight: 600 }}>Preview course</Typography>
-                <Typography variant="body2">
-                  View how other see your course
-                </Typography>
-              </Box>
-              <Button
-                sx={{
-                  backgroundColor: "white",
-                  color: "black",
-                  height: "fit-content",
-                  paddingX: 4,
-                  borderRadius: 2,
-                }}
-                startIcon={<Telescope size={20} />}
-              >
-                Preview
-              </Button>
-            </Paper>
-            <Paper
-              elevation={4}
-              sx={{
-                backgroundColor: "white",
-                border: 1,
-                borderColor: grey[400],
-                padding: 2,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-                borderRadius: 2,
-                alignItems: "start",
-              }}
-            >
-              <Stack gap={0.5}>
-                <Typography sx={{ fontWeight: 600 }}>Choose level</Typography>
-                <Typography variant="body2">
-                  Choose the level for the course
-                </Typography>
-              </Stack>
-              <TextField
-                select
-                fullWidth
-                size="small"
-                value={formik.values.level}
-              >
-                <MenuItem value="beginner" key="beginner">
-                  Beginner
-                </MenuItem>
-                <MenuItem value="intermediate" key="intermediate">
-                  Intermediate
-                </MenuItem>
-                <MenuItem value="advanced" key="advanced">
-                  Advanced
-                </MenuItem>
-              </TextField>
-            </Paper>
-          </Box>
+          <CourseSideForm handleClose={handleClose} formik={formik} />
         </Box>
       </Stack>
     </form>

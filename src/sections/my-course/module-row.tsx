@@ -12,7 +12,13 @@ import {
   ListItemButton,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { GripVertical, ChevronDown, Hammer, Trash } from "lucide-react";
+import {
+  GripVertical,
+  ChevronDown,
+  Hammer,
+  Trash,
+  ChevronUp,
+} from "lucide-react";
 import { useState } from "react";
 
 type SortableRowProps = {
@@ -90,16 +96,16 @@ export function SortableRow({
           >
             <GripVertical size={24} />
           </Box>
-          <IconButton onClick={() => setOpen(!open)}>
-            <ChevronDown size={24} />
+          <IconButton
+            onClick={() => module.lessons.length > 0 && setOpen(!open)}
+          >
+            {open ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
           </IconButton>
           <TextField
             size="small"
             value={module.name}
-            sx={{ width: 650 }}
-            inputProps={{
-              sx: { fontWeight: 500 },
-            }}
+            sx={{ width: 650, fontWeight: 500 }}
+            placeholder="Enter module name"
           />
         </Box>
         <Box

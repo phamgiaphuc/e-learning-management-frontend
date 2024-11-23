@@ -25,14 +25,17 @@ axiosJwt.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 500 &&
+      ["jwt expired", "jwt malformed"].includes(error.response.data.message)
+    ) {
       originalRequest._retry = true;
       try {
         const {
           data: { tokens },
         } = await axios.post("/auth/refresh-token");
-        setToken("token", tokens.acceessToken);
-        originalRequest.headers.Authorization = `Bearer ${tokens.acceessToken}`;
+        setToken("token", tokens.accessToken);
+        originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
         return axios(originalRequest);
       } catch (error) {
         console.log("Error: ", error);

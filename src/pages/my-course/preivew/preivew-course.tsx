@@ -1,30 +1,21 @@
-import useCourseContext from "@/hooks/contexts/use-course-context";
-import { blue } from "@/theme/tailwind-color";
-import { CourseDetailProps, inititialCourse } from "@/types/course";
-import { Box, Button, Grid2, Paper, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import SliderPic from "@/assets/images/slider_pic.png";
+import { useAppSelector } from "@/hooks/use-app-selector";
+import useMetaTitle from "@/hooks/use-meta-title";
 import { formatDate } from "@/utils/format-date";
-import { grey } from "@mui/material/colors";
+import { Box, Stack, Typography, Button, Grid2, Paper } from "@mui/material";
+import { blue } from "@mui/material/colors";
+import SliderPic from "@/assets/images/slider_pic.png";
+import { grey } from "@/theme/color";
+import StarIcon from "@mui/icons-material/Star";
 
-const CourseOverviewPage = () => {
-  const { id } = useParams();
-  const [course, setCourse] = useState<CourseDetailProps>(inititialCourse);
-  const { getCourseById } = useCourseContext();
+const PreivewCourse = () => {
+  const { course, modules } = useAppSelector((state) => state.course);
 
-  useEffect(() => {
-    const fetchCourseById = async () => {
-      if (id) {
-        const course = await getCourseById(id);
-        setCourse(course);
-      }
-    };
-    fetchCourseById();
-  }, [getCourseById, id]);
+  const lessons = modules?.flatMap((module) => module.lessons);
+
+  useMetaTitle({ title: "Preview course" });
 
   return (
-    <Stack gap={4}>
+    <Stack gap={2}>
       <Box
         sx={{
           width: "100%",
@@ -51,41 +42,44 @@ const CourseOverviewPage = () => {
               color: "primary.main",
             }}
           >
-            {course.name}
+            {course?.name}
           </Typography>
-          <Typography>{course.slug}</Typography>
+          <Typography>{course?.slug}</Typography>
           <Button
             variant="contained"
             sx={{
               height: 56,
               marginTop: 2,
-              width: 240,
+              width: 280,
               borderRadius: 2,
+              paddingY: 1,
             }}
           >
             <Stack>
               <Typography sx={{ fontWeight: 600 }}>Enroll for free</Typography>
               <Typography variant="body2">
-                Starts at {formatDate(course.createdAt)}
+                Starts at {formatDate(new Date())}
               </Typography>
             </Stack>
           </Button>
           <Typography sx={{ display: "flex", marginY: 1.5 }}>
             <Typography sx={{ fontWeight: 600, marginRight: 0.5 }}>
-              {course.numEnrollments}
+              {0}
             </Typography>
             already enrolled
           </Typography>
         </Box>
-        <Box>
-          <img
-            src={SliderPic}
-            height="100%"
-            style={{ objectFit: "cover", opacity: 0.75 }}
-          />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img src={SliderPic} height="100%" style={{ objectFit: "cover" }} />
         </Box>
         <Paper
-          elevation={6}
+          elevation={4}
           sx={{
             position: "absolute",
             bottom: -64,
@@ -116,6 +110,7 @@ const CourseOverviewPage = () => {
                   flexGrow: 1,
                   borderRight: 1,
                   borderColor: grey[600],
+                  height: "100%",
                 }}
               >
                 <Typography
@@ -124,7 +119,7 @@ const CourseOverviewPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {modules?.length} modules
                 </Typography>
                 <Typography variant="body2">
                   Gain insight into a topic and learn the fundamentals.
@@ -145,10 +140,10 @@ const CourseOverviewPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {lessons?.length} lessons
                 </Typography>
                 <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
+                  Explore each problem from the lessons
                 </Typography>
               </Box>
             </Grid2>
@@ -160,17 +155,24 @@ const CourseOverviewPage = () => {
                   borderColor: grey[600],
                 }}
               >
-                <Typography
+                <Box
                   sx={{
-                    fontSize: 18,
-                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
                   }}
                 >
-                  {course.numLessons} modules
-                </Typography>
-                <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
-                </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 18,
+                      fontWeight: 600,
+                    }}
+                  >
+                    4.5
+                  </Typography>
+                  <StarIcon color="warning" />
+                </Box>
+                <Typography variant="body2">Ratings & Reviews.</Typography>
               </Box>
             </Grid2>
             <Grid2 size={3}>
@@ -183,13 +185,12 @@ const CourseOverviewPage = () => {
                   sx={{
                     fontSize: 18,
                     fontWeight: 600,
+                    textTransform: "capitalize",
                   }}
                 >
-                  {course.numLessons} modules
+                  {course?.level} level
                 </Typography>
-                <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
-                </Typography>
+                <Typography variant="body2">Course level.</Typography>
               </Box>
             </Grid2>
           </Grid2>
@@ -197,22 +198,43 @@ const CourseOverviewPage = () => {
       </Box>
       <Box
         sx={{
-          marginTop: 6,
-          paddingX: 4,
           display: "flex",
           flexDirection: "column",
-          gap: 4,
+          paddingX: 8,
         }}
       >
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 0.5 }}>
-            Description
-          </Typography>
-          <Typography>{course.description}</Typography>
+        <Box
+          sx={{
+            marginTop: 10,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 600, marginBottom: 0.5 }}
+            >
+              Description
+            </Typography>
+            <Typography>{course?.description}</Typography>
+          </Box>
+          <img
+            src={course?.thumbnailUrl}
+            alt={course?.name}
+            style={{
+              width: 600,
+              height: 150,
+              objectFit: "cover",
+              borderRadius: 16,
+            }}
+          />
         </Box>
       </Box>
     </Stack>
   );
 };
 
-export default CourseOverviewPage;
+export default PreivewCourse;

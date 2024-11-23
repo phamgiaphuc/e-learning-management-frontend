@@ -20,7 +20,7 @@ export interface CourseProps {
 export interface NewCourseProps
   extends Pick<
     CourseProps,
-    "name" | "description" | "thumbnailUrl" | "level" | "slug"
+    "id" | "name" | "description" | "thumbnailUrl" | "level" | "slug"
   > {}
 
 export interface CourseDetailProps extends CourseProps {
@@ -42,6 +42,7 @@ export const initialNewCourse: NewCourseProps = {
   thumbnailUrl: "",
   level: "beginner",
   slug: "",
+  id: "",
 };
 
 export const inititialCourse: CourseDetailProps = {
