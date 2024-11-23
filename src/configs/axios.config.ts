@@ -1,4 +1,5 @@
 import envConfig from "@/configs/env.config";
+import { getToken, setToken } from "@/utils/token";
 import axios from "axios";
 
 axios.defaults.baseURL = envConfig.serverUrl;
@@ -11,7 +12,7 @@ export const axiosJwt = axios.create({
 
 axiosJwt.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getToken("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,14 +25,17 @@ axiosJwt.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 500 &&
+      ["jwt expired", "jwt malformed"].includes(error.response.data.message)
+    ) {
       originalRequest._retry = true;
       try {
         const {
           data: { tokens },
         } = await axios.post("/auth/refresh-token");
-        localStorage.setItem("token", tokens.acceessToken);
-        originalRequest.headers.Authorization = `Bearer ${tokens.acceessToken}`;
+        setToken("token", tokens.accessToken);
+        originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
         return axios(originalRequest);
       } catch (error) {
         console.log("Error: ", error);

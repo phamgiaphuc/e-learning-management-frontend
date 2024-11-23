@@ -1,12 +1,12 @@
 import { axiosJwt } from "@/configs/axios.config";
 import { ChildrenNodeProps } from "@/types/children";
-import { CourseProps, inititialCourse } from "@/types/course";
+import { CourseDetailProps, inititialCourse } from "@/types/course";
 import axios from "axios";
 import { createContext, useCallback } from "react";
 
 export interface CourseContextProps {
-  getCourses: () => Promise<Array<CourseProps>>;
-  getCourseById: (id: string) => Promise<CourseProps>;
+  getCourses: () => Promise<Array<CourseDetailProps>>;
+  getCourseById: (id: string) => Promise<CourseDetailProps>;
 }
 
 export const CourseContext = createContext<CourseContextProps>({
