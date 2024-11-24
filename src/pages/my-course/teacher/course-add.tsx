@@ -174,17 +174,17 @@ const CourseAddPage = () => {
                 }}
               >
                 <Typography sx={{ marginLeft: 0.5 }}>
-                  Description ({formik.values.description.length}/300)
+                  Description ({formik.values.description.length}/500)
                 </Typography>
                 <TextField
                   placeholder="Enter course name"
                   value={formik.values.description}
                   multiline
-                  rows={4}
+                  rows={5}
                   slotProps={{
                     input: {
                       inputProps: {
-                        maxLength: 300,
+                        maxLength: 500,
                       },
                     },
                   }}

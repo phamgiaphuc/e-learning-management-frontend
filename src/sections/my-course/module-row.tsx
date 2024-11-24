@@ -1,4 +1,5 @@
-import { ModuleProps } from "@/sections/my-course/module-list";
+import { LessonProps } from "@/types/lesson";
+import { ModuleProps } from "@/types/module";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -19,11 +20,12 @@ import {
   Trash,
   ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type SortableRowProps = {
   module: ModuleProps;
-  removeModule: (id: number) => void;
+  removeModule: (id: string) => void;
   forceDragging?: boolean;
 };
 
@@ -33,6 +35,11 @@ export function SortableRow({
   forceDragging = false,
 }: SortableRowProps) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleEdit = useCallback(() => {
+    navigate(`/my-course/edit?type=module&id=${module.id}`);
+  }, [module.id, navigate]);
 
   const {
     attributes,
@@ -118,6 +125,7 @@ export function SortableRow({
             variant="contained"
             startIcon={<Hammer size={16} />}
             sx={{ width: 100, borderRadius: 2 }}
+            onClick={handleEdit}
           >
             Edit
           </Button>
@@ -142,7 +150,7 @@ export function SortableRow({
           }}
         >
           <List disablePadding>
-            {module.lessons.map((lesson) => (
+            {module.lessons.map((lesson: LessonProps) => (
               <ListItem
                 key={lesson.id}
                 disablePadding

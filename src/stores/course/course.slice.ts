@@ -10,6 +10,7 @@ interface CourseStateProps {
 
 const initialState: CourseStateProps = {
   course: undefined,
+  modules: undefined,
 };
 
 const courseSlice = createSlice({
@@ -40,7 +41,7 @@ const courseSlice = createSlice({
     updateModule: (state, action: PayloadAction<ModuleProps[]>) => {
       state.modules = action.payload;
     },
-    deleteModule: (state, action: PayloadAction<number>) => {
+    deleteModule: (state, action: PayloadAction<string>) => {
       state.modules = state.modules?.filter(
         (module) => module.id !== action.payload,
       );

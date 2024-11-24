@@ -168,7 +168,7 @@ const PreivewCourse = () => {
                       fontWeight: 600,
                     }}
                   >
-                    4.5
+                    0
                   </Typography>
                   <StarIcon color="warning" />
                 </Box>
@@ -221,16 +221,18 @@ const PreivewCourse = () => {
             </Typography>
             <Typography>{course?.description}</Typography>
           </Box>
-          <img
-            src={course?.thumbnailUrl}
-            alt={course?.name}
-            style={{
-              width: 600,
-              height: 150,
-              objectFit: "cover",
-              borderRadius: 16,
-            }}
-          />
+          {course?.thumbnailUrl && (
+            <img
+              src={course.thumbnailUrl}
+              alt={course?.name}
+              style={{
+                width: 600,
+                height: 150,
+                objectFit: "cover",
+                borderRadius: 16,
+              }}
+            />
+          )}
         </Box>
       </Box>
     </Stack>

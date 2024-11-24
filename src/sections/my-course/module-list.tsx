@@ -23,6 +23,7 @@ import { ModuleProps } from "@/types/module";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import { updateModule } from "@/stores/course/course.slice";
+import { v4 as uuidv4 } from "uuid";
 
 const ModuleList = () => {
   const { modules } = useAppSelector((state) => state.course);
@@ -32,7 +33,7 @@ const ModuleList = () => {
   );
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     if (!modules) {
       return;
     }
@@ -46,8 +47,8 @@ const ModuleList = () => {
     const updated = [
       ...(modules || []),
       {
-        id: (modules || []).length + 1,
-        name: `Module ${(modules || []).length + 1}`,
+        id: uuidv4(),
+        name: "Module name",
         lessons: [],
         sequence: (modules || []).length + 1,
       },

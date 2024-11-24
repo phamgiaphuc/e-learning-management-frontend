@@ -37,7 +37,7 @@ const AddCourseDialog = ({ ...props }: AddCourseDialogProps) => {
   const handleConfirm = async () => {
     try {
       dispatch(setBaseCourse({ name: courseName, description }));
-      navigate("/my-course/add");
+      navigate("/my-course/add-course");
     } catch (error) {
       errorToast(String(error));
     }
@@ -56,7 +56,7 @@ const AddCourseDialog = ({ ...props }: AddCourseDialogProps) => {
       onConfirm={handleConfirm}
       {...props}
       title="Add new course"
-      maxWidth="sm"
+      maxWidth="md"
       successText={""}
       disabledConfirmBtn={!courseName}
       confirmText="Add course"
@@ -100,18 +100,18 @@ const AddCourseDialog = ({ ...props }: AddCourseDialogProps) => {
             marginTop: 1.5,
           }}
         >
-          Enter the course's description ({description.length}/300)
+          Enter the course's description ({description.length}/500)
         </Typography>
         <TextField
           value={description}
           onChange={handleDescriptionChange}
           multiline
-          rows={4}
+          rows={5}
           placeholder="Your course's description"
           slotProps={{
             input: {
               inputProps: {
-                maxLength: 300,
+                maxLength: 500,
               },
             },
           }}
