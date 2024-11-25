@@ -1,65 +1,43 @@
+import SliderPic from "@/assets/images/slider_pic.png";
 import CustomCourseCard from "@/components/card/course-card";
 import useCourseContext from "@/hooks/contexts/use-course-context";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import useMetaTitle from "@/hooks/use-meta-title";
-import ContinueLearningSection from "@/sections/home/continue-learning";
-import HomeHeroContent from "@/sections/home/hero-content";
 import { blue } from "@/theme/color";
 import { CourseProps } from "@/types/course";
 import { Box, Grid2, Tab, Tabs, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-//DUMMY DATA
-// const courses = [
-//   {
-//     title: "Advanced Learning Algorithms",
-//     subtitle: "Course by IBM",
-//     image: ala,
-//   },
+const Container = styled(Box)({
+  position: "relative",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  borderRadius: "0.5rem",
+  padding: "2rem 2rem 2rem 2rem",
+  marginTop: 4,
+  marginRight: 42,
+  marginLeft: 42,
+  boxShadow: "0 0.1rem 0.2rem 0",
+  backgroundColor: "#cce4ff",
+  overflow: "hidden",
+});
 
-//   {
-//     title: "Mathematics for Machine Learning Specialization",
-//     subtitle: "Course by Instructor David",
-//     image: math,
-//   },
+const ImageContainer = styled(Box)({
+  position: "absolute",
+  top: -28,
+  right: 32,
+});
 
-//   {
-//     title: "Python for Data Science, AI & Development",
-//     subtitle: "Course by Professor Joseph Santarcangelo",
-//     image: python,
-//   },
+const StyledTypography = styled(Typography)({
+  fontWeight: "bolder",
+  color: blue[900],
+});
 
-//   {
-//     title: "Python for Data Science, AI & Development",
-//     subtitle: "Course by Professor Joseph Santarcangelo",
-//     image: python,
-//   },
-
-//   {
-//     title: "Advanced Learning Algorithms",
-//     subtitle: "Course by IBM",
-//     image: ala,
-//   },
-
-//   {
-//     title: "Mathematics for Machine Learning Specialization",
-//     subtitle: "Course by Instructor David",
-//     image: math,
-//   },
-
-//   {
-//     title: "Python for Data Science, AI & Development",
-//     subtitle: "Course by Professor Joseph Santarcangelo",
-//     image: python,
-//   },
-
-//   {
-//     title: "Python for Data Science, AI & Development",
-//     subtitle: "Course by Professor Joseph Santarcangelo",
-//     image: python,
-//   },
-// ];
+const StyledImage = styled("img")({
+  height: "20rem",
+});
 
 const NavigationTabs = styled(Tabs)({
   "& .MuiTabs-indicator": {
@@ -73,12 +51,11 @@ const CustomTab = styled(Tab)(() => ({
   },
 }));
 
-const HomePage: React.FC = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+const HomePage = () => {
   const [courses, setCourses] = useState<Array<CourseProps>>([]);
   const { getCourses } = useCourseContext();
   const [value, setValue] = useState(0);
-  useMetaTitle({ title: isAuthenticated ? "Home" : "Home before login" });
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     async function fetchCourses() {
@@ -88,6 +65,8 @@ const HomePage: React.FC = () => {
     fetchCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useMetaTitle({ title: "Home" });
 
   return (
     <>
@@ -99,36 +78,73 @@ const HomePage: React.FC = () => {
           gap: 2,
         }}
       >
-        {isAuthenticated ? <ContinueLearningSection /> : <HomeHeroContent />}
-
+        {!isAuthenticated && (
+          <Container>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography
+                sx={{
+                  letterSpacing: "0.3rem",
+                  fontWeight: "600",
+                  marginBottom: 5,
+                }}
+                variant="h6"
+                color="textSecondary"
+              >
+                ONLINE COURSE
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <StyledTypography
+                  sx={{
+                    fontSize: "3rem",
+                    fontWeight: "600",
+                  }}
+                  variant="h3"
+                >
+                  Sharpen Your Skills
+                </StyledTypography>
+                <StyledTypography
+                  sx={{
+                    fontSize: "1.5rem",
+                    fontWeight: "500",
+                  }}
+                  variant="h6"
+                >
+                  With Professional Online Courses
+                </StyledTypography>
+              </Box>
+            </Box>
+            <ImageContainer>
+              <StyledImage src={SliderPic} alt="img" />
+            </ImageContainer>
+          </Container>
+        )}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            marginX: 2,
+            marginX: 5,
           }}
         >
-          {isAuthenticated ? (
-            <Typography
-              variant="h5"
-              color="primary.main"
-              gutterBottom
-              fontWeight={700}
-            >
-              What to learn next?
-            </Typography>
-          ) : (
-            <NavigationTabs
-              value={value}
-              onChange={(_, value) => setValue(value)}
-            >
-              <CustomTab label="Network" />
-              <CustomTab label="Front-end" />
-              <CustomTab label="Back-end" />
-              <CustomTab label="Database" />
-              <CustomTab label="AI" />
-            </NavigationTabs>
-          )}
+          <NavigationTabs
+            value={value}
+            onChange={(_, value) => setValue(value)}
+          >
+            <CustomTab label="Network" />
+            <CustomTab label="Front-end" />
+            <CustomTab label="Back-end" />
+            <CustomTab label="Database" />
+            <CustomTab label="AI" />
+          </NavigationTabs>
           <Grid2
             container
             spacing={3}

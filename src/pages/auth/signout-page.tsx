@@ -8,15 +8,24 @@ import {
   DialogTitle,
   Stack,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignOutPage = () => {
   const [isOpen, setOpen] = useState(true);
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isOpen) {
+      navigate("/");
+    }
+  }, [isOpen, navigate]);
+
   return (
     <React.Fragment>
       <Dialog
@@ -83,7 +92,7 @@ const SignOutPage = () => {
               }}
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/home");
+                navigate("/");
               }}
             >
               Stay logged out

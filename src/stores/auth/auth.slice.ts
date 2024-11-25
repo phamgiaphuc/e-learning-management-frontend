@@ -1,4 +1,4 @@
-import { TokenProps, UserDetailProps } from "@/types/user";
+import { UserDetailProps } from "@/types/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthStateProps {
@@ -12,14 +12,14 @@ interface AuthStateProps {
     | null;
   loading: boolean;
   isAuthenticated: boolean;
-  data: { tokens: TokenProps; user: UserDetailProps } | null;
+  user: UserDetailProps | null;
 }
 
 const initialState: AuthStateProps = {
   type: null,
   loading: false,
   isAuthenticated: false,
-  data: null,
+  user: null,
 };
 
 const authSlice = createSlice({
@@ -34,13 +34,13 @@ const authSlice = createSlice({
       state.loading = false;
       state.type = null;
     },
-    authSignIn(state, action: PayloadAction<AuthStateProps["data"]>) {
+    authSignIn(state, action: PayloadAction<AuthStateProps["user"]>) {
       state.isAuthenticated = true;
-      state.data = action.payload;
+      state.user = action.payload;
     },
     authSignOut(state) {
       state.isAuthenticated = false;
-      state.data = null;
+      state.user = null;
     },
   },
 });
