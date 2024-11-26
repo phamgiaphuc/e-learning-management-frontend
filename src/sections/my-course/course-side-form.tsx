@@ -129,13 +129,13 @@ const CourseSideForm = ({ handleClose, formik }: CourseSideFormProps) => {
           error={formik.touched.level && Boolean(formik.errors.level)}
           helperText={formik.touched.level && formik.errors.level}
         >
-          <MenuItem value="beginner" key="beginner">
+          <MenuItem value="BEGINNER" key="BEGINNER">
             Beginner
           </MenuItem>
-          <MenuItem value="intermediate" key="intermediate">
+          <MenuItem value="INTERMEDIATE" key="INTERMEDIATE">
             Intermediate
           </MenuItem>
-          <MenuItem value="advanced" key="advanced">
+          <MenuItem value="ADVANCED" key="ADVANCED">
             Advanced
           </MenuItem>
         </TextField>

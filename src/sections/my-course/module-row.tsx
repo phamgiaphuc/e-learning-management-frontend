@@ -1,3 +1,5 @@
+import { useAppDispatch } from "@/hooks/use-app-dispatch";
+import { updateModuleById } from "@/stores/course/course.slice";
 import { LessonProps } from "@/types/lesson";
 import { ModuleProps } from "@/types/module";
 import { useSortable } from "@dnd-kit/sortable";
@@ -36,6 +38,7 @@ export function SortableRow({
 }: SortableRowProps) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleEdit = useCallback(() => {
     navigate(`/my-course/edit?type=module&id=${module.id}`);
@@ -50,8 +53,24 @@ export function SortableRow({
     transform,
     transition,
   } = useSortable({
-    id: module.sequence,
+    id: module.position,
   });
+
+  const handleNameChange = useCallback(
+    (name: string) => {
+      const updated = {
+        ...module,
+        name,
+      };
+      dispatch(
+        updateModuleById({
+          id: module.id,
+          module: updated,
+        }),
+      );
+    },
+    [dispatch, module],
+  );
 
   const parentStyles = {
     transform: CSS.Transform.toString(transform),
@@ -113,6 +132,7 @@ export function SortableRow({
             value={module.name}
             sx={{ width: 650, fontWeight: 500 }}
             placeholder="Enter module name"
+            onChange={(e) => handleNameChange(e.target.value)}
           />
         </Box>
         <Box

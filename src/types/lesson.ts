@@ -11,3 +11,18 @@ export const initialLesson: LessonProps = {
   name: "Lesson name",
   content: "",
 };
+
+export interface LessonDetailProps extends LessonProps {
+  position: number;
+  description: string;
+  moduleId: string;
+}
+
+export const initialLessonDetail: LessonDetailProps = {
+  id: uuidv4(),
+  name: "",
+  content: "",
+  position: 1,
+  description: "",
+  moduleId: "",
+};

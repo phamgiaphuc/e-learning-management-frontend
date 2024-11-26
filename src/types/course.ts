@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-type Level = "beginner" | "intermediate" | "advanced";
+type Level = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
 
 export interface CourseProps {
   id: string;
@@ -40,7 +40,7 @@ export const initialNewCourse: NewCourseProps = {
   name: "",
   description: "",
   thumbnailUrl: "",
-  level: "beginner",
+  level: "BEGINNER",
   slug: "",
   id: "",
 };
@@ -56,7 +56,7 @@ export const inititialCourse: CourseDetailProps = {
   teacherId: "",
   thumbnailUrl: "",
   rating: 0,
-  level: "beginner",
+  level: "BEGINNER",
   updatedAt: new Date(),
   createdAt: new Date(),
   deletedAt: new Date(),

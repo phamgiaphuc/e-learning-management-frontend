@@ -50,7 +50,7 @@ const ModuleList = () => {
         id: uuidv4(),
         name: "Module name",
         lessons: [],
-        sequence: (modules || []).length + 1,
+        position: (modules || []).length + 1,
       },
     ];
     dispatch(updateModule(updated));
@@ -58,7 +58,7 @@ const ModuleList = () => {
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
-    setActiveModule(modules?.find((item) => item.sequence === active.id));
+    setActiveModule(modules?.find((item) => item.position === active.id));
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -70,15 +70,15 @@ const ModuleList = () => {
       return;
     }
 
-    const activeItem = modules.find((ex) => ex.sequence === active.id);
-    const overItem = modules.find((ex) => ex.sequence === over.id);
+    const activeItem = modules.find((ex) => ex.position === active.id);
+    const overItem = modules.find((ex) => ex.position === over.id);
 
     if (!activeItem || !overItem) {
       return;
     }
 
-    const activeIndex = modules.findIndex((ex) => ex.sequence === active.id);
-    const overIndex = modules.findIndex((ex) => ex.sequence === over.id);
+    const activeIndex = modules.findIndex((ex) => ex.position === active.id);
+    const overIndex = modules.findIndex((ex) => ex.position === over.id);
 
     if (activeIndex !== overIndex) {
       const updated = arrayMove(modules, activeIndex, overIndex).map(
@@ -141,7 +141,7 @@ const ModuleList = () => {
         onDragCancel={handleDragCancel}
       >
         <SortableContext
-          items={(modules || []).map((item) => item.sequence)}
+          items={(modules || []).map((item) => item.position)}
           strategy={verticalListSortingStrategy}
         >
           {(modules || []).map((module) => (

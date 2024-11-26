@@ -16,10 +16,18 @@ import {
 } from "@/types/course";
 import CourseSideForm from "@/sections/my-course/course-side-form";
 import useImageContext from "@/hooks/contexts/use-image-context";
+import useCourseContext from "@/hooks/contexts/use-course-context";
+import useModuleContext from "@/hooks/contexts/use-module-context";
+import useLessonContext from "@/hooks/contexts/use-lesson-context";
+import useToast from "@/hooks/use-toast";
 
 const CourseAddPage = () => {
-  const { course } = useAppSelector((state) => state.course);
+  const { course, modules } = useAppSelector((state) => state.course);
+  const { user } = useAppSelector((state) => state.auth);
   const { uploadImage } = useImageContext();
+  const { createCourse } = useCourseContext();
+  const { createModule } = useModuleContext();
+  const { createLesson } = useLessonContext();
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [".png", ".jpg", ".jpeg"],
@@ -30,12 +38,41 @@ const CourseAddPage = () => {
   });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { successToast, errorToast } = useToast();
 
   const formik = useFormik<NewCourseProps>({
     initialValues: initialNewCourse,
     validationSchema: newCourseSchema,
     onSubmit: async (values) => {
-      console.log(values);
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { slug, id, thumbnailUrl, ...rest } = values;
+        const course = await createCourse({
+          ...rest,
+          teacherId: user?.id || "",
+        });
+        if (modules) {
+          for (const module of modules) {
+            const data = await createModule({
+              courseId: course.id,
+              name: module.name,
+              description: "",
+            });
+            for (const lesson of module.lessons) {
+              await createLesson({
+                name: lesson.name,
+                moduleId: data.id,
+                description: "",
+                content: lesson.content,
+              });
+            }
+          }
+        }
+        successToast("Create course successfully");
+        navigate("/my-course");
+      } catch (error) {
+        errorToast(String(error));
+      }
     },
   });
 
@@ -177,7 +214,7 @@ const CourseAddPage = () => {
                   Description ({formik.values.description.length}/500)
                 </Typography>
                 <TextField
-                  placeholder="Enter course name"
+                  placeholder="Enter course description"
                   value={formik.values.description}
                   multiline
                   rows={5}

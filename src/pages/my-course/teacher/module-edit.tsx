@@ -1,7 +1,13 @@
+import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useDialog } from "@/hooks/use-dialog";
 import useQuery from "@/hooks/use-query";
 import SaveChangeDialog from "@/sections/my-course/save-change-dialog";
+import {
+  setIsChange,
+  updateLesson,
+  updateModule,
+} from "@/stores/course/course.slice";
 import { grey } from "@/theme/color";
 import { initialLesson } from "@/types/lesson";
 import { initialModule, ModuleProps } from "@/types/module";
@@ -16,17 +22,23 @@ import {
   Typography,
 } from "@mui/material";
 import { ArrowLeft, Plus } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ModuleEditPage = () => {
-  const [module, setModule] = useState<ModuleProps>(initialModule);
-  const { modules, course } = useAppSelector((state) => state.course);
-  const [isChange, setIsChange] = useState<boolean>(false);
+  const { modules, course, isChange } = useAppSelector((state) => state.course);
+  const [originalModule, setOriginalModule] =
+    useState<ModuleProps>(initialModule);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const query = useQuery();
   const saveChangeDialog = useDialog();
+
+  const module = useMemo(
+    () =>
+      (modules || []).find((m) => m.id === query.get("id")) || initialModule,
+    [modules, query],
+  );
 
   const handleGoBack = useCallback(() => {
     if (isChange) {
@@ -39,28 +51,81 @@ const ModuleEditPage = () => {
   const handleNameChange = useCallback(
     (name: string) => {
       if (!isChange) {
-        setIsChange(true);
+        dispatch(setIsChange(true));
       }
-      return setModule({ ...module, name });
+      const updated = (modules || []).map((m) => {
+        if (m.id === module.id) {
+          return { ...m, name };
+        }
+        return m;
+      });
+      dispatch(updateModule(updated));
     },
-    [isChange, module],
+    [dispatch, isChange, module.id, modules],
+  );
+
+  const handleNameLessonChange = useCallback(
+    (id: string, name: string) => {
+      const updatedLesson = module.lessons.find((l) => l.id === id);
+      console.log(updateLesson);
+      if (updatedLesson) {
+        dispatch(
+          updateLesson({
+            lesson_id: id,
+            module_id: module.id,
+            lesson: { ...updatedLesson, name },
+          }),
+        );
+      }
+    },
+    [dispatch, module.id, module.lessons],
   );
 
   const handleAddLesson = useCallback(() => {
     if (!isChange) {
-      setIsChange(true);
+      dispatch(setIsChange(true));
     }
-    const updated = {
-      ...module,
-      lessons: [...module.lessons, initialLesson],
-    };
-    setModule(updated);
-  }, [isChange, module]);
+    const updated = (modules || []).map((m) => {
+      if (m.id === module.id) {
+        return { ...m, lessons: [...m.lessons, initialLesson] };
+      }
+      return m;
+    });
+    dispatch(updateModule(updated));
+  }, [dispatch, isChange, module.id, modules]);
+
+  const handleDeleteLesson = useCallback(
+    (id: string) => {
+      if (!isChange) {
+        dispatch(setIsChange(true));
+      }
+      const updated = (modules || []).map((m) => {
+        if (m.id === module.id) {
+          return {
+            ...module,
+            lessons: module.lessons.filter((lesson) => lesson.id !== id),
+          };
+        }
+        return m;
+      });
+      dispatch(updateModule(updated));
+    },
+    [dispatch, isChange, module, modules],
+  );
+
+  const handleEditLesson = useCallback(
+    (id: string) => {
+      dispatch(setIsChange(true));
+      navigate(`/my-course/edit?type=lesson&id=${id}&module_id=${module.id}`);
+    },
+    [dispatch, module.id, navigate],
+  );
 
   useEffect(() => {
-    const module =
-      (modules || []).find((m) => m.id === query.get("id")) || initialModule;
-    setModule(module);
+    const module = (modules || []).find((m) => m.id === query.get("id"));
+    if (module) {
+      setOriginalModule(module);
+    }
   }, [modules, query]);
 
   useEffect(() => {
@@ -181,7 +246,14 @@ const ModuleEditPage = () => {
                     <Typography>Lesson {index + 1}: </Typography>
                   </Grid2>
                   <Grid2 size={9.5}>
-                    <TextField value={lesson.name} size="small" fullWidth />
+                    <TextField
+                      onChange={(e) =>
+                        handleNameLessonChange(lesson.id, e.target.value)
+                      }
+                      value={lesson.name}
+                      size="small"
+                      fullWidth
+                    />
                   </Grid2>
                 </Grid2>
                 <Box
@@ -192,10 +264,20 @@ const ModuleEditPage = () => {
                     width: "100%",
                   }}
                 >
-                  <Button variant="outlined" color="primary" fullWidth>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    onClick={() => handleEditLesson(lesson.id)}
+                  >
                     Edit lesson
                   </Button>
-                  <Button variant="outlined" color="error" fullWidth>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    fullWidth
+                    onClick={() => handleDeleteLesson(lesson.id)}
+                  >
                     Delete lesson
                   </Button>
                 </Box>
@@ -230,8 +312,11 @@ const ModuleEditPage = () => {
         </Grid2>
       </Box>
       <SaveChangeDialog
+        type="module"
+        module={module}
         open={saveChangeDialog.open}
         onClose={saveChangeDialog.handleClose}
+        originalModule={originalModule}
       />
     </Stack>
   );
