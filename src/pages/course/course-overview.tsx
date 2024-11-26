@@ -1,27 +1,54 @@
 import useCourseContext from "@/hooks/contexts/use-course-context";
 import { blue } from "@/theme/tailwind-color";
 import { CourseDetailProps, inititialCourse } from "@/types/course";
-import { Box, Button, Grid2, Paper, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid2,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import SliderPic from "@/assets/images/slider_pic.png";
 import { formatDate } from "@/utils/format-date";
 import { grey } from "@mui/material/colors";
+// import HCMIUIcon from "@/assets/icons/hcmiu.png";
+import { Star } from "lucide-react";
+import { useAppSelector } from "@/hooks/use-app-selector";
+import { UserDetailProps } from "@/types/user";
 
-const CourseOverviewPage = () => {
+const CourseOverviewPage: React.FC = () => {
   const { id } = useParams();
   const [course, setCourse] = useState<CourseDetailProps>(inititialCourse);
-  const { getCourseById } = useCourseContext();
+  const [teacher, setTeacher] = useState<UserDetailProps | null>(null);
+  const { getCourseById, getUserById } = useCourseContext();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const handleEnrollClick = () => {
+    if (isAuthenticated) {
+      navigate(`/course/${course.id}/content`);
+    } else {
+      navigate("/signin");
+    }
+  };
 
   useEffect(() => {
     const fetchCourseById = async () => {
       if (id) {
         const course = await getCourseById(id);
         setCourse(course);
+        if (course.teacherId) {
+          const teacher = await getUserById(course.teacherId);
+          setTeacher(teacher);
+        }
       }
     };
     fetchCourseById();
-  }, [getCourseById, id]);
+  }, [getCourseById, getUserById, id]);
 
   return (
     <Stack gap={4}>
@@ -29,7 +56,7 @@ const CourseOverviewPage = () => {
         sx={{
           width: "100%",
           backgroundColor: blue[100],
-          height: 300,
+          height: 400,
           display: "flex",
           paddingRight: 16,
           paddingLeft: 8,
@@ -41,9 +68,14 @@ const CourseOverviewPage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            paddingY: 8,
+            paddingY: 2,
           }}
         >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+            alt="Course Image"
+            style={{ width: "8rem", height: "auto", marginBottom: "1rem" }}
+          />
           <Typography
             sx={{
               fontSize: 32,
@@ -53,7 +85,24 @@ const CourseOverviewPage = () => {
           >
             {course.name}
           </Typography>
-          <Typography>{course.slug}</Typography>
+          <Typography
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: 16,
+            }}
+          >
+            <Avatar
+              sx={{
+                cursor: "pointer",
+                color: "primary.main",
+                bgcolor: "#fff",
+                marginRight: 3,
+              }}
+              src={teacher?.userProfile.avatar}
+            />
+            Intructor: {teacher?.username}
+          </Typography>
           <Button
             variant="contained"
             sx={{
@@ -62,9 +111,10 @@ const CourseOverviewPage = () => {
               width: 240,
               borderRadius: 2,
             }}
+            onClick={handleEnrollClick}
           >
             <Stack>
-              <Typography sx={{ fontWeight: 600 }}>Enroll for free</Typography>
+              <Typography sx={{ fontWeight: 600 }}>Join the class</Typography>
               <Typography variant="body2">
                 Starts at {formatDate(course.createdAt)}
               </Typography>
@@ -75,6 +125,12 @@ const CourseOverviewPage = () => {
               {course.numEnrollments}
             </Typography>
             already enrolled
+          </Typography>
+          <Typography
+            sx={{ display: "flex", alignItems: "center", marginTop: 1 }}
+          >
+            Included with Scholaro{" "}
+            {/* <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} /> */}
           </Typography>
         </Box>
         <Box>
@@ -124,10 +180,10 @@ const CourseOverviewPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  1 Course series
                 </Typography>
                 <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
+                  Get in-depth knowledge of a subject
                 </Typography>
               </Box>
             </Grid2>
@@ -145,10 +201,16 @@ const CourseOverviewPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {course.rating}{" "}
+                  <Star
+                    fill="blue"
+                    color="blue"
+                    size={18}
+                    style={{ marginLeft: "4px" }}
+                  />
                 </Typography>
                 <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
+                  {course.numReviews} reviews
                 </Typography>
               </Box>
             </Grid2>
@@ -166,11 +228,9 @@ const CourseOverviewPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {course.level} levels
                 </Typography>
-                <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
-                </Typography>
+                <Typography variant="body2">Recommended experience</Typography>
               </Box>
             </Grid2>
             <Grid2 size={3}>
@@ -185,10 +245,10 @@ const CourseOverviewPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  Flexible schedule
                 </Typography>
                 <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
+                  2 months, 10 hours a week
                 </Typography>
               </Box>
             </Grid2>
@@ -206,7 +266,7 @@ const CourseOverviewPage = () => {
       >
         <Box>
           <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 0.5 }}>
-            Description
+            At a Glance
           </Typography>
           <Typography>{course.description}</Typography>
         </Box>

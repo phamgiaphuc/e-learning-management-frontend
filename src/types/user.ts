@@ -6,7 +6,7 @@ export const roles: Record<Role, string> = {
   user: "Student",
 };
 
-interface UserProps {
+export interface UserProps {
   id: string;
   email: string;
   username: string;
@@ -28,3 +28,18 @@ export interface TokenProps {
   accessToken: string;
   refreshToken: string;
 }
+
+export const initialUser: UserDetailProps = {
+  id: "",
+  email: "",
+  username: "",
+  role: "user",
+  isVerified: false,
+  userProfileId: "",
+  userProfile: {
+    avatar: "",
+  },
+  updatedAt: new Date(),
+  createdAt: new Date(),
+  deletedAt: new Date(),
+};

@@ -15,12 +15,19 @@ export interface CourseProps {
   thumbnailUrl: string;
   rating: number;
   level: Level;
+  numReviews: number;
 }
 
 export interface NewCourseProps
   extends Pick<
     CourseProps,
-    "id" | "name" | "description" | "thumbnailUrl" | "level" | "slug"
+    | "id"
+    | "name"
+    | "description"
+    | "thumbnailUrl"
+    | "level"
+    | "slug"
+    | "numReviews"
   > {}
 
 export interface CourseDetailProps extends CourseProps {
@@ -43,6 +50,7 @@ export const initialNewCourse: NewCourseProps = {
   level: "beginner",
   slug: "",
   id: "",
+  numReviews: 0,
 };
 
 export const inititialCourse: CourseDetailProps = {
@@ -60,4 +68,5 @@ export const inititialCourse: CourseDetailProps = {
   updatedAt: new Date(),
   createdAt: new Date(),
   deletedAt: new Date(),
+  numReviews: 0,
 };

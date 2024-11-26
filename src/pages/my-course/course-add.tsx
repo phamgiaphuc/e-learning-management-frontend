@@ -61,6 +61,7 @@ const CourseAddPage = () => {
         thumbnailUrl: course.thumbnailUrl,
         level: course.level,
         slug: course.slug,
+        numReviews: course.numReviews,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
