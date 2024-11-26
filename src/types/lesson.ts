@@ -1,6 +1,17 @@
 export interface LessonProps {
-  id: number;
+  id: string;
   name: string;
-  lessons: Array<{ id: string; name: string }>;
-  sequence: number;
 }
+export interface LessonDetailsProps extends LessonProps {
+  description: string;
+  slug: string;
+  //content: {};
+}
+
+export const initialLesson: LessonDetailsProps = {
+  id: "",
+  name: "",
+  description: "",
+  slug: "",
+  //content: {},
+};

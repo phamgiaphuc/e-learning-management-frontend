@@ -68,7 +68,7 @@ const CourseOverviewPage = () => {
             }}
           >
             <Stack>
-              <Typography sx={{ fontWeight: 600 }}>Enroll for free</Typography>
+              <Typography sx={{ fontWeight: 600 }}>Join in class</Typography>
               <Typography variant="body2">
                 Starts at {formatDate(course.createdAt)}
               </Typography>
