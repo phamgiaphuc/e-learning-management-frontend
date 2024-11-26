@@ -20,7 +20,7 @@ export interface CourseProps {
 export interface NewCourseProps
   extends Pick<
     CourseProps,
-    "id" | "name" | "description" | "thumbnailUrl" | "level" | "slug"
+    "id" | "name" | "description" | "thumbnailUrl" | "level"
   > {}
 
 export interface CourseDetailProps extends CourseProps {
@@ -33,7 +33,6 @@ export const newCourseSchema = yup.object<NewCourseProps>({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
   level: yup.string().required("Level is required"),
-  slug: yup.string().required("Slug is required"),
 });
 
 export const initialNewCourse: NewCourseProps = {
@@ -41,7 +40,6 @@ export const initialNewCourse: NewCourseProps = {
   description: "",
   thumbnailUrl: "",
   level: "BEGINNER",
-  slug: "",
   id: "",
 };
 

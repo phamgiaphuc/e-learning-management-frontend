@@ -1,41 +1,30 @@
 import { useAppSelector } from "@/hooks/use-app-selector";
-import { grey } from "@/theme/color";
-import { Breadcrumbs, Stack, Typography, Box, TextField } from "@mui/material";
-import { ChevronRight, Download } from "lucide-react";
-import { useDropzone } from "react-dropzone";
-import ModuleList from "@/sections/my-course/module-list";
+import { Breadcrumbs, Stack, Typography, Box } from "@mui/material";
+import { ChevronRight } from "lucide-react";
+import ModuleList from "@/sections/my-course/teacher/module-list";
 import { useFormik } from "formik";
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
-import { resetCourse, setThumbnailUrl } from "@/stores/course/course.slice";
+import { resetCourse } from "@/stores/course/course.slice";
 import {
   initialNewCourse,
   NewCourseProps,
   newCourseSchema,
 } from "@/types/course";
-import CourseSideForm from "@/sections/my-course/course-side-form";
-import useImageContext from "@/hooks/contexts/use-image-context";
+import CourseSideForm from "@/sections/my-course/teacher/course-side-form";
 import useCourseContext from "@/hooks/contexts/use-course-context";
 import useModuleContext from "@/hooks/contexts/use-module-context";
 import useLessonContext from "@/hooks/contexts/use-lesson-context";
 import useToast from "@/hooks/use-toast";
+import CourseInfoForm from "@/sections/my-course/teacher/course-info-form";
 
 const CourseAddPage = () => {
   const { course, modules } = useAppSelector((state) => state.course);
   const { user } = useAppSelector((state) => state.auth);
-  const { uploadImage } = useImageContext();
   const { createCourse } = useCourseContext();
   const { createModule } = useModuleContext();
   const { createLesson } = useLessonContext();
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      "image/*": [".png", ".jpg", ".jpeg"],
-    },
-    onDrop: (acceptedFiles) => {
-      handleUploadImage(acceptedFiles[0]);
-    },
-  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { successToast, errorToast } = useToast();
@@ -46,7 +35,7 @@ const CourseAddPage = () => {
     onSubmit: async (values) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { slug, id, thumbnailUrl, ...rest } = values;
+        const { id, ...rest } = values;
         const course = await createCourse({
           ...rest,
           teacherId: user?.id || "",
@@ -68,6 +57,7 @@ const CourseAddPage = () => {
             }
           }
         }
+        dispatch(resetCourse());
         successToast("Create course successfully");
         navigate("/my-course");
       } catch (error) {
@@ -75,12 +65,6 @@ const CourseAddPage = () => {
       }
     },
   });
-
-  const handleUploadImage = async (image: File) => {
-    const { imageUrl } = await uploadImage(image);
-    dispatch(setThumbnailUrl(imageUrl));
-    formik.setFieldValue("thumbnailUrl", imageUrl);
-  };
 
   const handleClose = useCallback(() => {
     dispatch(resetCourse());
@@ -97,7 +81,6 @@ const CourseAddPage = () => {
         description: course.description,
         thumbnailUrl: course.thumbnailUrl,
         level: course.level,
-        slug: course.slug,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,163 +128,7 @@ const CourseAddPage = () => {
                 {formik.values.name || "Project's name"}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                padding: 2,
-                border: 1,
-                borderColor: grey[400],
-                borderRadius: 2,
-                gap: 2,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 18,
-                  fontWeight: 600,
-                  marginLeft: 0.5,
-                }}
-              >
-                Basic course info
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 0.5,
-                }}
-              >
-                <Typography sx={{ marginLeft: 0.5 }}>Name</Typography>
-                <TextField
-                  type="text"
-                  placeholder="Enter course name"
-                  value={formik.values.name}
-                  name="name"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 0.5,
-                }}
-              >
-                <Typography sx={{ marginLeft: 0.5 }}>Slug</Typography>
-                <TextField
-                  type="text"
-                  placeholder="Enter course slug"
-                  value={formik.values.slug}
-                  name="slug"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.slug && Boolean(formik.errors.slug)}
-                  helperText={formik.touched.slug && formik.errors.slug}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 0.5,
-                }}
-              >
-                <Typography sx={{ marginLeft: 0.5 }}>
-                  Description ({formik.values.description.length}/500)
-                </Typography>
-                <TextField
-                  placeholder="Enter course description"
-                  value={formik.values.description}
-                  multiline
-                  rows={5}
-                  slotProps={{
-                    input: {
-                      inputProps: {
-                        maxLength: 500,
-                      },
-                    },
-                  }}
-                  name="description"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.description &&
-                    Boolean(formik.errors.description)
-                  }
-                  helperText={
-                    formik.touched.description && formik.errors.description
-                  }
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 0.5,
-                }}
-              >
-                <Typography sx={{ marginLeft: 0.5 }}>
-                  Course thumbnail
-                </Typography>
-                <Box
-                  {...getRootProps()}
-                  sx={{
-                    border: 1,
-                    borderColor: grey[400],
-                    borderRadius: 2,
-                    height: 128,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 1,
-                    overflow: "hidden",
-                    pơsition: "relative",
-                  }}
-                >
-                  <input {...getInputProps()} />
-                  {formik.values.thumbnailUrl ? (
-                    <>
-                      <img
-                        src={formik.values.thumbnailUrl}
-                        alt="thumbnail"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          display: "flex",
-                          gap: 1,
-                          padding: 2,
-                          backgroundColor: "rgba(0, 0, 0, 0.5)",
-                          borderRadius: 2,
-                          color: "white",
-                        }}
-                      >
-                        <Download />
-                        <Typography>
-                          Click here to upload or drag and drop the image
-                        </Typography>
-                      </Box>
-                    </>
-                  ) : (
-                    <>
-                      <Download />
-                      <Typography>
-                        Click here to upload or drag and drop the image
-                      </Typography>
-                    </>
-                  )}
-                </Box>
-              </Box>
-            </Box>
+            <CourseInfoForm formik={formik} />
             <ModuleList />
           </Box>
           <CourseSideForm handleClose={handleClose} formik={formik} />

@@ -24,6 +24,21 @@ export interface UserDetailProps extends UserProps {
   deletedAt: string | Date;
 }
 
+export const initialUser: UserDetailProps = {
+  updatedAt: "",
+  createdAt: "",
+  deletedAt: "",
+  id: "",
+  email: "",
+  username: "",
+  role: "admin",
+  isVerified: false,
+  userProfileId: "",
+  userProfile: {
+    avatar: "",
+  },
+};
+
 export interface TokenProps {
   accessToken: string;
   refreshToken: string;

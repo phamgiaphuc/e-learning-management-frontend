@@ -1,6 +1,7 @@
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import useToast from "@/hooks/use-toast";
 import { authSignIn, authSignOut } from "@/stores/auth/auth.slice";
+import { resetCourse } from "@/stores/course/course.slice";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
@@ -85,6 +86,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       await axios.post("/auth/signout");
       removeToken("token");
       dispatch(authSignOut());
+      dispatch(resetCourse());
       successToast("Sign out successfully");
     } catch (error) {
       console.log("Sign-out failed: ", error);

@@ -1,13 +1,12 @@
-import useCourseContext from "@/hooks/contexts/use-course-context";
-import { blue } from "@/theme/color";
+import useTeacherContext from "@/hooks/contexts/use-teacher-context";
 import { CourseProps } from "@/types/course";
-import { Box, Grid2, Paper, Stack, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Alert, Box, Grid2, Paper, Stack, Typography } from "@mui/material";
 
-const CourseList = () => {
+const TeacherCourseList = () => {
   const [courses, setCourses] = useState<CourseProps[]>([]);
-  const { getCourses } = useCourseContext();
+  const { getTeacherCourses } = useTeacherContext();
   const navigate = useNavigate();
 
   const onCourseClick = useCallback(
@@ -18,33 +17,36 @@ const CourseList = () => {
   );
 
   useEffect(() => {
-    const getAllCourses = async () => {
-      const courses = await getCourses();
-      setCourses(courses);
+    const getAllTeacherCourses = async () => {
+      const teacherCourses = await getTeacherCourses();
+      setCourses(teacherCourses);
     };
-    getAllCourses();
-  }, [getCourses]);
+    getAllTeacherCourses();
+  }, [getTeacherCourses]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Typography
-        variant="h6"
-        sx={{
-          marginBottom: 1,
-          marginLeft: 1,
-          color: blue[800],
-          fontWeight: 600,
-        }}
-      >
-        Recommended Courses
-      </Typography>
-      <Grid2 container spacing={4}>
-        {courses?.map((course) => (
+    <Grid2 container spacing={4}>
+      {courses?.length === 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+            marginTop: 8,
+          }}
+        >
+          <Alert severity="error">
+            <Typography>
+              No courses or guided projects are currently available. Please
+              create your first course.
+            </Typography>
+          </Alert>
+        </Box>
+      )}
+      {courses &&
+        courses.map((course) => (
           <Grid2 size={3} key={course.id}>
             <Paper
               elevation={2}
@@ -110,9 +112,8 @@ const CourseList = () => {
             </Paper>
           </Grid2>
         ))}
-      </Grid2>
-    </Box>
+    </Grid2>
   );
 };
 
-export default CourseList;
+export default TeacherCourseList;

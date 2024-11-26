@@ -1,13 +1,12 @@
 import SliderPic from "@/assets/images/slider_pic.png";
-import CustomCourseCard from "@/components/card/card";
-import useCourseContext from "@/hooks/contexts/use-course-context";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import useMetaTitle from "@/hooks/use-meta-title";
+import CourseList from "@/sections/home/course-list";
+import CourseStudent from "@/sections/home/course-student";
+import CourseTeacher from "@/sections/home/course-teacher";
 import { blue } from "@/theme/color";
-import { CourseProps } from "@/types/course";
-import { Box, Grid2, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
 
 const Container = styled(Box)({
   position: "relative",
@@ -39,32 +38,8 @@ const StyledImage = styled("img")({
   height: "20rem",
 });
 
-const NavigationTabs = styled(Tabs)({
-  "& .MuiTabs-indicator": {
-    backgroundColor: "blue",
-  },
-});
-
-const CustomTab = styled(Tab)(() => ({
-  "&.Mui-selected": {
-    color: blue[800],
-  },
-}));
-
 const HomePage = () => {
-  const [courses, setCourses] = useState<Array<CourseProps>>([]);
-  const { getCourses } = useCourseContext();
-  const [value, setValue] = useState(0);
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    async function fetchCourses() {
-      const courses = await getCourses();
-      setCourses(courses);
-    }
-    fetchCourses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   useMetaTitle({ title: "Home" });
 
@@ -128,38 +103,10 @@ const HomePage = () => {
             </ImageContainer>
           </Container>
         )}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            marginX: 5,
-          }}
-        >
-          <NavigationTabs
-            value={value}
-            onChange={(_, value) => setValue(value)}
-          >
-            <CustomTab label="Network" />
-            <CustomTab label="Front-end" />
-            <CustomTab label="Back-end" />
-            <CustomTab label="Database" />
-            <CustomTab label="AI" />
-          </NavigationTabs>
-          <Grid2
-            container
-            spacing={3}
-            sx={{
-              marginTop: 2,
-              gap: 3,
-            }}
-          >
-            {courses?.map((course, index) => (
-              <Grid2 size={3}>
-                <CustomCourseCard course={course} key={index} />
-              </Grid2>
-            ))}
-          </Grid2>
-        </Box>
+        <Stack gap={2}>
+          {user?.role === "user" ? <CourseStudent /> : <CourseTeacher />}
+          <CourseList />
+        </Stack>
       </Box>
     </>
   );

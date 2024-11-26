@@ -5,6 +5,7 @@ export interface ModuleProps {
   id: string;
   name: string;
   lessons: Array<LessonProps>;
+  description: string;
   position: number;
 }
 
@@ -13,10 +14,10 @@ export const initialModule: ModuleProps = {
   name: "Module name",
   lessons: [],
   position: 1,
+  description: "",
 };
 
-export interface ModuleDetailProps
-  extends Pick<ModuleProps, "id" | "name" | "position"> {
+export interface ModuleDetailProps extends Omit<ModuleProps, "lessons"> {
   courseId: string;
   description: string;
   numLessons: number;

@@ -125,7 +125,7 @@ export function SortableRow({
           <IconButton
             onClick={() => module.lessons.length > 0 && setOpen(!open)}
           >
-            {open ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+            {open ? <ChevronDown size={24} /> : <ChevronUp size={24} />}
           </IconButton>
           <TextField
             size="small"
@@ -170,7 +170,7 @@ export function SortableRow({
           }}
         >
           <List disablePadding>
-            {module.lessons.map((lesson: LessonProps) => (
+            {module.lessons.map((lesson: LessonProps, index) => (
               <ListItem
                 key={lesson.id}
                 disablePadding
@@ -182,7 +182,7 @@ export function SortableRow({
                     borderRadius: 2,
                   }}
                 >
-                  {lesson.name}
+                  {index + 1}. {lesson.name}
                 </ListItemButton>
               </ListItem>
             ))}

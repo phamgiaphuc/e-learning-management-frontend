@@ -100,7 +100,7 @@ const AddCourseDialog = ({ ...props }: AddCourseDialogProps) => {
             marginTop: 1.5,
           }}
         >
-          Enter the course's description ({description.length}/500)
+          Enter the course's description ({description.length}/750)
         </Typography>
         <TextField
           value={description}
@@ -111,7 +111,7 @@ const AddCourseDialog = ({ ...props }: AddCourseDialogProps) => {
           slotProps={{
             input: {
               inputProps: {
-                maxLength: 500,
+                maxLength: 750,
               },
             },
           }}

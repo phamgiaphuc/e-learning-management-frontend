@@ -15,11 +15,11 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { SortableRow } from "@/sections/my-course/module-row";
+import { SortableRow } from "@/sections/my-course/teacher/module-row";
 import { Box, Button, Typography } from "@mui/material";
 import { grey } from "@/theme/color";
 import { Plus } from "lucide-react";
-import { ModuleProps } from "@/types/module";
+import { initialModule, ModuleProps } from "@/types/module";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import { updateModule } from "@/stores/course/course.slice";
@@ -47,6 +47,7 @@ const ModuleList = () => {
     const updated = [
       ...(modules || []),
       {
+        ...initialModule,
         id: uuidv4(),
         name: "Module name",
         lessons: [],

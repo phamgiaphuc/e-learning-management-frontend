@@ -2,7 +2,7 @@ import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useDialog } from "@/hooks/use-dialog";
 import useQuery from "@/hooks/use-query";
-import SaveChangeDialog from "@/sections/my-course/save-change-dialog";
+import SaveChangeDialog from "@/sections/my-course/teacher/save-change-dialog";
 import {
   setIsChange,
   updateLesson,
@@ -15,15 +15,15 @@ import {
   Box,
   Button,
   Grid2,
-  IconButton,
   InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Folder, Plus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 const ModuleEditPage = () => {
   const { modules, course, isChange } = useAppSelector((state) => state.course);
@@ -64,6 +64,22 @@ const ModuleEditPage = () => {
     [dispatch, isChange, module.id, modules],
   );
 
+  const handleDescriptionChange = useCallback(
+    (description: string) => {
+      if (!isChange) {
+        dispatch(setIsChange(true));
+      }
+      const updated = (modules || []).map((m) => {
+        if (m.id === module.id) {
+          return { ...m, description };
+        }
+        return m;
+      });
+      dispatch(updateModule(updated));
+    },
+    [dispatch, isChange, module.id, modules],
+  );
+
   const handleNameLessonChange = useCallback(
     (id: string, name: string) => {
       const updatedLesson = module.lessons.find((l) => l.id === id);
@@ -87,7 +103,16 @@ const ModuleEditPage = () => {
     }
     const updated = (modules || []).map((m) => {
       if (m.id === module.id) {
-        return { ...m, lessons: [...m.lessons, initialLesson] };
+        return {
+          ...m,
+          lessons: [
+            ...m.lessons,
+            {
+              ...initialLesson,
+              id: uuidv4(),
+            },
+          ],
+        };
       }
       return m;
     });
@@ -126,7 +151,8 @@ const ModuleEditPage = () => {
     if (module) {
       setOriginalModule(module);
     }
-  }, [modules, query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!modules || !query || !query.get) {
@@ -152,12 +178,19 @@ const ModuleEditPage = () => {
             gap: 1,
           }}
         >
-          <IconButton onClick={handleGoBack}>
-            <ArrowLeft size={20} />
-          </IconButton>
-          <Typography color="primary.main" sx={{ fontWeight: 600 }}>
+          <Button
+            onClick={handleGoBack}
+            startIcon={<ArrowLeft size={20} />}
+            sx={{
+              fontWeight: 600,
+              marginLeft: 5,
+              paddingX: 2,
+              fontSize: 16,
+              color: "black",
+            }}
+          >
             Go back to previous page
-          </Typography>
+          </Button>
         </Box>
       </Box>
       <Box
@@ -193,23 +226,39 @@ const ModuleEditPage = () => {
           gap: 2,
         }}
       >
-        <TextField
-          placeholder="Enter module name"
-          value={module.name}
-          sx={{
-            width: 600,
-          }}
-          onChange={(e) => handleNameChange(e.target.value)}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Typography color="black">Module name: </Typography>
-                </InputAdornment>
-              ),
-            },
-          }}
-        />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Typography>Module name: </Typography>
+          <TextField
+            placeholder="Enter module name"
+            value={module.name}
+            sx={{
+              width: 750,
+            }}
+            onChange={(e) => handleNameChange(e.target.value)}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Folder size={20} />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Typography>Module description: </Typography>
+          <TextField
+            placeholder="Enter module description"
+            multiline
+            rows={4}
+            value={module.description}
+            sx={{
+              width: 750,
+            }}
+            onChange={(e) => handleDescriptionChange(e.target.value)}
+          />
+        </Box>
         <Typography sx={{ fontWeight: 600, fontSize: 20 }}>
           Lessons ({module.lessons.length})
         </Typography>
@@ -235,9 +284,10 @@ const ModuleEditPage = () => {
                   sx={{
                     width: "100%",
                   }}
+                  spacing={0.5}
                 >
                   <Grid2
-                    size={2.5}
+                    size={3}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -245,7 +295,7 @@ const ModuleEditPage = () => {
                   >
                     <Typography>Lesson {index + 1}: </Typography>
                   </Grid2>
-                  <Grid2 size={9.5}>
+                  <Grid2 size={9}>
                     <TextField
                       onChange={(e) =>
                         handleNameLessonChange(lesson.id, e.target.value)

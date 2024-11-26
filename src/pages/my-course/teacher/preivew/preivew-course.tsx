@@ -44,7 +44,6 @@ const PreivewCourse = () => {
           >
             {course?.name}
           </Typography>
-          <Typography>{course?.slug}</Typography>
           <Button
             variant="contained"
             sx={{

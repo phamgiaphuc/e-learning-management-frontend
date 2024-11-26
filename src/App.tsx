@@ -9,13 +9,13 @@ import SignUpPage from "@/pages/auth/signup-page";
 import MyCoursePage from "@/pages/home/my-course-page";
 import NotFoundPage from "@/pages/other/not-found-page";
 import { Route, Routes } from "react-router-dom";
-import CourseOverviewPage from "./pages/course/course-overview";
 import SignOutPage from "@/pages/auth/signout-page";
 import HomePage from "@/pages/home/home-page";
 import CourseAddPage from "@/pages/my-course/teacher/course-add";
 import MyCourseLayout from "@/layouts/my-course-layout";
 import PreviewLayout from "@/layouts/preview-layout";
 import EditLayout from "@/layouts/edit-layout";
+import CourseDetailPage from "@/pages/course/course-detail-page";
 
 const App = () => {
   return (
@@ -32,7 +32,7 @@ const App = () => {
           </Route>
           <Route path="signout" element={<SignOutPage />} />
           <Route path="course">
-            <Route path=":id" element={<CourseOverviewPage />} />
+            <Route path=":id" element={<CourseDetailPage />} />
           </Route>
         </Route>
         <Route element={<AuthLayout />}>

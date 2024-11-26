@@ -29,7 +29,6 @@ const courseSlice = createSlice({
         id: uuidv4(),
         thumbnailUrl: "",
         level: "BEGINNER",
-        slug: "Unlock Your Potential: Explore New Skills and Knowledge Today!",
       };
       state.modules = [initialModule];
     },

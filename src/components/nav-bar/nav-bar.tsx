@@ -107,6 +107,7 @@ const NavBar = () => {
           >
             <Box
               component={Link}
+              href="/"
               sx={{
                 display: "flex",
                 alignItems: "center",

@@ -1,27 +1,41 @@
 import useCourseContext from "@/hooks/contexts/use-course-context";
 import { blue } from "@/theme/tailwind-color";
 import { CourseDetailProps, inititialCourse } from "@/types/course";
-import { Box, Button, Grid2, Paper, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid2,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SliderPic from "@/assets/images/slider_pic.png";
 import { formatDate } from "@/utils/format-date";
 import { grey } from "@mui/material/colors";
+import { initialUser, UserDetailProps } from "@/types/user";
+import useUserContext from "@/hooks/contexts/use-user-context";
 
-const CourseOverviewPage = () => {
+const CourseDetailPage = () => {
   const { id } = useParams();
   const [course, setCourse] = useState<CourseDetailProps>(inititialCourse);
+  const [teacher, setTeacher] = useState<UserDetailProps>(initialUser);
   const { getCourseById } = useCourseContext();
+  const { getUserById } = useUserContext();
 
   useEffect(() => {
     const fetchCourseById = async () => {
       if (id) {
         const course = await getCourseById(id);
         setCourse(course);
+        const teacher = await getUserById(course.teacherId);
+        setTeacher(teacher);
       }
     };
     fetchCourseById();
-  }, [getCourseById, id]);
+  }, [getCourseById, getUserById, id]);
 
   return (
     <Stack gap={4}>
@@ -29,7 +43,7 @@ const CourseOverviewPage = () => {
         sx={{
           width: "100%",
           backgroundColor: blue[100],
-          height: 300,
+          minHeight: 300,
           display: "flex",
           paddingRight: 16,
           paddingLeft: 8,
@@ -53,13 +67,21 @@ const CourseOverviewPage = () => {
           >
             {course.name}
           </Typography>
-          <Typography>{course.slug}</Typography>
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 1, marginY: 2 }}
+          >
+            <Typography sx={{ fontWeight: 600 }}>Instructed by </Typography>
+            <Avatar src={teacher.userProfile.avatar} alt={teacher.username} />
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Typography>{teacher.username}</Typography>
+              <Typography variant="subtitle2">{teacher.email}</Typography>
+            </Box>
+          </Box>
           <Button
             variant="contained"
             sx={{
               height: 56,
-              marginTop: 2,
-              width: 240,
+              width: 300,
               borderRadius: 2,
             }}
           >
@@ -80,15 +102,14 @@ const CourseOverviewPage = () => {
         <Box>
           <img
             src={SliderPic}
-            height="100%"
-            style={{ objectFit: "cover", opacity: 0.75 }}
+            style={{ objectFit: "cover", opacity: 0.75, height: 275 }}
           />
         </Box>
         <Paper
           elevation={6}
           sx={{
             position: "absolute",
-            bottom: -64,
+            bottom: -48,
             left: 64,
             height: 100,
             backgroundColor: "white",
@@ -198,21 +219,47 @@ const CourseOverviewPage = () => {
       <Box
         sx={{
           marginTop: 6,
-          paddingX: 4,
+          paddingX: 8,
           display: "flex",
           flexDirection: "column",
           gap: 4,
         }}
       >
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 0.5 }}>
-            Description
-          </Typography>
-          <Typography>{course.description}</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 600, marginBottom: 0.5 }}
+            >
+              Description
+            </Typography>
+            <Typography sx={{ textAlign: "justify" }}>
+              {course?.description}
+            </Typography>
+          </Box>
+          {course?.thumbnailUrl && (
+            <img
+              src={course.thumbnailUrl}
+              alt={course?.name}
+              style={{
+                width: 600,
+                height: 150,
+                objectFit: "cover",
+                borderRadius: 16,
+              }}
+            />
+          )}
         </Box>
       </Box>
     </Stack>
   );
 };
 
-export default CourseOverviewPage;
+export default CourseDetailPage;
