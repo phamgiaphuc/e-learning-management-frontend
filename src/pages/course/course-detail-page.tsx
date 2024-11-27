@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SliderPic from "@/assets/images/slider_pic.png";
 import { formatDate } from "@/utils/format-date";
 import { grey } from "@mui/material/colors";
@@ -24,6 +24,7 @@ const CourseDetailPage = () => {
   const [teacher, setTeacher] = useState<UserDetailProps>(initialUser);
   const { getCourseById } = useCourseContext();
   const { getUserById } = useUserContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourseById = async () => {
@@ -79,6 +80,10 @@ const CourseDetailPage = () => {
           </Box>
           <Button
             variant="contained"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`/course/${course.id}/content`);
+            }}
             sx={{
               height: 56,
               width: 300,
@@ -86,7 +91,7 @@ const CourseDetailPage = () => {
             }}
           >
             <Stack>
-              <Typography sx={{ fontWeight: 600 }}>Enroll for free</Typography>
+              <Typography sx={{ fontWeight: 600 }}>Join in class</Typography>
               <Typography variant="body2">
                 Starts at {formatDate(course.createdAt)}
               </Typography>

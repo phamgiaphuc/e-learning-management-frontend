@@ -47,7 +47,7 @@
   dependencies:
     "@babel/types" "^7.26.0"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.23.9", "@babel/runtime@^7.26.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.23.9", "@babel/runtime@^7.25.7", "@babel/runtime@^7.26.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.26.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.0.tgz#8600c2f595f277c60815256418b85356a65173c1"
   integrity sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==
@@ -91,7 +91,7 @@
   dependencies:
     tslib "^2.0.0"
 
-"@dnd-kit/core@^6.1.0":
+"@dnd-kit/core@^6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-6.2.0.tgz#4c10e2242e007c33ddade090c25b470b5c11abfd"
   integrity sha512-KVK/CJmaYGTxTPU6P0+Oy4itgffTUa80B8317sXzfOr1qUzSL29jE7Th11llXiu2haB7B9Glpzo2CDElin+geQ==
@@ -100,10 +100,10 @@
     "@dnd-kit/utilities" "^3.2.2"
     tslib "^2.0.0"
 
-"@dnd-kit/sortable@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-8.0.0.tgz#086b7ac6723d4618a4ccb6f0227406d8a8862a96"
-  integrity sha512-U3jk5ebVXe1Lr7c2wU7SBZjcWdQP+j7peHJfCspnA81enlu88Mgd7CC8Q+pub9ubP7eKVETzJW+IBAhsqbSu/g==
+"@dnd-kit/sortable@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-9.0.0.tgz#c1910adc8265753384c44888e588491e2c2869c6"
+  integrity sha512-3/9r8Mmba0nKTbo8kPnVSFZKf/VSy94nXZ3aUwzPEh78j/LooQ/EFKRZENak4PHKBkN53mgTF/z+Sd8H+FcAnQ==
   dependencies:
     "@dnd-kit/utilities" "^3.2.2"
     tslib "^2.0.0"
@@ -629,7 +629,7 @@
     prop-types "^15.8.1"
     react-is "^18.3.1"
 
-"@mui/utils@^6.1.8":
+"@mui/utils@^5.16.6 || ^6.0.0", "@mui/utils@^6.1.8":
   version "6.1.8"
   resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-6.1.8.tgz#ae07cad4f6099eeb43dbc71267b4a96304ba3982"
   integrity sha512-O2DWb1kz8hiANVcR7Z4gOB3SvPPsSQGUmStpyBDzde6dJIfBzgV9PbEQOBZd3EBsd1pB+Uv1z5LAJAbymmawrA==
@@ -640,6 +640,27 @@
     clsx "^2.1.1"
     prop-types "^15.8.1"
     react-is "^18.3.1"
+
+"@mui/x-internals@7.21.0":
+  version "7.21.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-internals/-/x-internals-7.21.0.tgz#daca984059015b27efdb47bb44dc7ff4a6816673"
+  integrity sha512-94YNyZ0BhK5Z+Tkr90RKf47IVCW8R/1MvdUhh6MCQg6sZa74jsX+x+gEZ4kzuCqOsuyTyxikeQ8vVuCIQiP7UQ==
+  dependencies:
+    "@babel/runtime" "^7.25.7"
+    "@mui/utils" "^5.16.6 || ^6.0.0"
+
+"@mui/x-tree-view@^7.22.1":
+  version "7.22.1"
+  resolved "https://registry.yarnpkg.com/@mui/x-tree-view/-/x-tree-view-7.22.1.tgz#90228f174b2ccc346f4f488edb52369ec54b5262"
+  integrity sha512-EdFuzAgHn+/b++oNbm8JuXiF4MbRW+Dg70+MNbp2fQi8U1J38kg1hwvIFQ6Wi2AEt3Dv9euaPMFJM+a/4pk5Ng==
+  dependencies:
+    "@babel/runtime" "^7.25.7"
+    "@mui/utils" "^5.16.6 || ^6.0.0"
+    "@mui/x-internals" "7.21.0"
+    "@types/react-transition-group" "^4.4.11"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

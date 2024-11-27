@@ -16,6 +16,7 @@ import MyCourseLayout from "@/layouts/my-course-layout";
 import PreviewLayout from "@/layouts/preview-layout";
 import EditLayout from "@/layouts/edit-layout";
 import CourseDetailPage from "@/pages/course/course-detail-page";
+import CourseContent from "@/pages/course/course-content";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="signout" element={<SignOutPage />} />
           <Route path="course">
             <Route path=":id" element={<CourseDetailPage />} />
+            <Route path=":id/content" element={<CourseContent />} />
           </Route>
         </Route>
         <Route element={<AuthLayout />}>

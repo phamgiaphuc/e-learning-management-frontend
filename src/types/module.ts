@@ -31,3 +31,10 @@ export const initialModuleDetail: ModuleDetailProps = {
   description: "",
   numLessons: 0,
 };
+
+export interface ModuleDetailsProps extends ModuleProps {
+  slug: string;
+  description: string;
+  updatedAt: string | null | Date;
+  createdAt: string | Date;
+}
