@@ -194,7 +194,14 @@ const NavBar = () => {
                   open={openMenu}
                   onClose={handleCloseProfile}
                 >
-                  <MenuItem onClick={handleCloseProfile}>My profile</MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/my-profile");
+                    }}
+                  >
+                    My profile
+                  </MenuItem>
                   <MenuItem onClick={handleCloseProfile}>Settings</MenuItem>
                   <MenuItem
                     onClick={(e) => {

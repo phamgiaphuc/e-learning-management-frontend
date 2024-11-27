@@ -1,7 +1,9 @@
+import { LessonProps } from "./lesson";
+
 export interface ModuleProps {
   id: number;
   name: string;
-  lessons: Array<{ id: string; name: string }>;
+  lessons: Array<{ LessonProps: LessonProps }>;
   sequence: number;
 }
 
