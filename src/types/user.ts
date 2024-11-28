@@ -15,6 +15,11 @@ interface UserProps {
   userProfileId: string;
   userProfile: {
     avatar: string;
+    firstName: string;
+    lastName: string;
+    birth: string;
+    gender: string;
+    contactNumber: number;
   };
 }
 

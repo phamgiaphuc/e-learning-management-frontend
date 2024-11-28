@@ -39,6 +39,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } = await axios.post("/auth/signin", credentials);
         dispatch(authSignIn(user));
         localStorage.setItem("token", tokens.accessToken);
+        localStorage.setItem("userId", `${user.userId}`);
         successToast("Sign in successfully");
         navigate("/");
       } catch (error) {

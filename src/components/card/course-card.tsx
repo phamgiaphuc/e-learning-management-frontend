@@ -14,7 +14,7 @@ const CourseCard = styled(Card)({
   borderRadius: "10px",
   cursor: "pointer",
   "&:hover": {
-    transform: "scale(1.05)",
+    transform: "scale(1.08)",
   },
 });
 
@@ -37,11 +37,11 @@ const CustomCourseCard = ({ course }: CardProps) => {
         alt={course.name}
         sx={{
           objectFit: "cover",
-          width: "95%",
+          width: "93%",
           height: "170px",
           margin: "auto",
-          paddingTop: "10px",
-          borderRadius: "1rem",
+          marginTop: "10px",
+          borderRadius: "10px",
           overflow: "hidden",
         }}
       />

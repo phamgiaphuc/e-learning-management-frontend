@@ -16,6 +16,7 @@ import CourseAddPage from "@/pages/my-course/course-add";
 import MyCourseLayout from "@/layouts/my-course-layout";
 import PreviewLayout from "@/layouts/preview-layout";
 import CourseContent from "./pages/course/course-content";
+import ProfilePage from "./pages/other/profile-page";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path=":id" element={<CourseOverviewPage />} />
             <Route path=":id/content" element={<CourseContent />} />
           </Route>
+          <Route path="/my-profile" element={<ProfilePage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="signin" element={<SignInPage />} />
