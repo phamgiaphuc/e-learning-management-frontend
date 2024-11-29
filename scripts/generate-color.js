@@ -1,14 +1,20 @@
+import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
-function generateOrUpdateColorTs(colorName, colorArray, additionalColors) {
+function generateOrUpdateColorTs(
+  fileName,
+  colorName,
+  colorArray,
+  additionalColors,
+) {
   const themeDir = join(process.cwd(), "../src/theme");
 
   if (!existsSync(themeDir)) {
     mkdirSync(themeDir, { recursive: true });
   }
 
-  const filePath = join(themeDir, "color.ts");
+  const filePath = join(themeDir, `${fileName}.ts`);
 
   let fileContent = "";
   if (existsSync(filePath)) {
@@ -19,7 +25,7 @@ function generateOrUpdateColorTs(colorName, colorArray, additionalColors) {
 
   colorArray.forEach((hexValue, index) => {
     const shade = index === 0 ? 50 : 100 * index;
-    newColorContent += `  ${shade}: "#${hexValue}",${index === colorArray.length - 1 && additionalColors ? "" : "\n"}`;
+    newColorContent += `  ${shade}: ${hexValue.includes("#") ? `"${hexValue}"` : `"#${hexValue}"`},${index === colorArray.length - 1 && additionalColors ? "" : "\n"}`;
   });
 
   newColorContent += additionalColors;
@@ -37,28 +43,31 @@ function generateOrUpdateColorTs(colorName, colorArray, additionalColors) {
 
   writeFileSync(filePath, fileContent, "utf8");
   console.log(
-    `${colorName} has been updated or added successfully in color.ts.`,
+    `${colorName} has been updated or added successfully in ${fileName}.ts.`,
   );
 }
 
-const name = "purple";
-const palette = [
-  "F3E5F5",
-  "E1BEE7",
-  "CE93D8",
-  "BA68C8",
-  "AB47BC",
-  "9C27B0",
-  "8E24AA",
-  "7B1FA2",
-  "6A1B9A",
-  "4A148C",
-];
-const additionalColors = `
-  A100: "#EA80FC",
-  A200: "#E040FB",
-  A400: "#D500F9",
-  A700: "#AA00FF",
-`;
+function formatFile() {
+  execSync("npx eslint . --fix");
+}
 
-generateOrUpdateColorTs(name, palette, additionalColors);
+const fileName = "tailwind-color";
+const name = "blue";
+const palette = [
+  "#EFF6FF",
+  "#F4F4F5",
+  "#E4E4E7",
+  "#D4D4D8",
+  "#A1A1AA",
+  "#71717A",
+  "#52525B",
+  "#3F3F46",
+  "#27272A",
+  "#18181B",
+  "#09090B",
+];
+
+const additionalColors = ``;
+
+generateOrUpdateColorTs(fileName, name, palette, additionalColors);
+formatFile();
