@@ -121,7 +121,7 @@ const NavBar = () => {
               }}
             >
               <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
-              <Typography color="primary.main" variant="h5" fontWeight={700}>
+              <Typography color="primary.main" variant="h5" fontWeight={600}>
                 Scholaro
               </Typography>
             </Box>

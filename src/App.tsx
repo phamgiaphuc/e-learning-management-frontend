@@ -31,14 +31,15 @@ const App = () => {
             <Route path="preview" element={<PreviewLayout />} />
             <Route path="edit" element={<EditLayout />} />
           </Route>
-          <Route path="signout" element={<SignOutPage />} />
+          {/** Course */}
           <Route path="course">
             <Route path=":id" element={<CourseDetailPage />} />
             <Route path=":id/content" element={<CourseContent />} />
           </Route>
+          <Route path="signout" element={<SignOutPage />} />
         </Route>
         <Route element={<AuthLayout />}>
-          <Route path="signin" element={<SignInPage />} />
+          <Route path="login" element={<SignInPage />} />
           <Route path="signup" element={<SignUpPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="recover-password" element={<RecoverPasswordPage />} />

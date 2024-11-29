@@ -1,179 +1,87 @@
-import useModuleContext from "@/hooks/contexts/use-module-context";
-import { ModuleDetailProps } from "@/types/module";
-import { SquareMinus } from "lucide-react";
+import useCourseContext from "@/hooks/contexts/use-course-context";
+import CourseAssignment from "@/sections/course/content/course-assignment";
+import CourseContentMain from "@/sections/course/content/course-content-main";
+import CourseInfo from "@/sections/course/content/course-info";
+import CourseMaterial from "@/sections/course/content/course-material";
+import { grey } from "@/theme/color";
 import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography,
-  styled,
-} from "@mui/material";
-import { TreeItem, treeItemClasses } from "@mui/x-tree-view/TreeItem";
+  CourseDetailProps,
+  GetCourseByIdProps,
+  initialCourse,
+} from "@/types/course";
+import { ModuleDetailProps } from "@/types/module";
+import { Box, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { LessonDetailProps } from "@/types/lesson";
-import useLessonContext from "@/hooks/contexts/use-lesson-context";
-import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
-
-const CustomTreeItem = styled(TreeItem)(() => ({
-  [`& .${treeItemClasses.content}`]: {
-    padding: 2,
-    height: "3rem",
-    [`& .${treeItemClasses.label}`]: {
-      fontWeight: 600,
-    },
-  },
-  [`& .${treeItemClasses.groupTransition}`]: {
-    marginLeft: 15,
-    paddingLeft: 18,
-  },
-}));
-
-const LessonTreeItem = styled(TreeItem)(() => ({
-  [`& .${treeItemClasses.content}`]: {
-    padding: 2,
-    height: "3rem",
-    [`& .${treeItemClasses.label}`]: {
-      fontSize: "15px",
-      fontWeight: 400,
-    },
-  },
-  [`& .${treeItemClasses.groupTransition}`]: {
-    marginLeft: 10,
-    paddingLeft: 18,
-    borderLeft: "1px dashed black",
-  },
-}));
 
 const CourseContent = () => {
-  const [modules, setModules] = useState<Array<ModuleDetailProps>>([]);
-  const [lessons, setLessons] = useState<Array<LessonDetailProps>>([]);
   const { id } = useParams();
-  const [selectedModule, setSelectedModule] =
-    useState<ModuleDetailProps | null>(null);
+  const [course, setCourse] = useState<CourseDetailProps>(initialCourse);
+  const [modules, setModules] = useState<GetCourseByIdProps["modules"]>([]);
+  const [moduleId, setModuleId] = useState<ModuleDetailProps["id"]>("");
+  const { getCourseById } = useCourseContext();
 
-  const { getModules } = useModuleContext();
-  const { getLessons } = useLessonContext();
-
-  const handleModuleSelection = useCallback(
-    async (module: ModuleDetailProps) => {
-      if (selectedModule?.id === module.id) return;
-      setSelectedModule(module);
-
-      const fetchedLessons = await getLessons(module.id);
-      setLessons(fetchedLessons);
-    },
-    [selectedModule, getLessons],
-  );
+  const onClickModule = useCallback((id: ModuleDetailProps["id"]) => {
+    setModuleId(id);
+  }, []);
 
   useEffect(() => {
-    const fetchModules = async () => {
+    const fetchCourseById = async () => {
       if (id) {
-        const modules = await getModules(id);
+        const { course, modules } = await getCourseById(id);
+        setCourse(course);
         setModules(modules);
-        if (modules.length > 0) {
-          handleModuleSelection(modules[0]);
-        }
       }
     };
-    fetchModules();
-  }, [id, getModules, handleModuleSelection]);
-
-  const renderLessons = (module: ModuleDetailProps) => {
-    if (selectedModule?.id === module.id && lessons.length > 0) {
-      return lessons.map((lesson) => (
-        <LessonTreeItem
-          key={lesson.id}
-          itemId={lesson.id.toString()}
-          label={lesson.name}
-        />
-      ));
-    }
-    return null;
-  };
+    fetchCourseById();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   return (
-    <Box>
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        PaperProps={{
-          sx: {
-            width: "23vw",
-            paddingTop: "5rem",
-            overflow: "auto",
-            zIndex: -1,
-          },
-        }}
-      >
-        <SimpleTreeView defaultExpandedItems={["course-material"]}>
-          <CustomTreeItem itemId="course-material" label="Course Material">
-            {modules.length > 0 ? (
-              modules.map((module) => (
-                <TreeItem
-                  key={module.id}
-                  itemId={module.id.toString()}
-                  label={module.name}
-                  onClick={() => handleModuleSelection(module)}
-                >
-                  {renderLessons(module)}
-                </TreeItem>
-              ))
-            ) : (
-              <TreeItem itemId="no-modules" label="No materials available" />
-            )}
-          </CustomTreeItem>
-          <TreeItem itemId="assignments" label="Assignments"></TreeItem>
-          <TreeItem itemId="info" label="Course Information"></TreeItem>
-        </SimpleTreeView>
-      </Drawer>
+    <Box
+      sx={{
+        display: "flex",
+        position: "relative",
+      }}
+    >
       <Box
         sx={{
-          marginLeft: "25vw",
-          padding: "2rem",
-          zIndex: 1,
+          width: "18rem",
+          maxHeight: "calc(100vh - 80px)",
+          minHeight: "calc(100vh - 80px)",
+          position: "fixed",
+          borderRadius: 0,
+          borderRight: "1.5px solid",
+          borderColor: grey[300],
+          padding: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          overflow: "auto",
         }}
       >
-        {selectedModule ? (
-          <>
-            <Typography fontWeight="700" fontSize="40px" color="primary.main">
-              {selectedModule.name}
-            </Typography>
-            <Typography fontWeight="400" fontSize="16px" color="grey.500">
-              {selectedModule.description || "No description available."}
-            </Typography>
-            <Divider sx={{ marginY: 2 }} />
-            <Typography
-              fontWeight="700"
-              fontSize="18px"
-              color="grey.900"
-              marginTop="1.5rem"
-            >
-              Lessons
-            </Typography>
-            <List component="div" disablePadding>
-              {lessons.map((lesson) => (
-                <ListItem key={lesson.id} sx={{ pl: 1 }}>
-                  <ListItemButton>
-                    <SquareMinus color="lightgrey" />
-                    <ListItemText
-                      primary={lesson.name}
-                      sx={{ paddingLeft: "0.5rem" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </>
-        ) : (
-          <Typography fontWeight="400" fontSize="20px" color="grey.500">
-            Please select a module from the list.
-          </Typography>
-        )}
+        <Typography
+          sx={{
+            fontSize: 16,
+            fontWeight: 600,
+          }}
+        >
+          {course.name}
+        </Typography>
+        <CourseMaterial
+          modules={modules}
+          moduleId={moduleId}
+          onClickModule={onClickModule}
+        />
+        <CourseAssignment />
+        <CourseInfo />
+      </Box>
+      <Box
+        sx={{
+          paddingLeft: "18rem",
+        }}
+      >
+        <CourseContentMain courseName={course.name} moduleId={moduleId} />
       </Box>
     </Box>
   );

@@ -1,6 +1,12 @@
 import useCourseContext from "@/hooks/contexts/use-course-context";
 import { blue } from "@/theme/tailwind-color";
-import { CourseDetailProps, inititialCourse } from "@/types/course";
+import {
+  CourseDetailProps,
+  GetCourseByIdProps,
+  initialCourse,
+  levels,
+  levelSubs,
+} from "@/types/course";
 import {
   Avatar,
   Box,
@@ -10,33 +16,83 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SliderPic from "@/assets/images/slider_pic.png";
 import { formatDate } from "@/utils/format-date";
 import { grey } from "@mui/material/colors";
 import { initialUser, UserDetailProps } from "@/types/user";
 import useUserContext from "@/hooks/contexts/use-user-context";
+import { Info } from "lucide-react";
+import CourseContentList from "@/sections/course/course-content-list";
+import { useAppSelector } from "@/hooks/use-app-selector";
+import useEnrollmentContext from "@/hooks/contexts/use-enrollment-context";
+import useStudentContext from "@/hooks/contexts/use-student-context";
+import { StudentEnrolledCourse } from "@/types/student";
 
 const CourseDetailPage = () => {
   const { id } = useParams();
-  const [course, setCourse] = useState<CourseDetailProps>(inititialCourse);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const [course, setCourse] = useState<CourseDetailProps>(initialCourse);
+  const [modules, setModules] = useState<GetCourseByIdProps["modules"]>([]);
   const [teacher, setTeacher] = useState<UserDetailProps>(initialUser);
+  const [userLearnings, setUserLearnings] = useState<{
+    courses: StudentEnrolledCourse[];
+  }>({
+    courses: [],
+  });
   const { getCourseById } = useCourseContext();
   const { getUserById } = useUserContext();
+  const { createEnrollment } = useEnrollmentContext();
+  const { getStudentEnrollments } = useStudentContext();
   const navigate = useNavigate();
+
+  const courseBelongToUser = useMemo(
+    () =>
+      user?.id === teacher.id ||
+      userLearnings.courses.find((c) => c.studentId === user?.id),
+    [teacher.id, user?.id, userLearnings.courses],
+  );
+
+  const onClickBtn = useCallback(async () => {
+    if (!isAuthenticated) {
+      navigate(`/signin?courseId=${id}`);
+      return;
+    }
+    if (courseBelongToUser) {
+      navigate(`/course/${id}/content`);
+      return;
+    }
+    if (id) {
+      await createEnrollment(id);
+      navigate(`/course/${id}/content`);
+    }
+  }, [courseBelongToUser, createEnrollment, id, isAuthenticated, navigate]);
 
   useEffect(() => {
     const fetchCourseById = async () => {
       if (id) {
-        const course = await getCourseById(id);
+        const { course, modules } = await getCourseById(id);
         setCourse(course);
+        setModules(modules);
         const teacher = await getUserById(course.teacherId);
         setTeacher(teacher);
       }
     };
     fetchCourseById();
-  }, [getCourseById, getUserById, id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  useEffect(() => {
+    const fetchUserLearnings = async () => {
+      if (user?.role === "user") {
+        const { courses } = await getStudentEnrollments();
+        setUserLearnings({ courses });
+      }
+    };
+    fetchUserLearnings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.role]);
 
   return (
     <Stack gap={4}>
@@ -80,28 +136,38 @@ const CourseDetailPage = () => {
           </Box>
           <Button
             variant="contained"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(`/course/${course.id}/content`);
-            }}
+            onClick={onClickBtn}
             sx={{
               height: 56,
               width: 300,
               borderRadius: 2,
             }}
           >
-            <Stack>
-              <Typography sx={{ fontWeight: 600 }}>Join in class</Typography>
-              <Typography variant="body2">
-                Starts at {formatDate(course.createdAt)}
-              </Typography>
-            </Stack>
+            {!courseBelongToUser ? (
+              <Stack>
+                <Typography sx={{ fontWeight: 600 }}>
+                  Join course now
+                </Typography>
+                <Typography variant="body2">
+                  Starts at {formatDate(course.createdAt)}
+                </Typography>
+              </Stack>
+            ) : (
+              <Stack>
+                <Typography sx={{ fontWeight: 600 }}>
+                  See course content
+                </Typography>
+                <Typography variant="body2">
+                  Created at {formatDate(course.createdAt)}
+                </Typography>
+              </Stack>
+            )}
           </Button>
           <Typography sx={{ display: "flex", marginY: 1.5 }}>
             <Typography sx={{ fontWeight: 600, marginRight: 0.5 }}>
               {course.numEnrollments}
             </Typography>
-            already enrolled
+            students already enrolled
           </Typography>
         </Box>
         <Box>
@@ -135,6 +201,28 @@ const CourseDetailPage = () => {
             <Grid2 size={3}>
               <Box
                 sx={{
+                  flexGrow: 1,
+                  borderRight: 1,
+                  borderColor: grey[600],
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 600,
+                  }}
+                >
+                  {modules.length} modules
+                </Typography>
+                <Typography variant="body2">
+                  Understand the basics and develop foundational knowledge of a
+                  topic.
+                </Typography>
+              </Box>
+            </Grid2>
+            <Grid2 size={3}>
+              <Box
+                sx={{
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "start",
@@ -150,7 +238,7 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {course.numLessons} lessons
                 </Typography>
                 <Typography variant="body2">
                   Gain insight into a topic and learn the fundamentals.
@@ -171,31 +259,10 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {levels[course.level]} level
                 </Typography>
                 <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
-                </Typography>
-              </Box>
-            </Grid2>
-            <Grid2 size={3}>
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  borderRight: 1,
-                  borderColor: grey[600],
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: 18,
-                    fontWeight: 600,
-                  }}
-                >
-                  {course.numLessons} modules
-                </Typography>
-                <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
+                  {levelSubs[course.level]}
                 </Typography>
               </Box>
             </Grid2>
@@ -211,11 +278,9 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {course.numLessons} modules
+                  {course.rating} stars
                 </Typography>
-                <Typography variant="body2">
-                  Gain insight into a topic and learn the fundamentals.
-                </Typography>
+                <Typography variant="body2">Ratings</Typography>
               </Box>
             </Grid2>
           </Grid2>
@@ -223,30 +288,73 @@ const CourseDetailPage = () => {
       </Box>
       <Box
         sx={{
-          marginTop: 6,
+          marginTop: 4,
           paddingX: 8,
           display: "flex",
           flexDirection: "column",
           gap: 4,
+          paddingY: 2,
         }}
       >
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: "start",
             gap: 8,
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <Typography
               variant="h6"
-              sx={{ fontWeight: 600, marginBottom: 0.5 }}
+              sx={{
+                fontWeight: 600,
+                marginBottom: 0.5,
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+              }}
             >
-              Description
+              <Info size={20} /> Description
             </Typography>
             <Typography sx={{ textAlign: "justify" }}>
               {course?.description}
+            </Typography>
+            <Typography
+              sx={{
+                display: "inline-flex",
+                gap: 0.5,
+                marginTop: 1,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                }}
+              >
+                Created at:
+              </Typography>
+              {formatDate(course.createdAt)}
+            </Typography>
+            <Typography
+              sx={{
+                display: "inline-flex",
+                gap: 0.5,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                }}
+              >
+                Course slug:
+              </Typography>
+              {course.slug}
             </Typography>
           </Box>
           {course?.thumbnailUrl && (
@@ -255,13 +363,14 @@ const CourseDetailPage = () => {
               alt={course?.name}
               style={{
                 width: 600,
-                height: 150,
+                height: 180,
                 objectFit: "cover",
                 borderRadius: 16,
               }}
             />
           )}
         </Box>
+        <CourseContentList modules={modules} />
       </Box>
     </Stack>
   );

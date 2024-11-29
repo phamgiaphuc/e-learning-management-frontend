@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 type AuthProviderProps = ChildrenNodeProps;
 
 export interface AuthContextProps {
-  signIn: (credentials: SignInProps) => Promise<void>;
+  signIn: (credentials: SignInProps, redirectUrl: string) => Promise<void>;
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
   signOut: () => Promise<void>;
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
@@ -33,7 +33,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const { successToast, errorToast } = useToast();
 
   const signIn = useCallback(
-    async (credentials: SignInProps) => {
+    async (credentials: SignInProps, redirectUrl: string) => {
       try {
         const {
           data: { user, tokens },
@@ -41,7 +41,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         dispatch(authSignIn(user));
         localStorage.setItem("token", tokens.accessToken);
         successToast("Sign in successfully");
-        navigate("/");
+        if (redirectUrl && redirectUrl.trim()) {
+          navigate(-1);
+        } else {
+          navigate("/");
+        }
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           const { message, status, ...rest } = error.response.data;

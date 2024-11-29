@@ -14,7 +14,8 @@ const MyCoursePage = () => {
     <>
       <Stack
         sx={{
-          padding: 2,
+          paddingX: 4,
+          paddingY: 2,
           gap: 2,
         }}
       >

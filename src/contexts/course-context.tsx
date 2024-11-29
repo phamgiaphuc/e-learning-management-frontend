@@ -4,7 +4,9 @@ import { ChildrenNodeProps } from "@/types/children";
 import {
   CourseDetailProps,
   CourseProps,
-  inititialCourse,
+  GetCourseByIdProps,
+  initialGetCourseById,
+  initialCourse,
 } from "@/types/course";
 import axios, { AxiosError } from "axios";
 import { createContext, useCallback } from "react";
@@ -17,13 +19,13 @@ export interface CourseContextProps {
     >,
   ) => Promise<CourseDetailProps>;
   getCourses: () => Promise<Array<CourseDetailProps>>;
-  getCourseById: (id: string) => Promise<CourseDetailProps>;
+  getCourseById: (id: string) => Promise<GetCourseByIdProps>;
 }
 
 export const CourseContext = createContext<CourseContextProps>({
-  createCourse: async () => inititialCourse,
+  createCourse: async () => initialCourse,
   getCourses: async () => [],
-  getCourseById: async () => inititialCourse,
+  getCourseById: async () => initialGetCourseById,
 });
 
 const CourseProvider = ({ children }: ChildrenNodeProps) => {
@@ -69,9 +71,12 @@ const CourseProvider = ({ children }: ChildrenNodeProps) => {
   const getCourseById = useCallback(async (id: string) => {
     try {
       const {
-        data: { course },
+        data: { course, modules },
       } = await axiosJwt.get(`/courses/${id}`);
-      return course;
+      return {
+        course,
+        modules,
+      };
     } catch (error) {
       console.log(error);
       throw error;
