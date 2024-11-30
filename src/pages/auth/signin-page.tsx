@@ -52,7 +52,7 @@ const SignInPage = () => {
     [passwordVisible],
   );
 
-  useMetaTitle({ title: "Sign in" });
+  useMetaTitle({ title: "Log in" });
 
   useEffect(() => {
     if (query.get("courseId")) {

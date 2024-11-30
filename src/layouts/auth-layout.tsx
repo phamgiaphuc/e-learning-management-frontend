@@ -15,8 +15,8 @@ const AuthLayout = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const authPathname = useMemo(() => {
-    if (location.pathname.includes("signin")) {
-      return "signin";
+    if (location.pathname.includes("login")) {
+      return "login";
     }
     if (location.pathname.includes("signup")) {
       return "signup";
@@ -34,7 +34,7 @@ const AuthLayout = () => {
   }, [location.pathname]);
 
   const formTitle = useMemo(() => {
-    if (authPathname === "signin") {
+    if (authPathname === "login") {
       return "Log in";
     }
     if (authPathname === "signup") {
