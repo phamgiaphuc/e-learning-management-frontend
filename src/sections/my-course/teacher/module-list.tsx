@@ -15,14 +15,15 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { SortableRow } from "@/sections/my-course/module-row";
+import { SortableRow } from "@/sections/my-course/teacher/module-row";
 import { Box, Button, Typography } from "@mui/material";
 import { grey } from "@/theme/color";
 import { Plus } from "lucide-react";
-import { ModuleProps } from "@/types/module";
+import { initialModule, ModuleProps } from "@/types/module";
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import { updateModule } from "@/stores/course/course.slice";
+import { v4 as uuidv4 } from "uuid";
 
 const ModuleList = () => {
   const { modules } = useAppSelector((state) => state.course);
@@ -32,7 +33,7 @@ const ModuleList = () => {
   );
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     if (!modules) {
       return;
     }
@@ -46,10 +47,11 @@ const ModuleList = () => {
     const updated = [
       ...(modules || []),
       {
-        id: (modules || []).length + 1,
-        name: `Module ${(modules || []).length + 1}`,
+        ...initialModule,
+        id: uuidv4(),
+        name: "Module name",
         lessons: [],
-        sequence: (modules || []).length + 1,
+        position: (modules || []).length + 1,
       },
     ];
     dispatch(updateModule(updated));
@@ -57,7 +59,7 @@ const ModuleList = () => {
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
-    setActiveModule(modules?.find((item) => item.sequence === active.id));
+    setActiveModule(modules?.find((item) => item.position === active.id));
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -69,15 +71,15 @@ const ModuleList = () => {
       return;
     }
 
-    const activeItem = modules.find((ex) => ex.sequence === active.id);
-    const overItem = modules.find((ex) => ex.sequence === over.id);
+    const activeItem = modules.find((ex) => ex.position === active.id);
+    const overItem = modules.find((ex) => ex.position === over.id);
 
     if (!activeItem || !overItem) {
       return;
     }
 
-    const activeIndex = modules.findIndex((ex) => ex.sequence === active.id);
-    const overIndex = modules.findIndex((ex) => ex.sequence === over.id);
+    const activeIndex = modules.findIndex((ex) => ex.position === active.id);
+    const overIndex = modules.findIndex((ex) => ex.position === over.id);
 
     if (activeIndex !== overIndex) {
       const updated = arrayMove(modules, activeIndex, overIndex).map(
@@ -140,7 +142,7 @@ const ModuleList = () => {
         onDragCancel={handleDragCancel}
       >
         <SortableContext
-          items={(modules || []).map((item) => item.sequence)}
+          items={(modules || []).map((item) => item.position)}
           strategy={verticalListSortingStrategy}
         >
           {(modules || []).map((module) => (

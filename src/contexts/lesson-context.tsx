@@ -1,20 +1,47 @@
 import { axiosJwt } from "@/configs/axios.config";
-import { initialLesson, LessonDetailsProps } from "@/types/lesson";
-import { createContext, useCallback } from "react";
 import { ChildrenNodeProps } from "@/types/children";
+import { initialLessonDetail, LessonDetailProps } from "@/types/lesson";
+import { createContext, useCallback } from "react";
 
 export interface LessonContextProps {
-  getLessons: (id: number) => Promise<Array<LessonDetailsProps>>;
-  getLessonById: (id: number) => Promise<LessonDetailsProps>;
+  createLesson: (
+    data: Pick<
+      LessonDetailProps,
+      "name" | "moduleId" | "description" | "content"
+    >,
+  ) => Promise<LessonDetailProps>;
+  getLessons: (id: string) => Promise<Array<LessonDetailProps>>;
+  getLessonById: (id: string) => Promise<LessonDetailProps>;
 }
 
 export const LessonContext = createContext<LessonContextProps>({
+  createLesson: async () => initialLessonDetail,
   getLessons: async () => [],
-  getLessonById: async () => initialLesson,
+  getLessonById: async () => initialLessonDetail,
 });
 
 const LessonProvider = ({ children }: ChildrenNodeProps) => {
-  const getLessons = useCallback(async (moduleId: number) => {
+  const createLesson = useCallback(
+    async (
+      data: Pick<
+        LessonDetailProps,
+        "name" | "moduleId" | "description" | "content"
+      >,
+    ) => {
+      try {
+        const {
+          data: { lesson },
+        } = await axiosJwt.post("/lessons", data);
+        return lesson;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    [],
+  );
+
+  const getLessons = useCallback(async (moduleId: string) => {
     try {
       const {
         data: { lessons },
@@ -25,7 +52,7 @@ const LessonProvider = ({ children }: ChildrenNodeProps) => {
       throw error;
     }
   }, []);
-  const getLessonById = useCallback(async (id: number) => {
+  const getLessonById = useCallback(async (id: string) => {
     try {
       const {
         data: { lesson },
@@ -38,7 +65,7 @@ const LessonProvider = ({ children }: ChildrenNodeProps) => {
   }, []);
 
   return (
-    <LessonContext.Provider value={{ getLessons, getLessonById }}>
+    <LessonContext.Provider value={{ createLesson, getLessons, getLessonById }}>
       {children}
     </LessonContext.Provider>
   );

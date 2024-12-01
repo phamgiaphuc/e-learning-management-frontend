@@ -1,7 +1,21 @@
+import { LessonDetailProps } from "@/types/lesson";
+import { ModuleDetailProps } from "@/types/module";
 import * as yup from "yup";
 
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-type Level = "beginner" | "intermediate" | "advanced";
+type Level = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+
+export const levels: Record<Level, string> = {
+  ADVANCED: "Advanced",
+  BEGINNER: "Beginner",
+  INTERMEDIATE: "Intermediate",
+};
+
+export const levelSubs: Record<Level, string> = {
+  ADVANCED: "Demonstrating expertise and tackling challenging problems.",
+  BEGINNER: "Gaining foundational knowledge and understanding the basics.",
+  INTERMEDIATE: "Building confidence and applying skills to complex tasks.",
+};
 
 export interface CourseProps {
   id: string;
@@ -20,7 +34,7 @@ export interface CourseProps {
 export interface NewCourseProps
   extends Pick<
     CourseProps,
-    "id" | "name" | "description" | "thumbnailUrl" | "level" | "slug"
+    "id" | "name" | "description" | "thumbnailUrl" | "level"
   > {}
 
 export interface CourseDetailProps extends CourseProps {
@@ -29,23 +43,30 @@ export interface CourseDetailProps extends CourseProps {
   deletedAt: string | null | Date;
 }
 
+export interface GetCourseByIdProps {
+  course: CourseDetailProps;
+  modules: Array<
+    Pick<ModuleDetailProps, "id" | "name"> & {
+      lessons: Array<Pick<LessonDetailProps, "id" | "name">>;
+    }
+  >;
+}
+
 export const newCourseSchema = yup.object<NewCourseProps>({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
   level: yup.string().required("Level is required"),
-  slug: yup.string().required("Slug is required"),
 });
 
 export const initialNewCourse: NewCourseProps = {
   name: "",
   description: "",
   thumbnailUrl: "",
-  level: "beginner",
-  slug: "",
+  level: "BEGINNER",
   id: "",
 };
 
-export const inititialCourse: CourseDetailProps = {
+export const initialCourse: CourseDetailProps = {
   id: "",
   description: "",
   isDeleted: false,
@@ -56,8 +77,13 @@ export const inititialCourse: CourseDetailProps = {
   teacherId: "",
   thumbnailUrl: "",
   rating: 0,
-  level: "beginner",
+  level: "BEGINNER",
   updatedAt: new Date(),
   createdAt: new Date(),
   deletedAt: new Date(),
+};
+
+export const initialGetCourseById: GetCourseByIdProps = {
+  course: initialCourse,
+  modules: [],
 };

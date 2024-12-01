@@ -1,19 +1,40 @@
 import { axiosJwt } from "@/configs/axios.config";
-import { initialModule, ModuleDetailsProps } from "@/types/module";
-import { createContext, useCallback } from "react";
 import { ChildrenNodeProps } from "@/types/children";
+import { initialModuleDetail, ModuleDetailProps } from "@/types/module";
+import { createContext, useCallback } from "react";
 
 export interface ModuleContextProps {
-  getModules: (id: string) => Promise<Array<ModuleDetailsProps>>;
-  getModuleById: (id: string) => Promise<ModuleDetailsProps>;
+  createModule: (
+    data: Pick<ModuleDetailProps, "name" | "courseId" | "description">,
+  ) => Promise<ModuleDetailProps>;
+  getModules: (id: string) => Promise<Array<ModuleDetailProps>>;
+  getModuleById: (id: string) => Promise<ModuleDetailProps>;
 }
 
 export const ModuleContext = createContext<ModuleContextProps>({
+  createModule: async () => initialModuleDetail,
   getModules: async () => [],
-  getModuleById: async () => initialModule,
+  getModuleById: async () => initialModuleDetail,
 });
 
 const ModuleProvider = ({ children }: ChildrenNodeProps) => {
+  const createModule = useCallback(
+    async (
+      data: Pick<ModuleDetailProps, "name" | "courseId" | "description">,
+    ) => {
+      try {
+        const {
+          data: { module },
+        } = await axiosJwt.post("/modules", data);
+        return module;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    [],
+  );
+
   const getModules = useCallback(async (courseId: string) => {
     try {
       const {
@@ -38,7 +59,7 @@ const ModuleProvider = ({ children }: ChildrenNodeProps) => {
   }, []);
 
   return (
-    <ModuleContext.Provider value={{ getModules, getModuleById }}>
+    <ModuleContext.Provider value={{ createModule, getModules, getModuleById }}>
       {children}
     </ModuleContext.Provider>
   );

@@ -1,4 +1,7 @@
-import { ModuleProps } from "@/sections/my-course/module-list";
+import { useAppDispatch } from "@/hooks/use-app-dispatch";
+import { updateModuleById } from "@/stores/course/course.slice";
+import { LessonProps } from "@/types/lesson";
+import { ModuleProps } from "@/types/module";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -19,11 +22,12 @@ import {
   Trash,
   ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type SortableRowProps = {
   module: ModuleProps;
-  removeModule: (id: number) => void;
+  removeModule: (id: string) => void;
   forceDragging?: boolean;
 };
 
@@ -33,6 +37,12 @@ export function SortableRow({
   forceDragging = false,
 }: SortableRowProps) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleEdit = useCallback(() => {
+    navigate(`/my-course/edit?type=module&id=${module.id}`);
+  }, [module.id, navigate]);
 
   const {
     attributes,
@@ -43,8 +53,24 @@ export function SortableRow({
     transform,
     transition,
   } = useSortable({
-    id: module.sequence,
+    id: module.position,
   });
+
+  const handleNameChange = useCallback(
+    (name: string) => {
+      const updated = {
+        ...module,
+        name,
+      };
+      dispatch(
+        updateModuleById({
+          id: module.id,
+          module: updated,
+        }),
+      );
+    },
+    [dispatch, module],
+  );
 
   const parentStyles = {
     transform: CSS.Transform.toString(transform),
@@ -99,13 +125,14 @@ export function SortableRow({
           <IconButton
             onClick={() => module.lessons.length > 0 && setOpen(!open)}
           >
-            {open ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+            {open ? <ChevronDown size={24} /> : <ChevronUp size={24} />}
           </IconButton>
           <TextField
             size="small"
             value={module.name}
             sx={{ width: 650, fontWeight: 500 }}
             placeholder="Enter module name"
+            onChange={(e) => handleNameChange(e.target.value)}
           />
         </Box>
         <Box
@@ -118,6 +145,7 @@ export function SortableRow({
             variant="contained"
             startIcon={<Hammer size={16} />}
             sx={{ width: 100, borderRadius: 2 }}
+            onClick={handleEdit}
           >
             Edit
           </Button>
@@ -142,7 +170,7 @@ export function SortableRow({
           }}
         >
           <List disablePadding>
-            {module.lessons.map((lesson) => (
+            {module.lessons.map((lesson: LessonProps, index) => (
               <ListItem
                 key={lesson.id}
                 disablePadding
@@ -154,7 +182,7 @@ export function SortableRow({
                     borderRadius: 2,
                   }}
                 >
-                  {lesson.name}
+                  {index + 1}. {lesson.name}
                 </ListItemButton>
               </ListItem>
             ))}

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useAppSelector } from "@/hooks/use-app-selector";
 import useQuery from "@/hooks/use-query";
-import PreivewCourse from "@/pages/my-course/preivew/preivew-course";
-import PreivewModule from "@/pages/my-course/preivew/preivew-module";
+import PreivewCourse from "@/pages/my-course/teacher/preivew/preivew-course";
+import PreivewModule from "@/pages/my-course/teacher/preivew/preivew-module";
 import { IconButton, Stack, Box, Typography } from "@mui/material";
 import _ from "lodash";
 import { ArrowLeft } from "lucide-react";
@@ -15,7 +15,7 @@ const PreviewLayout = () => {
   const navigate = useNavigate();
 
   if (!query || !query.get) {
-    navigate("/my-course/add");
+    navigate("/my-course/add-course");
     return null;
   }
 
@@ -36,7 +36,7 @@ const PreviewLayout = () => {
 
   const handleGoBack = useCallback(() => {
     if (type === "course") {
-      return navigate("/my-course/add");
+      return navigate("/my-course/add-course");
     }
     if (type === "module") {
       return navigate("/my-course/preivew?type=course");

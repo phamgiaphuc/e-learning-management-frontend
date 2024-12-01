@@ -1,6 +1,7 @@
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import useToast from "@/hooks/use-toast";
 import { authSignIn, authSignOut } from "@/stores/auth/auth.slice";
+import { resetCourse } from "@/stores/course/course.slice";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
@@ -13,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 type AuthProviderProps = ChildrenNodeProps;
 
 export interface AuthContextProps {
-  signIn: (credentials: SignInProps) => Promise<void>;
+  signIn: (credentials: SignInProps, redirectUrl: string) => Promise<void>;
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
   signOut: () => Promise<void>;
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
@@ -32,7 +33,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const { successToast, errorToast } = useToast();
 
   const signIn = useCallback(
-    async (credentials: SignInProps) => {
+    async (credentials: SignInProps, redirectUrl: string) => {
       try {
         const {
           data: { user, tokens },
@@ -41,7 +42,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         localStorage.setItem("token", tokens.accessToken);
         localStorage.setItem("userId", `${user.userId}`);
         successToast("Sign in successfully");
-        navigate("/");
+        if (redirectUrl && redirectUrl.trim()) {
+          navigate(-1);
+        } else {
+          navigate("/");
+        }
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           const { message, status, ...rest } = error.response.data;
@@ -86,6 +91,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       await axios.post("/auth/signout");
       removeToken("token");
       dispatch(authSignOut());
+      dispatch(resetCourse());
       successToast("Sign out successfully");
     } catch (error) {
       console.log("Sign-out failed: ", error);

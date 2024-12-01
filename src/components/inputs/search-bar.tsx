@@ -19,8 +19,7 @@ const SearchBar = () => {
         },
         "& .MuiOutlinedInput-notchedOutline": {
           borderColor: "primary.main",
-          borderWidth: "2px",
-          borderRadius: "0.1rem",
+          borderWidth: 1,
         },
       }}
       slotProps={{

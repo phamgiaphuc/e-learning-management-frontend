@@ -1,27 +1,21 @@
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useDialog } from "@/hooks/use-dialog";
-import AddCourseDialog from "@/sections/my-course/add-course-dialog";
-import CompletedSection from "@/sections/my-course/completed-section";
-import InProgressSection from "@/sections/my-course/in-progress-section";
-import { Box, Button, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useCallback, useState } from "react";
-
-type TabKey = "in-progress" | "completed";
+import AddCourseDialog from "@/sections/my-course/teacher/add-course-dialog";
+import TeacherCourseList from "@/sections/my-course/teacher/teacher-course-list";
+import { blue } from "@/theme/color";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { Plus } from "lucide-react";
 
 const MyCoursePage = () => {
-  const [tab, setTab] = useState<TabKey>("in-progress");
   const { user } = useAppSelector((state) => state.auth);
   const courseDialog = useDialog();
-
-  const onTabChange = useCallback((value: TabKey) => {
-    setTab(value);
-  }, []);
 
   return (
     <>
       <Stack
         sx={{
-          padding: 4,
+          paddingX: 4,
+          paddingY: 2,
           gap: 2,
         }}
       >
@@ -37,44 +31,57 @@ const MyCoursePage = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 0.5,
             }}
           >
-            <Typography variant="h5" fontWeight={800}>
-              My courses
-            </Typography>
-            <Typography>
-              {user?.role === "teacher"
-                ? "Manage the courses you're teaching and create new learning experiences for your students."
-                : "All your learning in one place! See the courses you're taking"}
-            </Typography>
+            {user?.role === "teacher" && (
+              <>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "600",
+                    color: blue[800],
+                  }}
+                >
+                  Manage your course
+                </Typography>
+                <Typography>
+                  Manage the courses you're teaching and create new learning
+                  experiences for your students.
+                </Typography>
+              </>
+            )}
+            {user?.role === "user" && (
+              <>
+                <Typography variant="h5" fontWeight={800}>
+                  My courses
+                </Typography>
+                <Typography>
+                  All your learning in one place! See the courses you're taking
+                </Typography>
+              </>
+            )}
           </Box>
-          <Box>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={courseDialog.handleOpen}
-            >
-              Add new course
-            </Button>
-          </Box>
+          {user?.role === "teacher" && (
+            <Box>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={courseDialog.handleOpen}
+                startIcon={<Plus size={20} />}
+              >
+                Add new course
+              </Button>
+            </Box>
+          )}
         </Box>
-        <Tabs
-          value={tab}
-          indicatorColor="secondary"
-          textColor="secondary"
-          onChange={(_, value) => onTabChange(value)}
-        >
-          <Tab value="in-progress" label="In progress" />
-          <Tab value="completed" label="Completed" />
-        </Tabs>
-        {tab === "in-progress" && <InProgressSection />}
-        {tab === "completed" && <CompletedSection />}
+        {user?.role === "teacher" && <TeacherCourseList />}
       </Stack>
-      <AddCourseDialog
-        onClose={courseDialog.handleClose}
-        open={courseDialog.open}
-      />
+      {user?.role === "teacher" && (
+        <AddCourseDialog
+          onClose={courseDialog.handleClose}
+          open={courseDialog.open}
+        />
+      )}
     </>
   );
 };

@@ -107,6 +107,7 @@ const NavBar = () => {
           >
             <Box
               component={Link}
+              href="/"
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -120,7 +121,7 @@ const NavBar = () => {
               }}
             >
               <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
-              <Typography color="primary.main" variant="h5" fontWeight={700}>
+              <Typography color="primary.main" variant="h5" fontWeight={600}>
                 Scholaro
               </Typography>
             </Box>
@@ -233,7 +234,7 @@ const NavBar = () => {
                   textColor="white"
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate("/signin");
+                    navigate("/login");
                   }}
                 >
                   <Typography>Log in</Typography>
