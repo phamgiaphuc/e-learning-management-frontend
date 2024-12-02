@@ -17,6 +17,7 @@ import PreviewLayout from "@/layouts/preview-layout";
 import EditLayout from "@/layouts/edit-layout";
 import CourseDetailPage from "@/pages/course/course-detail-page";
 import CourseContent from "@/pages/course/course-content";
+import SearchPage from "@/pages/home/search-page";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="search" element={<SearchPage />} />
           <Route path="my-course" element={<MyCourseLayout />}>
             <Route index element={<MyCoursePage />} />
             {/** Teacher */}
