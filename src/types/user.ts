@@ -18,9 +18,10 @@ export interface UserProps {
     avatar: string;
     firstName: string;
     lastName: string;
-    birthDate: Date;
-    gender: string;
-    contactNumber: number;
+    birth: Date;
+    //  gender: string;
+    address: string;
+    phoneNumber: string;
   };
 }
 
@@ -44,9 +45,10 @@ export const initialUser: UserDetailProps = {
     avatar: "",
     firstName: "",
     lastName: "",
-    birthDate: new Date(),
-    gender: "",
-    contactNumber: 0,
+    birth: new Date(),
+    // gender: "",
+    address: "",
+    phoneNumber: "",
   },
 };
 
@@ -54,20 +56,23 @@ export interface UserProfileProps {
   avatar: string;
   firstName: string;
   lastName: string;
-  birthDate: Date;
-  gender: string;
-  contactNumber: number;
+  birth: Date;
+  // gender: string;
+  address: string;
+  phoneNumber: string;
 }
 
 export const userProfileSchema = yup.object().shape({
   firstName: yup.string(),
   lastName: yup.string(),
-  contactNumber: yup.number(),
+
   birthDate: yup
     .date()
     .nullable()
     .max(new Date(), "Birth date cannot be in the future"),
-  gender: yup.string().oneOf(["Male", "Female", "Other"], "Invalid gender"),
+  // gender: yup.string().oneOf(["MALE", "FEMALE", "CUSTOM"], "Invalid gender"),
+  phoneNumber: yup.string(),
+  address: yup.string(),
 });
 
 export interface TokenProps {

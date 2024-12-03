@@ -67,7 +67,7 @@ const SignOutPage = () => {
               }}
               onClick={(e) => {
                 e.preventDefault();
-                navigate("/signin");
+                navigate("/login");
               }}
             >
               Log in

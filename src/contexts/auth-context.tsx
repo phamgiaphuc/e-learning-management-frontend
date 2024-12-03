@@ -2,6 +2,7 @@ import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import useToast from "@/hooks/use-toast";
 import { authSignIn, authSignOut } from "@/stores/auth/auth.slice";
 import { resetCourse } from "@/stores/course/course.slice";
+import { RecoverPasswordProps } from "@/types/auth/recover-password";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
@@ -18,6 +19,7 @@ export interface AuthContextProps {
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
   signOut: () => Promise<void>;
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
+  resetPassword: (newPassword: RecoverPasswordProps) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -25,6 +27,7 @@ export const AuthContext = createContext<AuthContextProps>({
   signUp: async () => {},
   signOut: async () => {},
   verifyCode: async () => {},
+  resetPassword: async () => {},
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -116,8 +119,23 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     [dispatch, navigate],
   );
 
+  const resetPassword = useCallback(
+    async (tokens: RecoverPasswordProps) => {
+      try {
+        await axios.post("/auth/reset-password", tokens);
+        successToast("Reset password successfully");
+      } catch (error) {
+        console.log("Reset password failed: ", error);
+        throw error;
+      }
+    },
+    [successToast],
+  );
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, verifyCode }}>
+    <AuthContext.Provider
+      value={{ signIn, signUp, signOut, verifyCode, resetPassword }}
+    >
       {children}
     </AuthContext.Provider>
   );
