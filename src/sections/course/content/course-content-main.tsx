@@ -27,20 +27,20 @@ const CourseContentMain = ({
   }, []);
 
   const previousLesson = useMemo(() => {
-    const index = lessons.findIndex((lesson) => lesson.id === lesson.id);
+    const index = lessons.findIndex((item) => item.id === lesson.id);
     if (index === 0) {
       return "";
     }
     return lessons[index - 1];
-  }, [lessons]);
+  }, [lesson.id, lessons]);
 
   const nextLesson = useMemo(() => {
-    const index = lessons.findIndex((lesson) => lesson.id === lesson.id);
+    const index = lessons.findIndex((item) => item.id === lesson.id);
     if (index === lessons.length - 1) {
       return "";
     }
     return lessons[index + 1];
-  }, [lessons]);
+  }, [lesson.id, lessons]);
 
   const handleClickLesson = useCallback(
     async (lessonId: string) => {
@@ -49,6 +49,22 @@ const CourseContentMain = ({
     },
     [getLessonById],
   );
+
+  const onClickNextLesson = useCallback(() => {
+    if (!nextLesson) {
+      handleClickModule();
+      return;
+    }
+    handleClickLesson(nextLesson.id);
+  }, [nextLesson, handleClickLesson, handleClickModule]);
+
+  const onClickPreviousLesson = useCallback(() => {
+    if (!previousLesson) {
+      handleClickModule();
+      return;
+    }
+    handleClickLesson(previousLesson.id);
+  }, [previousLesson, handleClickLesson, handleClickModule]);
 
   useEffect(() => {
     if (!moduleId) return;
@@ -113,10 +129,16 @@ const CourseContentMain = ({
               width: "100%",
             }}
           >
-            <Button startIcon={<ChevronLeft size={20} />}>
+            <Button
+              startIcon={<ChevronLeft size={20} />}
+              onClick={onClickPreviousLesson}
+            >
               {previousLesson ? previousLesson.name : "Module"}
             </Button>
-            <Button endIcon={<ChevronRight size={20} />}>
+            <Button
+              endIcon={<ChevronRight size={20} />}
+              onClick={onClickNextLesson}
+            >
               {nextLesson ? nextLesson.name : "Module"}
             </Button>
           </Box>

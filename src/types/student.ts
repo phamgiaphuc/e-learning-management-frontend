@@ -1,3 +1,6 @@
+import { CourseDetailProps } from "@/types/course";
+import { EnrollmentStatus } from "@/types/enrollment";
+
 export interface StudentEnrolledCourse {
   cancelledAt: Date | string;
   completedLessonsIds: string[];
@@ -7,6 +10,7 @@ export interface StudentEnrolledCourse {
   enrolledAt: Date | string;
   grade: number;
   id: string;
-  status: string;
+  status: EnrollmentStatus;
   studentId: string;
+  course?: CourseDetailProps;
 }

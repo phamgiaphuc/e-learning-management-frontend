@@ -16,21 +16,21 @@ const GeneralLayout = ({ children }: GeneralLayoutProps) => {
   return (
     <BreakpointProvider>
       <AuthProvider>
-        <UserProvider>
-          <TeacherProvider>
-            <StudentProvider>
-              <ImageProvider>
-                <EnrollmentProvider>
-                  <CourseProvider>
+        <CourseProvider>
+          <UserProvider>
+            <TeacherProvider>
+              <StudentProvider>
+                <ImageProvider>
+                  <EnrollmentProvider>
                     <ModuleProvider>
                       <LessonProvider>{children}</LessonProvider>
                     </ModuleProvider>
-                  </CourseProvider>
-                </EnrollmentProvider>
-              </ImageProvider>
-            </StudentProvider>
-          </TeacherProvider>
-        </UserProvider>
+                  </EnrollmentProvider>
+                </ImageProvider>
+              </StudentProvider>
+            </TeacherProvider>
+          </UserProvider>
+        </CourseProvider>
       </AuthProvider>
     </BreakpointProvider>
   );

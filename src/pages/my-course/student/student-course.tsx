@@ -1,10 +1,7 @@
 import useStudentContext from "@/hooks/contexts/use-student-context";
 import { useAppSelector } from "@/hooks/use-app-selector";
-import { blue } from "@/theme/color";
-import { levels } from "@/types/course";
 import { enrollmentStatus, EnrollmentStatus } from "@/types/enrollment";
 import { StudentEnrolledCourse } from "@/types/student";
-import { formatDate } from "@/utils/format-date";
 import {
   Box,
   Button,
@@ -17,6 +14,8 @@ import {
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "@/utils/format-date";
+import { levels } from "@/types/course";
 
 interface Tab {
   key: EnrollmentStatus;
@@ -34,12 +33,12 @@ const tabs: Tab[] = [
   },
 ];
 
-const CourseStudent = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const [courses, setCourses] = useState<StudentEnrolledCourse[]>([]);
-  const { getStudentEnrollments } = useStudentContext();
+const StudentCourse = () => {
   const [tab, setTab] = useState<Tab["key"]>("IN_PROGRESS");
   const navigate = useNavigate();
+  const { getStudentEnrollments } = useStudentContext();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const [courses, setCourses] = useState<StudentEnrolledCourse[]>([]);
 
   const filteredCourses = useMemo(
     () => courses.filter((course) => course.status === tab),
@@ -76,23 +75,6 @@ const CourseStudent = () => {
         flexDirection: "column",
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          marginLeft: 1,
-          fontWeight: "600",
-          color: blue[800],
-        }}
-      >
-        My course
-      </Typography>
-      <Typography
-        sx={{
-          marginLeft: 1,
-        }}
-      >
-        All your learning in one place! See the courses you're taking
-      </Typography>
       <Tabs
         value={tab}
         sx={{
@@ -244,4 +226,4 @@ const CourseStudent = () => {
   );
 };
 
-export default CourseStudent;
+export default StudentCourse;

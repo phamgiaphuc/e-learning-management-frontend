@@ -6,6 +6,7 @@ import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
 import { ChildrenNodeProps } from "@/types/children";
+import { setRefreshTokenCookie } from "@/utils/cookie";
 import { removeToken } from "@/utils/token";
 import axios, { AxiosError } from "axios";
 import { createContext, useCallback } from "react";
@@ -18,6 +19,7 @@ export interface AuthContextProps {
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
   signOut: () => Promise<void>;
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
+  getMe: (accessToken: string, refreshToken: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -25,12 +27,36 @@ export const AuthContext = createContext<AuthContextProps>({
   signUp: async () => {},
   signOut: async () => {},
   verifyCode: async () => {},
+  getMe: async () => {},
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { successToast, errorToast } = useToast();
+
+  const getMe = useCallback(
+    async (accessToken: string, refreshToken: string) => {
+      try {
+        const {
+          data: { user },
+        } = await axios.get("/auth/me", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        dispatch(authSignIn(user));
+        localStorage.setItem("token", accessToken);
+        setRefreshTokenCookie(refreshToken);
+        successToast("Log in successfully");
+        navigate("/");
+      } catch (error) {
+        console.error("Get user failed: ", error);
+        throw error;
+      }
+    },
+    [dispatch, navigate, successToast],
+  );
 
   const signIn = useCallback(
     async (credentials: SignInProps, redirectUrl: string) => {
@@ -40,7 +66,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         } = await axios.post("/auth/signin", credentials);
         dispatch(authSignIn(user));
         localStorage.setItem("token", tokens.accessToken);
-        successToast("Sign in successfully");
+        successToast("Log in successfully");
         if (redirectUrl && redirectUrl.trim()) {
           navigate(-1);
         } else {
@@ -116,7 +142,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, verifyCode }}>
+    <AuthContext.Provider
+      value={{ signIn, signUp, signOut, verifyCode, getMe }}
+    >
       {children}
     </AuthContext.Provider>
   );

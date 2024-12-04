@@ -1,5 +1,6 @@
 import { useAppSelector } from "@/hooks/use-app-selector";
 import { useDialog } from "@/hooks/use-dialog";
+import StudentCourse from "@/pages/my-course/student/student-course";
 import AddCourseDialog from "@/sections/my-course/teacher/add-course-dialog";
 import TeacherCourseList from "@/sections/my-course/teacher/teacher-course-list";
 import { blue } from "@/theme/color";
@@ -52,10 +53,21 @@ const MyCoursePage = () => {
             )}
             {user?.role === "user" && (
               <>
-                <Typography variant="h5" fontWeight={800}>
-                  My courses
+                <Typography
+                  variant="h6"
+                  sx={{
+                    marginLeft: 1,
+                    fontWeight: "600",
+                    color: blue[800],
+                  }}
+                >
+                  My course
                 </Typography>
-                <Typography>
+                <Typography
+                  sx={{
+                    marginLeft: 1,
+                  }}
+                >
                   All your learning in one place! See the courses you're taking
                 </Typography>
               </>
@@ -75,6 +87,7 @@ const MyCoursePage = () => {
           )}
         </Box>
         {user?.role === "teacher" && <TeacherCourseList />}
+        {user?.role === "user" && <StudentCourse />}
       </Stack>
       {user?.role === "teacher" && (
         <AddCourseDialog
