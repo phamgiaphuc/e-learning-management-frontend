@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 const SearchBar = () => {
   const searchRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-
   const onHandleKey = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
-        if (searchRef.current) {
+        if (searchRef.current && searchRef.current.value.trim() !== "") {
           navigate(`/search?key=${searchRef.current.value}`);
         }
       }
