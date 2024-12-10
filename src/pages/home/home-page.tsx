@@ -13,6 +13,7 @@ import GraduationHatIcon from "@/assets/images/graduation-hat.png";
 import PaperPlaneIcon from "@/assets/images/paper-plane.png";
 import LighBulbIcon from "@/assets/images/light-bulb.png";
 import { useNavigate } from "react-router-dom";
+import envConfig from "@/configs/env.config";
 
 const HomePage = () => {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
@@ -140,6 +141,9 @@ const HomePage = () => {
                   width: 40.5,
                   height: 40.5,
                 }}
+                onClick={() =>
+                  window.open(`${envConfig.serverUrl}/auth/google`, "_self")
+                }
               >
                 <img src={GoogleIcon} alt="google-icon" height={24} />
               </Button>

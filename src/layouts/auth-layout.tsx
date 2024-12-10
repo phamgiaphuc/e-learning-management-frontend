@@ -6,6 +6,7 @@ import { Box, Button, Grid2, Typography } from "@mui/material";
 import { ArrowLeft, Home } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import LogoIcon from "@/assets/icons/logo.png";
 
 const AuthLayout = () => {
   // Variables and states
@@ -105,7 +106,7 @@ const AuthLayout = () => {
             textDecoration: "none",
           }}
         >
-          <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
+          <img src={LogoIcon} alt="logo" height={38} width={38} />
           <Box
             sx={{
               display: "flex",
