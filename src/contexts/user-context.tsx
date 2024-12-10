@@ -57,7 +57,7 @@ const UserProvider = ({ children }: ChildrenNodeProps) => {
         throw error;
       }
     },
-    [],
+    [dispatch],
   );
 
   return (
