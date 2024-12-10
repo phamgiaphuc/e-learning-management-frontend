@@ -56,7 +56,7 @@ const CourseDetailPage = () => {
 
   const onClickBtn = useCallback(async () => {
     if (!isAuthenticated) {
-      navigate(`/signin?courseId=${id}`);
+      navigate(`/login?courseId=${id}`);
       return;
     }
     if (courseBelongToUser) {
@@ -212,7 +212,7 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {modules.length} modules
+                  {modules?.length} modules
                 </Typography>
                 <Typography variant="body2">
                   Understand the basics and develop foundational knowledge of a
