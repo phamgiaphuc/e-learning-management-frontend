@@ -1,3 +1,4 @@
+import useAuthContext from "@/hooks/contexts/use-auth-context";
 import useMetaTitle from "@/hooks/use-meta-title";
 import {
   ForgotPasswordProps,
@@ -17,11 +18,18 @@ import { User } from "lucide-react";
 
 const ForgotPasswordPage = () => {
   // Variables and states
+  const { sendResetPasswordCode } = useAuthContext();
+
   const formik = useFormik<ForgotPasswordProps>({
     validationSchema: forgotPasswordSchema,
     initialValues: initialForgotPasswordValues,
     onSubmit: async (values) => {
-      console.log(values);
+      try {
+        await sendResetPasswordCode(values);
+        console.log("Reset password code sent successfully");
+      } catch (error) {
+        console.error("Failed to send reset password code:", error);
+      }
     },
   });
 

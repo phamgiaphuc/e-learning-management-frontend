@@ -6,9 +6,9 @@ import * as yup from "yup";
 type Level = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
 
 export const levels: Record<Level, string> = {
-  ADVANCED: "Advanced",
   BEGINNER: "Beginner",
   INTERMEDIATE: "Intermediate",
+  ADVANCED: "Advanced",
 };
 
 export const levelSubs: Record<Level, string> = {
