@@ -30,6 +30,9 @@ const AuthLayout = () => {
     if (location.pathname.includes("recover-password")) {
       return "recover-password";
     }
+    if (location.pathname.includes("third-party")) {
+      return "third-party";
+    }
     return "default";
   }, [location.pathname]);
 
@@ -48,6 +51,9 @@ const AuthLayout = () => {
     }
     if (authPathname === "recover-password") {
       return "Recover password";
+    }
+    if (authPathname === "third-party") {
+      return "Third party login";
     }
     return "Default title";
   }, [authPathname]);

@@ -18,6 +18,8 @@ import EditLayout from "@/layouts/edit-layout";
 import CourseDetailPage from "@/pages/course/course-detail-page";
 import CourseContent from "@/pages/course/course-content";
 import SearchPage from "@/pages/home/search-page";
+import ThirdPartyPage from "@/pages/auth/third-party-page";
+import ProfilePage from "./pages/profile/profile-page";
 
 const App = () => {
   return (
@@ -26,6 +28,7 @@ const App = () => {
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path="my-profile" element={<ProfilePage />} />
           <Route path="my-course" element={<MyCourseLayout />}>
             <Route index element={<MyCoursePage />} />
             {/** Teacher */}
@@ -46,6 +49,7 @@ const App = () => {
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="recover-password" element={<RecoverPasswordPage />} />
           <Route path="verify" element={<OtpVerificationPage />} />
+          <Route path="third-party" element={<ThirdPartyPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

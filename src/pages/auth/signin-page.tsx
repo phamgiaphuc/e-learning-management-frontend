@@ -1,5 +1,6 @@
 import FacebookLogo from "@/assets/icons/facebook-logo.svg";
 import GoogleLogo from "@/assets/icons/google-logo.svg";
+import envConfig from "@/configs/env.config";
 import useAuthContext from "@/hooks/contexts/use-auth-context";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
@@ -203,6 +204,9 @@ const SignInPage = () => {
         sx={{
           height: 48,
         }}
+        onClick={() =>
+          window.open(`${envConfig.serverUrl}/auth/google`, "_self")
+        }
       >
         <Typography fontWeight={500} color="primary.main" marginRight={0.5}>
           Sign in with Google
