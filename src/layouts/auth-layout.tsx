@@ -15,8 +15,8 @@ const AuthLayout = () => {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const authPathname = useMemo(() => {
-    if (location.pathname.includes("signin")) {
-      return "signin";
+    if (location.pathname.includes("login")) {
+      return "login";
     }
     if (location.pathname.includes("signup")) {
       return "signup";
@@ -30,11 +30,14 @@ const AuthLayout = () => {
     if (location.pathname.includes("recover-password")) {
       return "recover-password";
     }
+    if (location.pathname.includes("third-party")) {
+      return "third-party";
+    }
     return "default";
   }, [location.pathname]);
 
   const formTitle = useMemo(() => {
-    if (authPathname === "signin") {
+    if (authPathname === "login") {
       return "Log in";
     }
     if (authPathname === "signup") {
@@ -48,6 +51,9 @@ const AuthLayout = () => {
     }
     if (authPathname === "recover-password") {
       return "Recover password";
+    }
+    if (authPathname === "third-party") {
+      return "Third party login";
     }
     return "Default title";
   }, [authPathname]);

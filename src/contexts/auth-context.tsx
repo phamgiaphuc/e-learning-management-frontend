@@ -1,10 +1,13 @@
 import { useAppDispatch } from "@/hooks/use-app-dispatch";
 import useToast from "@/hooks/use-toast";
 import { authSignIn, authSignOut } from "@/stores/auth/auth.slice";
+import { resetCourse } from "@/stores/course/course.slice";
+import { RecoverPasswordProps } from "@/types/auth/recover-password";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
 import { ChildrenNodeProps } from "@/types/children";
+import { setRefreshTokenCookie } from "@/utils/cookie";
 import { removeToken } from "@/utils/token";
 import axios, { AxiosError } from "axios";
 import { createContext, useCallback } from "react";
@@ -13,10 +16,12 @@ import { useNavigate } from "react-router-dom";
 type AuthProviderProps = ChildrenNodeProps;
 
 export interface AuthContextProps {
-  signIn: (credentials: SignInProps) => Promise<void>;
+  signIn: (credentials: SignInProps, redirectUrl: string) => Promise<void>;
   signUp: (credentials: Omit<SignUpProps, "confirmPassword">) => Promise<void>;
   signOut: () => Promise<void>;
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
+  getMe: (accessToken: string, refreshToken: string) => Promise<void>;
+  resetPassword: (newPassword: RecoverPasswordProps) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -24,6 +29,8 @@ export const AuthContext = createContext<AuthContextProps>({
   signUp: async () => {},
   signOut: async () => {},
   verifyCode: async () => {},
+  getMe: async () => {},
+  resetPassword: async () => {},
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -31,16 +38,44 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const dispatch = useAppDispatch();
   const { successToast, errorToast } = useToast();
 
+  const getMe = useCallback(
+    async (accessToken: string, refreshToken: string) => {
+      try {
+        const {
+          data: { user },
+        } = await axios.get("/auth/me", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        dispatch(authSignIn(user));
+        localStorage.setItem("token", accessToken);
+        setRefreshTokenCookie(refreshToken);
+        successToast("Log in successfully");
+        navigate("/");
+      } catch (error) {
+        console.error("Get user failed: ", error);
+        throw error;
+      }
+    },
+    [dispatch, navigate, successToast],
+  );
+
   const signIn = useCallback(
-    async (credentials: SignInProps) => {
+    async (credentials: SignInProps, redirectUrl: string) => {
       try {
         const {
           data: { user, tokens },
         } = await axios.post("/auth/signin", credentials);
         dispatch(authSignIn(user));
         localStorage.setItem("token", tokens.accessToken);
+        localStorage.setItem("userId", `${user.userId}`);
         successToast("Sign in successfully");
-        navigate("/");
+        if (redirectUrl && redirectUrl.trim()) {
+          navigate(-1);
+        } else {
+          navigate("/");
+        }
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           const { message, status, ...rest } = error.response.data;
@@ -85,6 +120,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       await axios.post("/auth/signout");
       removeToken("token");
       dispatch(authSignOut());
+      dispatch(resetCourse());
       successToast("Sign out successfully");
     } catch (error) {
       console.log("Sign-out failed: ", error);
@@ -109,8 +145,23 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     [dispatch, navigate],
   );
 
+  const resetPassword = useCallback(
+    async (tokens: RecoverPasswordProps) => {
+      try {
+        await axios.post("/auth/reset-password", tokens);
+        successToast("Reset password successfully");
+      } catch (error) {
+        console.log("Reset password failed: ", error);
+        throw error;
+      }
+    },
+    [successToast],
+  );
+
   return (
-    <AuthContext.Provider value={{ signIn, signUp, signOut, verifyCode }}>
+    <AuthContext.Provider
+      value={{ signIn, signUp, signOut, verifyCode, getMe, resetPassword }}
+    >
       {children}
     </AuthContext.Provider>
   );

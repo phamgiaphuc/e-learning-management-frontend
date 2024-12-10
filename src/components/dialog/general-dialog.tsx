@@ -26,6 +26,7 @@ export function GeneralDialog({
   disabledConfirmBtn = false,
   disabledClose = [],
   cancelBtnHidden = true,
+  onCancel = async () => {},
   ...dialogProps
 }: DialogProps & {
   title?: string;
@@ -40,6 +41,7 @@ export function GeneralDialog({
   disabledClose?: Array<btnProps>;
   cancelBtnHidden?: boolean;
   onConfirm: () => Promise<void>;
+  onCancel?: () => Promise<void>;
 }) {
   return (
     <Dialog
@@ -108,7 +110,9 @@ export function GeneralDialog({
             <Button
               variant="outlined"
               color="error"
-              onClick={(e) => {
+              size="large"
+              onClick={async (e) => {
+                await onCancel();
                 !disabledClose.includes("cancel") &&
                   dialogProps.onClose?.(e, "escapeKeyDown");
               }}

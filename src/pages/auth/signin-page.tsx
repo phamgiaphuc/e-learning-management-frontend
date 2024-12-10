@@ -1,8 +1,10 @@
 import FacebookLogo from "@/assets/icons/facebook-logo.svg";
 import GoogleLogo from "@/assets/icons/google-logo.svg";
+import envConfig from "@/configs/env.config";
 import useAuthContext from "@/hooks/contexts/use-auth-context";
 import useBreakpointContext from "@/hooks/use-breakpoint-context";
 import useMetaTitle from "@/hooks/use-meta-title";
+import useQuery from "@/hooks/use-query";
 import { blue } from "@/theme/color";
 import {
   initialSignInValues,
@@ -24,22 +26,24 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { CircleHelp, Eye, EyeOff, Lock, User } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
   // Variables and states
   const theme = useTheme();
+  const query = useQuery();
   const { signIn } = useAuthContext();
   const { isTabletView, isMobileView } = useBreakpointContext();
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [courseId, setCourseId] = useState<string>("");
 
   const formik = useFormik<SignInProps>({
     validationSchema: signInSchema,
     initialValues: initialSignInValues,
     onSubmit: async (values) => {
-      await signIn(values);
+      await signIn(values, courseId);
     },
   });
 
@@ -49,7 +53,13 @@ const SignInPage = () => {
     [passwordVisible],
   );
 
-  useMetaTitle({ title: "Sign in" });
+  useMetaTitle({ title: "Log in" });
+
+  useEffect(() => {
+    if (query.get("courseId")) {
+      setCourseId(String(query.get("courseId")));
+    }
+  }, [query]);
 
   return (
     <Stack gap={2} width="100%">
@@ -194,6 +204,9 @@ const SignInPage = () => {
         sx={{
           height: 48,
         }}
+        onClick={() =>
+          window.open(`${envConfig.serverUrl}/auth/google`, "_self")
+        }
       >
         <Typography fontWeight={500} color="primary.main" marginRight={0.5}>
           Sign in with Google

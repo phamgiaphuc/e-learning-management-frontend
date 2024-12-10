@@ -53,11 +53,11 @@ const RecoverPasswordPage = () => {
             type="password"
             placeholder="Enter your password"
             fullWidth
-            // value={formik.values.account}
-            // onChange={formik.handleChange}
-            // onBlur={formik.handleBlur}
-            // error={!!(formik.touched.account && formik.errors.account)}
-            // helperText={formik.touched.account && formik.errors.account}
+            value={formik.values.newPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={!!(formik.touched.newPassword && formik.errors.newPassword)}
+            helperText={formik.touched.newPassword && formik.errors.newPassword}
           />
         </Box>
         <Box display="flex" flexDirection="column" gap={1}>
@@ -78,11 +78,17 @@ const RecoverPasswordPage = () => {
             type="password"
             placeholder="Enter your password"
             fullWidth
-            // value={formik.values.account}
+            // value={formik.values.passwordConfirm}
             // onChange={formik.handleChange}
             // onBlur={formik.handleBlur}
-            // error={!!(formik.touched.account && formik.errors.account)}
-            // helperText={formik.touched.account && formik.errors.account}
+            // error={
+            //   !!(
+            //     formik.touched.passwordConfirm && formik.errors.passwordConfirm
+            //   )
+            // }
+            // helperText={
+            //   formik.touched.passwordConfirm && formik.errors.passwordConfirm
+            // }
           />
         </Box>
         <Button
