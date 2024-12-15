@@ -3,6 +3,7 @@ import useToast from "@/hooks/use-toast";
 import { authSignIn, authSignOut } from "@/stores/auth/auth.slice";
 import { resetCourse } from "@/stores/course/course.slice";
 import { RecoverPasswordProps } from "@/types/auth/recover-password";
+import { ForgotPasswordProps } from "@/types/auth/forgot-password";
 import { SignInProps } from "@/types/auth/signin";
 import { SignUpProps } from "@/types/auth/signup";
 import { VerfiyCodeProps } from "@/types/auth/verify-code";
@@ -22,6 +23,7 @@ export interface AuthContextProps {
   verifyCode: (credentials: VerfiyCodeProps) => Promise<void>;
   getMe: (accessToken: string, refreshToken: string) => Promise<void>;
   resetPassword: (newPassword: RecoverPasswordProps) => Promise<void>;
+  sendResetPasswordCode: (email: ForgotPasswordProps) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -31,6 +33,7 @@ export const AuthContext = createContext<AuthContextProps>({
   verifyCode: async () => {},
   getMe: async () => {},
   resetPassword: async () => {},
+  sendResetPasswordCode: async () => {},
 });
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -128,6 +131,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [dispatch, successToast]);
 
+  const sendResetPasswordCode = useCallback(
+    async (email: ForgotPasswordProps) => {
+      try {
+        await axios.post("/auth/forgot-password", email);
+        successToast("Reset password code sent successfully");
+      } catch (error) {
+        console.error("Failed to send reset password code: ", error);
+        errorToast("Failed to send reset password code");
+        throw error;
+      }
+    },
+    [successToast, errorToast],
+  );
+
   const verifyCode = useCallback(
     async (credentials: VerfiyCodeProps) => {
       try {
@@ -160,7 +177,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, signUp, signOut, verifyCode, getMe, resetPassword }}
+      value={{
+        signIn,
+        signUp,
+        signOut,
+        verifyCode,
+        getMe,
+        resetPassword,
+        sendResetPasswordCode,
+      }}
     >
       {children}
     </AuthContext.Provider>

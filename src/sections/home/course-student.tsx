@@ -106,7 +106,7 @@ const CourseStudent = () => {
       </Tabs>
       {filteredCourses?.length > 0 ? (
         <Box sx={{ paddingY: 2 }}>
-          <Grid2 container>
+          <Grid2 container spacing={4}>
             {filteredCourses.map((item) => (
               <Grid2 key={item.id} size={6}>
                 <Paper

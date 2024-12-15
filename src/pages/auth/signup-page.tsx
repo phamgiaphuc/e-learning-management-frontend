@@ -54,7 +54,10 @@ const SignUpPage = () => {
     onSubmit: async (values) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...rest } = values;
-      await signUp(rest);
+      await signUp({
+        ...rest,
+        role: role || "user",
+      });
     },
   });
 

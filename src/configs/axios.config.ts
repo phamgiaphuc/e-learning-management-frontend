@@ -38,7 +38,7 @@ axiosJwt.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
         return axios(originalRequest);
       } catch (error) {
-        console.log("Error: ", error);
+        console.log(error);
         throw error;
       }
     }

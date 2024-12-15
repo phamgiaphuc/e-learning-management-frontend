@@ -1,4 +1,4 @@
-import HCMIUIcon from "@/assets/icons/hcmiu.png";
+import LogoIcon from "@/assets/icons/logo.png";
 import SearchBar from "@/components/inputs/search-bar";
 import useAuthContext from "@/hooks/contexts/use-auth-context";
 import { useAppSelector } from "@/hooks/use-app-selector";
@@ -120,7 +120,7 @@ const NavBar = () => {
                 navigate("/");
               }}
             >
-              <img src={HCMIUIcon} alt="hcmiu-logo" height={38} width={38} />
+              <img src={LogoIcon} alt="logo" height={38} width={38} />
               <Typography color="primary.main" variant="h5" fontWeight={600}>
                 Scholaro
               </Typography>

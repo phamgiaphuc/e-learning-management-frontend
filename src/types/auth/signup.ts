@@ -17,7 +17,7 @@ export const initialSignUpValues: SignUpProps = {
   lastName: "",
   email: "",
   password: "",
-  role: "student",
+  role: "user",
   username: "",
   confirmPassword: "",
 };

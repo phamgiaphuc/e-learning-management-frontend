@@ -20,6 +20,7 @@ import CourseContent from "@/pages/course/course-content";
 import SearchPage from "@/pages/home/search-page";
 import ThirdPartyPage from "@/pages/auth/third-party-page";
 import ProfilePage from "./pages/profile/profile-page";
+import AboutPage from "@/pages/home/about-page";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="my-profile" element={<ProfilePage />} />
           <Route path="my-course" element={<MyCourseLayout />}>

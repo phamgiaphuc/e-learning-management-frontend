@@ -8,7 +8,7 @@ export const darkColorScheme: ColorSystemOptions = {
       main: "#fff",
     },
     background: {
-      default: zinc[950],
+      default: zinc[900],
     },
   },
 };

@@ -50,8 +50,8 @@ const CourseDetailPage = () => {
   const courseBelongToUser = useMemo(
     () =>
       user?.id === teacher.id ||
-      userLearnings.courses.find((c) => c.studentId === user?.id),
-    [teacher.id, user?.id, userLearnings.courses],
+      userLearnings.courses.find((c) => c.courseId === id),
+    [id, teacher.id, user?.id, userLearnings.courses],
   );
 
   const onClickBtn = useCallback(async () => {
