@@ -8,3 +8,7 @@ export const setRefreshTokenCookie = (refreshToken: string) => {
     expires: 7,
   });
 };
+
+export const deleteRefreshTokenCookie = () => {
+  Cookies.remove("refreshToken");
+};

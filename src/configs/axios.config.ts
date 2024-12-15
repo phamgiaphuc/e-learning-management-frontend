@@ -1,4 +1,5 @@
 import envConfig from "@/configs/env.config";
+import { deleteRefreshTokenCookie } from "@/utils/cookie";
 import { getToken, setToken } from "@/utils/token";
 import axios from "axios";
 
@@ -38,7 +39,9 @@ axiosJwt.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
         return axios(originalRequest);
       } catch (error) {
-        console.log("Error: ", error);
+        console.log(error);
+        deleteRefreshTokenCookie();
+        window.location.replace("/login");
         throw error;
       }
     }
