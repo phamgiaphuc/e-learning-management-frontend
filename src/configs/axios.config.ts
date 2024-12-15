@@ -1,5 +1,4 @@
 import envConfig from "@/configs/env.config";
-import { deleteRefreshTokenCookie } from "@/utils/cookie";
 import { getToken, setToken } from "@/utils/token";
 import axios from "axios";
 
@@ -40,8 +39,6 @@ axiosJwt.interceptors.response.use(
         return axios(originalRequest);
       } catch (error) {
         console.log(error);
-        deleteRefreshTokenCookie();
-        window.location.replace("/login");
         throw error;
       }
     }
