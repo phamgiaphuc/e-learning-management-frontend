@@ -168,7 +168,7 @@ const HomePage = () => {
             </Typography>
           </Box>
         )}
-        <Stack gap={2} sx={{ width: "100%" }}>
+        <Stack gap={2} sx={{ width: "100%", marginBottom: 4 }}>
           {isAuthenticated ? (
             user?.role === "user" ? (
               <CourseStudent />
