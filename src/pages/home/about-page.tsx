@@ -8,69 +8,77 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import GPhucLogo from "@/assets/authors/gphuc.jpg";
+import GAnLogo from "@/assets/authors/giaan.jpg";
+import TTrinhLogo from "@/assets/authors/trinh.jpg";
+import QAnhLogo from "@/assets/authors/qanh.jpg";
+import ThuanLogo from "@/assets/authors/thuan.jpg";
+import PNghiLogo from "@/assets/authors/pnghi.jpg";
+import TGiangLogo from "@/assets/authors/tgiang.jpg";
 
 export const authors = [
   {
     id: 1,
     name: "H.T.Thy Giang",
-    avatar:
-      "https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-1/412869523_3623038977970904_7784186731189332809_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=k57lAvoZG9QQ7kNvgFxEDSp&_nc_zt=24&_nc_ht=scontent.fsgn5-12.fna&_nc_gid=AjwPtOacylw-iPbgbT3K7YP&oh=00_AYBqIMschLM45kjJWvRJTb3IcqE0WPkNgd09alQsOk52Bw&oe=676456CC",
+    avatar: TGiangLogo,
     position: "Landlord",
     role: "Leader & Frontend",
   },
   {
     id: 2,
     name: "P. Gia Phúc",
-    avatar: "https://avatar.iran.liara.run/username?username=GiaPhuc+Pham",
+    avatar: GPhucLogo,
     position: "Slave",
     role: "Fullstack",
   },
   {
     id: 3,
     name: "V. Gia Ân",
-    avatar: "https://avatar.iran.liara.run/username?username=GiaAn+Vo",
+    avatar: GAnLogo,
     position: "Slave",
     role: "Backend",
   },
   {
     id: 4,
     name: "N.Nam Hưng",
-    avatar: "https://avatar.iran.liara.run/username?username=NamHung+Ngo",
+    avatar:
+      "https://scontent.fsgn5-10.fna.fbcdn.net/v/t39.30808-6/461175989_938763618295503_5294032240523887856_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=4IcK_hxu9LgQ7kNvgFHbC7b&_nc_zt=23&_nc_ht=scontent.fsgn5-10.fna&_nc_gid=AJG4F07MYcF70s0QQonRXTq&oh=00_AYDyINY7odzEToLHaGeKkZ8qluX7g1VH-VqK5GzoNTCSbw&oe=67661BF3",
     position: "Slave",
     role: "Backend",
   },
   {
     id: 5,
     name: "N.H. Thao Trinh",
-    avatar: "https://avatar.iran.liara.run/username?username=ThaoTrinh+Nguyen",
+    avatar: TTrinhLogo,
     position: "Slave",
     role: "UI/UX and Tester",
   },
   {
     id: 6,
     name: "H.N. Quynh Anh",
-    avatar: "https://avatar.iran.liara.run/username?username=QuynhAnh+Hoang",
+    avatar: QAnhLogo,
     position: "Slave",
     role: "UI/UX and Tester",
   },
   {
     id: 7,
     name: "N.Trong Thuan",
-    avatar: "https://avatar.iran.liara.run/username?username=TrongThuan+Nguyen",
+    avatar: ThuanLogo,
     position: "Slave",
     role: "Frontend",
   },
   {
     id: 8,
     name: "N.V. Phuong Nghi",
-    avatar: "https://avatar.iran.liara.run/username?username=PhuongNghi+Nguyen",
+    avatar: PNghiLogo,
     position: "Slave",
     role: "Business Analyst",
   },
   {
     id: 9,
     name: "D.T. Quynh Nhu",
-    avatar: "https://avatar.iran.liara.run/username?username=QuynhNhu+Duong",
+    avatar:
+      "https://scontent.fsgn5-8.fna.fbcdn.net/v/t1.6435-9/74366038_147174976568237_124183971431972864_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=nCfPBAP91iMQ7kNvgEBmRUY&_nc_zt=23&_nc_ht=scontent.fsgn5-8.fna&_nc_gid=AW0veA1g1wWZLJvJwbdpHlZ&oh=00_AYAhXdbfSUASxzKlpXQOSNrUn_tNkEMrDGUWSCN5-M7KcQ&oe=67878DB9",
     position: "Slave",
     role: "Business Analyst",
   },
@@ -154,7 +162,7 @@ const AboutPage = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 8,
+            gap: 16,
             flexWrap: "wrap",
             justifyContent: "center",
           }}
@@ -173,8 +181,8 @@ const AboutPage = () => {
                 alt={author.name}
                 src={author.avatar}
                 sx={{
-                  height: 110,
-                  width: 110,
+                  height: 140,
+                  width: 140,
                   mb: 2,
                 }}
               />
